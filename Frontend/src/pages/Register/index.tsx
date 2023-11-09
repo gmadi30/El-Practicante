@@ -1,9 +1,61 @@
 import Navbar from "../../components/ui/Navbar";
-import InputForm from "../../components/form/InputForm";
+import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
+
+type FormValues = {
+  name: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  birthday: string;
+  dni: string;
+  mobile: string;
+  school: string;
+  degree: string;
+  company: string;
+  city: string;
+  autonomousCommunity: string;
+  zipCode: string;
+};
 
 function Signup() {
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm<FormValues>();
+  const { control, register, handleSubmit } = form;
+
+  const addStudent = async (data: FormValues) => {
+    await fetch("http://localhost:8080/api/v1/students", {
+      method: "POST",
+      body: JSON.stringify({
+        name: data.name,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        birthDay: data.birthday,
+        DNI: data.dni,
+        mobile: data.mobile,
+        school: "1",
+        degree: "1",
+        company: "1",
+        city: "Madrid",
+        autonomousCommunity: "Comunidad de Madrid",
+        zipCode: "29044",
+      }),
+      headers: {
+        "Content-Type": "application/json;",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
+  };
+
+  const onSubmit = (data: FormValues) => {
+    console.log("Form", data);
+    addStudent(data);
   };
   return (
     <>
@@ -11,31 +63,166 @@ function Signup() {
       <div className="mx-5 my-10 md:container md:mx-auto md:w-fit">
         <h1 className="font-semibold text-5xl mb-5">Registro</h1>
         <form
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="border-4 border-primary rounded-xl font-body flex flex-col mt-3 mb-10 px-20 space-y-7 py-10"
         >
-          <InputForm title="Nombre" type="text" placeHolder="Nombre" />
-          <InputForm title="Apellido" type="text" placeHolder="Apellido" />
-          <InputForm title="Email" type="email" placeHolder="Email" />
-          <InputForm
-            title="Contraseña"
-            type="password"
-            placeHolder="Contraseña"
-          />
-          <InputForm
-            title="Confirmar contraseña"
-            type="password"
-            placeHolder="Repetir contraseña"
-          />
-          <InputForm
-            title="Fecha de nacimiento"
-            type="date"
-            placeHolder="Introduce una fecha"
-          />
-          <InputForm title="DNI" type="text" placeHolder="A1234591-B" />
+          <label htmlFor="name" className="text-sm font-bold md:text-xl">
+            <h1 className="text-secondary-100">Nombre</h1>
+            <input
+              {...register("name")}
+              id="name"
+              type="text"
+              placeholder="Nombre"
+              className="border
+                    focus:outline-none
+                    focus:bg-primary
+                    w-full
+                    py-2
+                    pl-2
+                    rounded
+                    font-normal
+                    placeholder:opacity-60
+                    "
+            />
+          </label>
+          <label htmlFor="lastName" className="text-sm font-bold md:text-xl">
+            <h1 className="text-secondary-100">Apellido</h1>
+            <input
+              {...register("lastName")}
+              id="lastName"
+              type="text"
+              placeholder="Nombre"
+              className="border
+                    focus:outline-none
+                    focus:bg-primary
+                    w-full
+                    py-2
+                    pl-2
+                    rounded
+                    font-normal
+                    placeholder:opacity-60
+                    "
+            />
+          </label>
+          <label htmlFor="email" className="text-sm font-bold md:text-xl">
+            <h1 className="text-secondary-100">Email</h1>
+            <input
+              {...register("email")}
+              id="email"
+              type="email"
+              placeholder="Emal"
+              className="border
+                    focus:outline-none
+                    focus:bg-primary
+                    w-full
+                    py-2
+                    pl-2
+                    rounded
+                    font-normal
+                    placeholder:opacity-60
+                    "
+            />
+          </label>
+          <label htmlFor="password" className="text-sm font-bold md:text-xl">
+            <h1 className="text-secondary-100">Contraseña</h1>
+            <input
+              {...register("password")}
+              id="password"
+              type="password"
+              placeholder="Contraseña"
+              className="border
+                    focus:outline-none
+                    focus:bg-primary
+                    w-full
+                    py-2
+                    pl-2
+                    rounded
+                    font-normal
+                    placeholder:opacity-60
+                    "
+            />
+          </label>
+          <label
+            htmlFor="confirmPassword"
+            className="text-sm font-bold md:text-xl"
+          >
+            <h1 className="text-secondary-100">Confirmar contraseña</h1>
+            <input
+              {...register("confirmPassword")}
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirmar contraseña"
+              className="border
+                    focus:outline-none
+                    focus:bg-primary
+                    w-full
+                    py-2
+                    pl-2
+                    rounded
+                    font-normal
+                    placeholder:opacity-60
+                    "
+            />
+          </label>
+          <label htmlFor="birthday" className="text-sm font-bold md:text-xl">
+            <h1 className="text-secondary-100">Fecha de nacimiento</h1>
+            <input
+              {...register("birthday")}
+              id="birthday"
+              type="date"
+              placeholder="Introduce una fecha"
+              className="border
+                    focus:outline-none
+                    focus:bg-primary
+                    w-full
+                    py-2
+                    pl-2
+                    rounded
+                    font-normal
+                    placeholder:opacity-60
+                    "
+            />
+          </label>
 
-          <InputForm title="Móvil" type="tel" placeHolder="123-45-50-41" />
+          <label htmlFor="DNI" className="text-sm font-bold md:text-xl">
+            <h1 className="text-secondary-100">DNI</h1>
+            <input
+              {...register("dni")}
+              id="DNI"
+              type="text"
+              placeholder="A1234591-B"
+              className="border
+                    focus:outline-none
+                    focus:bg-primary
+                    w-full
+                    py-2
+                    pl-2
+                    rounded
+                    font-normal
+                    placeholder:opacity-60
+                    "
+            />
+          </label>
 
+          <label htmlFor="mobile" className="text-sm font-bold md:text-xl">
+            <h1 className="text-secondary-100">Móvil</h1>
+            <input
+              {...register("mobile")}
+              id="mobile"
+              type="tel"
+              placeholder="123-45-50-41"
+              className="border
+                    focus:outline-none
+                    focus:bg-primary
+                    w-full
+                    py-2
+                    pl-2
+                    rounded
+                    font-normal
+                    placeholder:opacity-60
+                    "
+            />
+          </label>
           <label className=" md:text-xl">
             <div className="text-sm">
               <h1 className="font-bold text-secondary-100 md:text-xl">
@@ -43,15 +230,15 @@ function Signup() {
               </h1>
               <select
                 className="md:text-xl px-2 py-4 border rounded w-full text-black focus:focus:border-secondary-100"
-                name="lenguajes"
+                {...register("school")}
+                name="school"
                 id="lang"
               >
-                <h1 className="text-secondary-100 md:text-xl">Móvil</h1>
                 <option value="selecciona">
                   Selecciona un Centro de Educación
                 </option>
                 <option value=""> No aparece</option>
-                <option value="IES Francisco de Goya">
+                <option id="" value="IES Francisco de Goya">
                   IES Francisco de Goya
                 </option>
               </select>
@@ -73,9 +260,9 @@ function Signup() {
                 Grado profesional
               </h1>
               <select
+                {...register("degree")}
                 className=" md:text-xl px-2 py-4 border rounded w-full focus:border-secondary-100"
-                name="lenguajes"
-                id="lang"
+                id="degree"
               >
                 <option value="selecciona" className="">
                   Selecciona un Grado
@@ -101,14 +288,19 @@ function Signup() {
               <h1 className="font-bold text-secondary-100">Empresa</h1>
               <select
                 className="px-2 py-4 border rounded w-full focus:border-secondary-100"
-                name="lenguajes"
-                id="lang"
+                {...register("company")}
+                id="company"
               >
                 <option value="selecciona">Selecciona una Empresa</option>
-                <option value="">No aparece</option>
-                <option value="DAM"> Indra</option>
-                <option value="DAW"> Accenture</option>
-                <option value="ASIR"> DXC Technology</option>
+                <option id="0" value="">
+                  No aparece
+                </option>
+                <option value="Indra"> Indra</option>
+                <option value="Accenture"> Accenture</option>
+                <option id="1" value="DXC Technology">
+                  {" "}
+                  DXC Technology
+                </option>
               </select>
             </div>
 
@@ -129,6 +321,7 @@ function Signup() {
             Crear cuenta
           </button>
         </form>
+        <DevTool control={control} />
       </div>
     </>
   );
