@@ -1,0 +1,6 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.esLint": true
+  },
+  "java.compile.nullAnalysis.mode": "automatic"
+}
