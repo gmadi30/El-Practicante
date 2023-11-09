@@ -2,12 +2,16 @@ package com.elpracticante.backend.student;
 
 import com.elpracticante.backend.student.dto.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.print.attribute.standard.Media;
+
 @RestController
 @RequestMapping("api/v1/students")
+@CrossOrigin
 public class StudentController {
 
     private final StudentService service;
@@ -16,7 +20,7 @@ public class StudentController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateStudentResponse> addStudent(@RequestBody CreateStudentRequest createStudentRequest) {
         CreateStudentResponse studentRequestOutput;
         try {

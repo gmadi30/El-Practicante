@@ -136,7 +136,7 @@ public class StudentService implements StudentServiceAPI {
 
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setName(createStudentRequest.name());
-        studentEntity.setLastName(createStudentRequest.lastname());
+        studentEntity.setLastName(createStudentRequest.lastName());
         studentEntity.setDni(StringUtils.hasLength(createStudentRequest.DNI()) ? createStudentRequest.DNI() : null);
         studentEntity.setEmail(createStudentRequest.email());
         studentEntity.setPassword(createStudentRequest.password());
@@ -194,7 +194,7 @@ public class StudentService implements StudentServiceAPI {
             throw new EmptyInputFieldException("Input field name cannot be empty");
         }
 
-        if (!StringUtils.hasLength(createStudentRequest.lastname())){
+        if (!StringUtils.hasLength(createStudentRequest.lastName())){
             throw new EmptyInputFieldException("Input field lastname cannot be empty");
         }
 

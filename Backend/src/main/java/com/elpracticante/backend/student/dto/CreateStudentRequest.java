@@ -4,7 +4,7 @@ public record CreateStudentRequest(
 
         String name,
 
-        String lastname,
+        String lastName,
 
         String DNI,
 
