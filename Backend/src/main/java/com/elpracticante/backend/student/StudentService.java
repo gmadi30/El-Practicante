@@ -22,6 +22,8 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -88,6 +90,41 @@ public class StudentService implements StudentServiceAPI {
     public void deleteStudent(int studentId) {
         StudentEntity studentEntity = getStudentEntity(studentId);
         studentRepository.delete(studentEntity);
+    }
+
+    @Override
+    public GetAllStudentsResponse getAllStudents() {
+        List<StudentEntity> studentEntityList = studentRepository.findAll();
+        List<Student> studentList = new ArrayList<>();
+
+        studentEntityList.forEach(
+               studentEntity -> {
+                   studentList.add( new Student(
+                           studentEntity.getId(),
+                           studentEntity.getName(),
+                           studentEntity.getLastName(),
+                           studentEntity.getEmail(),
+                           studentEntity.getCity(),
+                           studentEntity.getAutonomousCommunity(),
+                           studentEntity.getMobile(),
+                           new CompanyDTO(
+                                   studentEntity.getCompany().getId(),
+                                   studentEntity.getCompany().getName()
+                           ),
+                           new SchoolDTO(
+                                   studentEntity.getSchool().getId(),
+                                   studentEntity.getSchool().getName()
+                           ),
+                           new DegreeDTO(
+                                   studentEntity.getDegree().getId(),
+                                   studentEntity.getDegree().getName()
+                           )
+
+                   ));
+               }
+        );
+
+        return new GetAllStudentsResponse(studentList);
     }
 
     private Integer insertStudent(StudentEntity studentEntity) {

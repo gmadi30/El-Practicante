@@ -66,8 +66,20 @@ public class StudentController {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
-
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping()
+    public ResponseEntity<GetAllStudentsResponse> deleteStudent() {
+        GetAllStudentsResponse getAllStudentsResponse = null;
+        try {
+            getAllStudentsResponse = service.getAllStudents();
+        }catch (Exception ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        }
+        return new ResponseEntity<>(getAllStudentsResponse, HttpStatus.OK);
+    }
+
+
 }

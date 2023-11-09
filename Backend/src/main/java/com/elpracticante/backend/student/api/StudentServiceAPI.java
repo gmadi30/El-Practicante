@@ -14,4 +14,6 @@ public interface StudentServiceAPI {
     UpdateStudentResponse updateStudent(int studentId, UpdateStudentRequest updateStudentRequest);
 
     void deleteStudent(int studentId);
+
+    GetAllStudentsResponse getAllStudents();
 }
