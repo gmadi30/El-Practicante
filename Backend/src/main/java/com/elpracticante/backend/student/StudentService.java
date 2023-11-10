@@ -132,15 +132,13 @@ public class StudentService implements StudentServiceAPI {
     }
 
     private StudentEntity createStudentEntity(CreateStudentRequest createStudentRequest) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setName(createStudentRequest.name());
         studentEntity.setLastName(createStudentRequest.lastName());
         studentEntity.setDni(StringUtils.hasLength(createStudentRequest.DNI()) ? createStudentRequest.DNI() : null);
         studentEntity.setEmail(createStudentRequest.email());
         studentEntity.setPassword(createStudentRequest.password());
-        studentEntity.setBirthday(LocalDate.parse(createStudentRequest.birthDay(), formatter));
+        studentEntity.setBirthday( getFormattedLocalDate(createStudentRequest));
         studentEntity.setCity(createStudentRequest.city());
         studentEntity.setAutonomousCommunity(createStudentRequest.autonomousCommunity());
         studentEntity.setZipCode(createStudentRequest.zipCode());
@@ -150,6 +148,13 @@ public class StudentService implements StudentServiceAPI {
         studentEntity.setCompany(getCompanyEntity(Integer.parseInt(createStudentRequest.company())).get());
 
         return studentEntity;
+    }
+
+    private static LocalDate getFormattedLocalDate(CreateStudentRequest createStudentRequest) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate birthday = LocalDate.parse(createStudentRequest.birthDay());
+        birthday.format(formatter);
+        return birthday;
     }
 
     private StudentEntity getStudentEntity(int studentId) {
