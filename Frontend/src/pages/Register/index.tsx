@@ -2,7 +2,6 @@ import Navbar from "../../components/ui/Navbar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 type FormValues = {
   name: string;
@@ -22,7 +21,6 @@ type FormValues = {
 };
 
 function Signup() {
-  const [isRequestOK, setRequestOK] = useState(false);
   let navigate = useNavigate();
   const form = useForm<FormValues>();
   const { control, register, handleSubmit } = form;
@@ -51,21 +49,16 @@ function Signup() {
       },
     })
       .then((response) => {
-        response.text().then((response) => {
-          console.log(response);
-          setRequestOK(true);
-        });
+        if (response.status == 201) {
+          navigate("/login", { replace: true });
+        }
       })
-      .catch((error: Error) => console.log(error));
+      .catch((error: Error) => console.log("Este es el error: " + error));
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("Form", data);
     addStudent(data);
-
-    if (isRequestOK) {
-      navigate("/login");
-    }
   };
   return (
     <>
