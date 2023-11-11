@@ -1,5 +1,3 @@
-import { useForm } from "react-hook-form";
-
 interface InputFormProps {
   type: string;
   placeHolder: string;
@@ -7,16 +5,11 @@ interface InputFormProps {
   id: string;
 }
 const InputForm: React.FC<InputFormProps> = (props) => {
-  const { register } = useForm();
-  const { name, ref, onChange, onBlur } = register(props.id);
   return (
     <label htmlFor={props.id} className="text-sm font-bold md:text-xl">
       <h1 className="text-secondary-100">{props.title}</h1>
       <input
-        id={name}
-        ref={ref}
-        onChange={onChange}
-        onBlur={onBlur}
+        id={props.title}
         type={props.type}
         placeholder={props.placeHolder}
         className="border
