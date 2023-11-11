@@ -10,25 +10,26 @@ import com.elpracticante.backend.school.entity.SchoolEntity;
 import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.school.repository.SchoolRepository;
+import com.elpracticante.backend.shared.exceptions.WrongLoginCredentialsException;
 import com.elpracticante.backend.student.api.StudentServiceAPI;
 import com.elpracticante.backend.student.dto.*;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class StudentService implements StudentServiceAPI {
-    Logger logger = LoggerFactory.getLogger(StudentService.class);
+
     private final StudentRepository studentRepository;
 
     private final SchoolRepository schoolRepository;
@@ -55,7 +56,7 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public GetStudentResponse getStudent(int studentId) {
-        StudentEntity studentEntity = getStudentEntity(studentId);
+        StudentEntity studentEntity = getStudentEntityById(studentId);
 
         return new GetStudentResponse(
                 studentEntity.getName(),
@@ -74,7 +75,7 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public UpdateStudentResponse updateStudent(int studentId, UpdateStudentRequest updateStudentRequest) {
-        StudentEntity studentEntity = getStudentEntity(studentId);
+        StudentEntity studentEntity = getStudentEntityById(studentId);
 
         studentEntity.setName(updateStudentRequest.name());
         studentEntity.setLastName(updateStudentRequest.lastName());
@@ -88,7 +89,7 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public void deleteStudent(int studentId) {
-        StudentEntity studentEntity = getStudentEntity(studentId);
+        StudentEntity studentEntity = getStudentEntityById(studentId);
         studentRepository.delete(studentEntity);
     }
 
@@ -127,6 +128,23 @@ public class StudentService implements StudentServiceAPI {
         return new GetAllStudentsResponse(studentList);
     }
 
+    @Override
+    public LoginStudentResponse postLogin(LoginStudentRequest loginStudentRequest) {
+        Optional<StudentEntity> studentEntity = studentRepository.findByEmail(loginStudentRequest.studentEmail());
+
+        if (!studentEntity.isPresent()){
+            throw new WrongLoginCredentialsException("El usuario o la contraseña son incorrectas", HttpStatus.NOT_FOUND);
+        }
+
+        if (!studentEntity.get().getPassword().equals(loginStudentRequest.password())) {
+            throw new WrongLoginCredentialsException("El usuario o la contraseña son incorrectas", HttpStatus.NOT_FOUND);
+        }
+
+        LoginStudentResponse loginStudentResponse = new LoginStudentResponse(studentEntity.get().getId());
+        return loginStudentResponse;
+    }
+
+
     private Integer insertStudent(StudentEntity studentEntity) {
         return studentRepository.save(studentEntity).getId();
     }
@@ -138,7 +156,7 @@ public class StudentService implements StudentServiceAPI {
         studentEntity.setDni(StringUtils.hasLength(createStudentRequest.DNI()) ? createStudentRequest.DNI() : null);
         studentEntity.setEmail(createStudentRequest.email());
         studentEntity.setPassword(createStudentRequest.password());
-        studentEntity.setBirthday( getFormattedLocalDate(createStudentRequest));
+        studentEntity.setBirthday(getFormattedLocalDate(createStudentRequest.birthDay()));
         studentEntity.setCity(createStudentRequest.city());
         studentEntity.setAutonomousCommunity(createStudentRequest.autonomousCommunity());
         studentEntity.setZipCode(createStudentRequest.zipCode());
@@ -150,14 +168,12 @@ public class StudentService implements StudentServiceAPI {
         return studentEntity;
     }
 
-    private static LocalDate getFormattedLocalDate(CreateStudentRequest createStudentRequest) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate birthday = LocalDate.parse(createStudentRequest.birthDay());
-        birthday.format(formatter);
+    private static LocalDate getFormattedLocalDate(String createStudentRequest) {
+        LocalDate birthday = LocalDate.parse(createStudentRequest);
         return birthday;
     }
 
-    private StudentEntity getStudentEntity(int studentId) {
+    private StudentEntity getStudentEntityById(int studentId) {
         Optional<StudentEntity> studentEntity = studentRepository.findById(studentId);
 
        if (studentEntity.isPresent()) {
@@ -196,31 +212,31 @@ public class StudentService implements StudentServiceAPI {
     private void validateInput(CreateStudentRequest createStudentRequest) throws EmptyInputFieldException {
 
         if (!StringUtils.hasLength(createStudentRequest.name())){
-            throw new EmptyInputFieldException("Input field name cannot be empty");
+            throw new EmptyInputFieldException("Input field name cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasLength(createStudentRequest.lastName())){
-            throw new EmptyInputFieldException("Input field lastname cannot be empty");
+            throw new EmptyInputFieldException("Input field lastname cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasLength(createStudentRequest.email())){
-            throw new EmptyInputFieldException("Input field email cannot be empty");
+            throw new EmptyInputFieldException("Input field email cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasLength(createStudentRequest.password())){
-            throw new EmptyInputFieldException("Input field password cannot be empty");
+            throw new EmptyInputFieldException("Input field password cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasLength(createStudentRequest.city())){
-            throw new EmptyInputFieldException("Input field city cannot be empty");
+            throw new EmptyInputFieldException("Input field city cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasLength(createStudentRequest.autonomousCommunity())){
-            throw new EmptyInputFieldException("Input field autonomousCommunity cannot be empty");
+            throw new EmptyInputFieldException("Input field autonomousCommunity cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasLength(createStudentRequest.zipCode())){
-            throw new EmptyInputFieldException("Input field zipCode cannot be empty");
+            throw new EmptyInputFieldException("Input field zipCode cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
 

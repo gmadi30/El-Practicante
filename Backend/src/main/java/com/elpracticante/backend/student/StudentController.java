@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.print.attribute.standard.Media;
 
 @RestController
 @RequestMapping("api/v1/students")
@@ -23,17 +22,12 @@ public class StudentController {
     @PostMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateStudentResponse> addStudent(@RequestBody CreateStudentRequest createStudentRequest) {
         CreateStudentResponse studentRequestOutput;
-        try {
-            studentRequestOutput = service.addStudent(createStudentRequest);
-        }catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex.getCause());
-        }
 
+        studentRequestOutput = service.addStudent(createStudentRequest);
         return new ResponseEntity<>(studentRequestOutput, HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/{studentId}", produces = "application/json")
+    @GetMapping(path = "/{studentId}", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetStudentResponse> getStudent(@PathVariable int studentId) {
         GetStudentResponse getStudentResponse;
         try {
@@ -47,7 +41,7 @@ public class StudentController {
     }
 
 
-    @PutMapping(path = "/{studentId}")
+    @PutMapping(path = "/{studentId}", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UpdateStudentResponse> updateStudent(@PathVariable int studentId, @RequestBody UpdateStudentRequest updateStudentRequest) {
         UpdateStudentResponse updateStudentResponse;
 
@@ -61,7 +55,7 @@ public class StudentController {
         return new ResponseEntity<>(updateStudentResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{studentId}")
+    @DeleteMapping(path = "/{studentId}", consumes =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> deleteStudent(@PathVariable int studentId) {
 
         try {
@@ -73,7 +67,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping()
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetAllStudentsResponse> deleteStudent() {
         GetAllStudentsResponse getAllStudentsResponse = null;
         try {
@@ -83,6 +77,18 @@ public class StudentController {
                     HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
         return new ResponseEntity<>(getAllStudentsResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/login", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LoginStudentResponse> postLogin(@RequestBody LoginStudentRequest body) {
+        try {
+            LoginStudentResponse loginStudentResponse = service.postLogin(body);
+            return new ResponseEntity<>(loginStudentResponse, HttpStatus.FOUND);
+        }catch (Exception ex) {
+            throw ex;
+        }
+
+
     }
 
 

@@ -16,4 +16,6 @@ public interface StudentServiceAPI {
     void deleteStudent(int studentId);
 
     GetAllStudentsResponse getAllStudents();
+
+    LoginStudentResponse postLogin(LoginStudentRequest loginStudentRequest);
 }
