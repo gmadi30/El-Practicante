@@ -1,6 +1,8 @@
 import Navbar from "../../components/ui/Navbar";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 type FormValues = {
   name: string;
@@ -20,6 +22,8 @@ type FormValues = {
 };
 
 function Signup() {
+  const [isRequestOK, setRequestOK] = useState(false);
+  let navigate = useNavigate();
   const form = useForm<FormValues>();
   const { control, register, handleSubmit } = form;
 
@@ -46,16 +50,22 @@ function Signup() {
         "Content-Type": "application/json;",
       },
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error: Error) => {
-        console.log(error.message);
-      });
+      .then((response) => {
+        response.text().then((response) => {
+          console.log(response);
+          setRequestOK(true);
+        });
+      })
+      .catch((error: Error) => console.log(error));
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("Form", data);
     addStudent(data);
+
+    if (isRequestOK) {
+      navigate("/login");
+    }
   };
   return (
     <>
