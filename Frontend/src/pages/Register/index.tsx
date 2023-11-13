@@ -62,7 +62,9 @@ export default function Register() {
   return (
     <>
       <div className="mx-5 my-10 md:container md:mx-auto md:w-fit">
-        <h1 className="font-semibold text-5xl mb-5">Registro</h1>
+        <header className="bg-primary mx-3 my-24 tracking-[0.5rem]">
+          <h1 className="text-5xl py-4 text-center">REGISTRO</h1>
+        </header>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="border-4 border-primary rounded-xl font-body flex flex-col mt-3 mb-10 px-20 space-y-7 py-10"

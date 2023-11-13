@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 type FormValues = {
   email: string;
