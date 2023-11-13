@@ -5,44 +5,50 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home/index.tsx";
 import ErrorPage from "./routes/error-page.tsx";
 import Companies from "./pages/Companies/index.tsx";
-import Signup from "./pages/Register/index.tsx";
 import Profile from "./pages/StudentProfile/index.tsx";
 import Login from "./pages/Login/index.tsx";
 import CompaniesProfile from "./pages/CompanyProfile/index.tsx";
 import CreateReview from "./components/CreateReview.tsx";
+import Register from "./pages/Register/index.tsx";
+import NavbarLayout from "./components/ui/NavbarLayout.tsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/companies",
-    element: <Companies />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    //student/id/profile
-    path: "/profile",
-    element: <Profile />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    // /companies/id
-    path: "/company-profile",
-    element: <CompaniesProfile />,
-  },
-  {
-    // /student/id/createReview
-    path: "/create-review",
-    element: <CreateReview />,
+    element: <NavbarLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "company/companies",
+        element: <Companies />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        //student/id/profile
+        path: "student/:studentId/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        // /companies/id
+        path: "companies/:companyId/company-profile",
+        element: <CompaniesProfile />,
+      },
+      {
+        // /student/id/createReview
+        path: "student/:studentId/create-review",
+        element: <CreateReview />,
+      },
+    ],
   },
 ]);
 

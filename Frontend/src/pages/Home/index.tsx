@@ -1,4 +1,3 @@
-import Navbar from "../../components/ui/Navbar";
 import Header from "./components/Header";
 import Cards from "./components/Cards";
 import Companies from "./components/Companies";
@@ -6,7 +5,6 @@ import Companies from "./components/Companies";
 export default function Home() {
   return (
     <div className="">
-      <Navbar></Navbar>
       <main className="font-body container mx-auto">
         <Header></Header>
         <Cards></Cards>

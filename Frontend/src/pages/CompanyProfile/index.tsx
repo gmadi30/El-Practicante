@@ -1,12 +1,10 @@
-import Navbar from "../../components/ui/Navbar";
 import { TiMail, TiSocialLinkedin, TiHome } from "react-icons/ti";
-import { ImCheckmark, ImCross, ImStarFull, ImStarHalf } from "react-icons/im";
+import { ImStarFull, ImStarHalf } from "react-icons/im";
 import indra from "../../assets/img/indra.png";
 import me from "../../assets/img/me.png";
-export default function CompaniesProfile() {
+export default function CompanyProfile() {
   return (
     <>
-      <Navbar></Navbar>
       <div className="font-body container mx-auto  ">
         <header className="xl:mx-[10%]">
           <div className="flex justify-center items-center py-10 bg-primary h-[6rem] mt-20 ">

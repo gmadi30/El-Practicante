@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import Navbar from "../../components/ui/Navbar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 type FormValues = {
   email: string;
@@ -26,8 +26,16 @@ export default function Login() {
       },
     })
       .then((response) => {
-        if (response.status) {
-          navigate("/login", { replace: true });
+        if (response.status == 302) {
+          console.log(response);
+          response.json().then((response) => {
+            console.log(response);
+            navigate(`/student/${response.studentId}/profile`, {
+              state: response,
+              replace: true,
+              relative: "path",
+            });
+          });
         }
       })
       .catch();
@@ -39,7 +47,6 @@ export default function Login() {
   };
   return (
     <>
-      <Navbar></Navbar>
       <div className="container px-20 mx-auto max-w-screen-sm md:mx-auto lg:text-xl sm:w-[75%]">
         <form
           onSubmit={handleSubmit(onSubmit)}

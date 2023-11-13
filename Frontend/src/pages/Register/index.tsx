@@ -1,4 +1,3 @@
-import Navbar from "../../components/ui/Navbar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +19,7 @@ type FormValues = {
   zipCode: string;
 };
 
-function Signup() {
+export default function Register() {
   let navigate = useNavigate();
   const form = useForm<FormValues>();
   const { control, register, handleSubmit } = form;
@@ -62,7 +61,6 @@ function Signup() {
   };
   return (
     <>
-      <Navbar></Navbar>
       <div className="mx-5 my-10 md:container md:mx-auto md:w-fit">
         <h1 className="font-semibold text-5xl mb-5">Registro</h1>
         <form
@@ -329,5 +327,3 @@ function Signup() {
     </>
   );
 }
-
-export default Signup;

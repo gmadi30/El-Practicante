@@ -8,7 +8,7 @@ const Companies = () => {
         <p className="text-2xl text-center font-bold text-secondary-100 xl:px-28 xl:text-4xl ">
           DESCUBRE QUE OPINAN LOS DEMÁS SOBRE LAS EMPRESAS
         </p>
-        <Link to="/companies">
+        <Link to="/company/companies">
           <button className=" rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 xl:text-2xl">
             <p>empresas</p>
           </button>

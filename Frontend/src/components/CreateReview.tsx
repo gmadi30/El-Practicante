@@ -1,10 +1,6 @@
-import Navbar from "./ui/Navbar";
-
 export default function CreateReview() {
   return (
     <div className="font-body">
-      <Navbar></Navbar>
-
       <header className="bg-primary mx-3 my-24 tracking-[0.5rem]">
         <h1 className="text-5xl py-4 text-center">REVIEW</h1>
       </header>
