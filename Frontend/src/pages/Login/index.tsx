@@ -31,7 +31,7 @@ export default function Login() {
           response.json().then((response) => {
             console.log(response);
             navigate(`/student/${response.studentId}/profile`, {
-              state: response,
+              state: { response: response, isAuthenticated: "true" },
               replace: true,
               relative: "path",
             });
