@@ -3,11 +3,13 @@ package com.elpracticante.backend.student.entity;
 
 import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.degree.entity.DegreeEntity;
+import com.elpracticante.backend.intership.entity.IntershipEntity;
 import com.elpracticante.backend.school.entity.SchoolEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -49,9 +51,8 @@ public class StudentEntity {
     @Column(name = "DNI")
     private String dni;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "COMPANY_ID")
-    private CompanyEntity company;
+    @Column(name = "COMPANY_NAME")
+    private String companyName;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "SCHOOL_ID")
@@ -60,5 +61,11 @@ public class StudentEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "DEGREE_ID")
     private DegreeEntity degree;
+
+    @OneToMany(mappedBy = "student")
+    private List<IntershipEntity> interships;
+
+
+
 }
 

@@ -13,7 +13,7 @@ type FormValues = {
   mobile: string;
   school: string;
   degree: string;
-  company: string;
+  companyName: string;
   city: string;
   autonomousCommunity: string;
   zipCode: string;
@@ -38,7 +38,7 @@ export default function Register() {
         mobile: data.mobile,
         school: "1",
         degree: "1",
-        company: "1",
+        companyName: data.companyName,
         city: "Madrid",
         autonomousCommunity: "Comunidad de Madrid",
         zipCode: "29044",
@@ -226,7 +226,7 @@ export default function Register() {
                     "
             />
           </label>
-          <label className=" md:text-xl">
+          <label className="md:text-xl">
             <div className="text-sm">
               <h1 className="font-bold text-secondary-100 md:text-xl">
                 Centro de educación
@@ -291,8 +291,8 @@ export default function Register() {
               <h1 className="font-bold text-secondary-100">Empresa</h1>
               <select
                 className="px-2 py-4 border rounded w-full focus:border-secondary-100"
-                {...register("company")}
-                id="company"
+                {...register("companyName")}
+                id="companyName"
               >
                 <option value="selecciona">Selecciona una Empresa</option>
                 <option id="0" value="">

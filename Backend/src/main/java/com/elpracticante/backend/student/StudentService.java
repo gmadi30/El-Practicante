@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.elpracticante.backend.shared.utils.DateUtils.getFormattedLocalDate;
+
 
 @Service
 public class StudentService implements StudentServiceAPI {
@@ -61,9 +63,7 @@ public class StudentService implements StudentServiceAPI {
         return new GetStudentResponse(
                 studentEntity.getName(),
                 studentEntity.getLastName(),
-                new CompanyDTO(
-                        studentEntity.getCompany().getId(),
-                        studentEntity.getCompany().getName()),
+                studentEntity.getCompanyName(),
                 new SchoolDTO(
                         studentEntity.getSchool().getId(),
                         studentEntity.getSchool().getName()),
@@ -108,10 +108,7 @@ public class StudentService implements StudentServiceAPI {
                            studentEntity.getCity(),
                            studentEntity.getAutonomousCommunity(),
                            studentEntity.getMobile(),
-                           new CompanyDTO(
-                                   studentEntity.getCompany().getId(),
-                                   studentEntity.getCompany().getName()
-                           ),
+                           studentEntity.getCompanyName(),
                            new SchoolDTO(
                                    studentEntity.getSchool().getId(),
                                    studentEntity.getSchool().getName()
@@ -163,15 +160,12 @@ public class StudentService implements StudentServiceAPI {
         studentEntity.setMobile(StringUtils.hasLength(createStudentRequest.mobile()) ? createStudentRequest.mobile() : null);
         studentEntity.setSchool(getSchoolEntity(Integer.parseInt(createStudentRequest.school())).get());
         studentEntity.setDegree(getDegreeEntity(Integer.parseInt(createStudentRequest.degree())).get());
-        studentEntity.setCompany(getCompanyEntity(Integer.parseInt(createStudentRequest.company())).get());
+        studentEntity.setCompanyName(createStudentRequest.companyName());
 
         return studentEntity;
     }
 
-    private static LocalDate getFormattedLocalDate(String createStudentRequest) {
-        LocalDate birthday = LocalDate.parse(createStudentRequest);
-        return birthday;
-    }
+
 
     private StudentEntity getStudentEntityById(int studentId) {
         Optional<StudentEntity> studentEntity = studentRepository.findById(studentId);

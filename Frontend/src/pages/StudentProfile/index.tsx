@@ -45,7 +45,7 @@ export default function Profile() {
             autonomousCommunity="Comunidad de Madrid"
           />
           <Intership
-            company={student?.companyDTO.name}
+            company={student?.companyName}
             companyReviewsAmout="20"
             intershipDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam."
             intershipBest={[

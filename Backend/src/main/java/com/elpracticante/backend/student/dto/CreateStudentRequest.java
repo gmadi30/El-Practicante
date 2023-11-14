@@ -22,7 +22,7 @@ public record CreateStudentRequest(
 
         String mobile,
 
-        String company,
+        String companyName,
 
         String school,
 

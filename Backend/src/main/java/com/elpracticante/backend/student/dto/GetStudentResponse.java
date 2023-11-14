@@ -9,7 +9,7 @@ public record GetStudentResponse (
 
         String lastName,
 
-        CompanyDTO companyDTO,
+        String companyName,
 
         SchoolDTO schoolDTO,
 
