@@ -15,9 +15,8 @@ public class TechnologyEntity {
     @Column(name = "TECHNOLOGY_ID")
     private Integer id;
 
+    @Column(name = "NAME")
     private String name;
-
-    private String category;
 
     @ManyToMany(mappedBy = "technologies")
     private List<IntershipEntity> interships;

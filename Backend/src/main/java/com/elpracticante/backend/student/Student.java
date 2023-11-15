@@ -12,7 +12,7 @@ public record Student(
         String city,
         String autonomousCommunity,
         String mobile,
-      String companyName,
+        String companyName,
         SchoolDTO schoolDTO,
         DegreeDTO degreeDTO
 

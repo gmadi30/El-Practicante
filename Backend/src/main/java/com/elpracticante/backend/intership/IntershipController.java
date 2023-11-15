@@ -3,6 +3,7 @@ package com.elpracticante.backend.intership;
 import com.elpracticante.backend.intership.dto.CreateIntershipRequest;
 import com.elpracticante.backend.intership.dto.CreateIntershipResponse;
 import lombok.NonNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class IntershipController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateIntershipResponse> addIntership(@RequestBody CreateIntershipRequest createIntershipRequest) {
-        return null;
+        CreateIntershipResponse createIntershipResponse = service.addStudent(createIntershipRequest);
+        return new ResponseEntity<>(createIntershipResponse, HttpStatus.OK);
     }
 }

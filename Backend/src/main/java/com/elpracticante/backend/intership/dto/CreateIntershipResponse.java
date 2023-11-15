@@ -1,7 +1,3 @@
 package com.elpracticante.backend.intership.dto;
 
-public record CreateIntershipResponse(
-
-
-) {
-}
+public record CreateIntershipResponse(Integer intershipId) {}

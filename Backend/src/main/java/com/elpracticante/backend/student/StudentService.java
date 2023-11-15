@@ -1,12 +1,8 @@
 package com.elpracticante.backend.student;
 
-import com.elpracticante.backend.company.dto.CompanyDTO;
-import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.company.repository.CompanyRepository;
 import com.elpracticante.backend.degree.dto.DegreeDTO;
-import com.elpracticante.backend.degree.entity.DegreeEntity;
 import com.elpracticante.backend.school.dto.SchoolDTO;
-import com.elpracticante.backend.school.entity.SchoolEntity;
 import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.school.repository.SchoolRepository;
@@ -15,24 +11,20 @@ import com.elpracticante.backend.student.api.StudentServiceAPI;
 import com.elpracticante.backend.student.dto.*;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.elpracticante.backend.shared.utils.DateUtils.getFormattedLocalDate;
+import static com.elpracticante.backend.shared.utils.EntityHelperUtils.*;
 
 
 @Service
 public class StudentService implements StudentServiceAPI {
-
-    private final StudentRepository studentRepository;
 
     private final SchoolRepository schoolRepository;
 
@@ -40,11 +32,14 @@ public class StudentService implements StudentServiceAPI {
 
     private final CompanyRepository companyRepository;
 
-    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, DegreeRepository degreeRepository, CompanyRepository companyRepository) {
+    private final StudentRepository studentRepository;
+
+
+    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, DegreeRepository degreeRepository, CompanyRepository companyRepository, SchoolRepository schoolRepository1, DegreeRepository degreeRepository1, CompanyRepository companyRepository1) {
         this.studentRepository = studentRepository;
-        this.schoolRepository = schoolRepository;
-        this.degreeRepository = degreeRepository;
-        this.companyRepository = companyRepository;
+        this.schoolRepository = schoolRepository1;
+        this.degreeRepository = degreeRepository1;
+        this.companyRepository = companyRepository1;
     }
 
     @Override
@@ -58,7 +53,7 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public GetStudentResponse getStudent(int studentId) {
-        StudentEntity studentEntity = getStudentEntityById(studentId);
+        StudentEntity studentEntity = getStudentEntityById(studentId, studentRepository);
 
         return new GetStudentResponse(
                 studentEntity.getName(),
@@ -75,7 +70,7 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public UpdateStudentResponse updateStudent(int studentId, UpdateStudentRequest updateStudentRequest) {
-        StudentEntity studentEntity = getStudentEntityById(studentId);
+        StudentEntity studentEntity = getStudentEntityById(studentId, studentRepository);
 
         studentEntity.setName(updateStudentRequest.name());
         studentEntity.setLastName(updateStudentRequest.lastName());
@@ -89,7 +84,7 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public void deleteStudent(int studentId) {
-        StudentEntity studentEntity = getStudentEntityById(studentId);
+        StudentEntity studentEntity = getStudentEntityById(studentId, studentRepository);
         studentRepository.delete(studentEntity);
     }
 
@@ -158,8 +153,8 @@ public class StudentService implements StudentServiceAPI {
         studentEntity.setAutonomousCommunity(createStudentRequest.autonomousCommunity());
         studentEntity.setZipCode(createStudentRequest.zipCode());
         studentEntity.setMobile(StringUtils.hasLength(createStudentRequest.mobile()) ? createStudentRequest.mobile() : null);
-        studentEntity.setSchool(getSchoolEntity(Integer.parseInt(createStudentRequest.school())).get());
-        studentEntity.setDegree(getDegreeEntity(Integer.parseInt(createStudentRequest.degree())).get());
+        studentEntity.setSchool(getSchoolEntity(Integer.parseInt(createStudentRequest.school()), schoolRepository));
+        studentEntity.setDegree(getDegreeEntity(Integer.parseInt(createStudentRequest.degree()), degreeRepository));
         studentEntity.setCompanyName(createStudentRequest.companyName());
 
         return studentEntity;
@@ -167,41 +162,7 @@ public class StudentService implements StudentServiceAPI {
 
 
 
-    private StudentEntity getStudentEntityById(int studentId) {
-        Optional<StudentEntity> studentEntity = studentRepository.findById(studentId);
 
-       if (studentEntity.isPresent()) {
-           return studentEntity.get();
-       }
-        throw new EntityNotFoundException("No record was found in the STUDENT table by the given ID");
-
-    }
-
-    private Optional<DegreeEntity> getDegreeEntity(int degreeId) {
-        Optional<DegreeEntity> degree = degreeRepository.findById(degreeId);
-
-        if (degree.isEmpty()){
-            throw new EntityNotFoundException("No record was found in the DEGREE table by the given ID");
-        }
-        return degree;
-    }
-
-    private Optional<SchoolEntity> getSchoolEntity(int schoolId) {
-        Optional<SchoolEntity> school = schoolRepository.findById(schoolId);
-        if (school.isEmpty()){
-            throw new EntityNotFoundException("No record was found in the SCHOOL table by the given ID");
-        }
-        return school;
-    }
-
-    private Optional<CompanyEntity> getCompanyEntity(int companyId) {
-        Optional<CompanyEntity> companyEntity = companyRepository.findById(companyId);
-
-        if (companyEntity.isEmpty()){
-            throw new EntityNotFoundException("No record was found in the COMPANY table by the given ID");
-        }
-        return companyEntity;
-    }
 
     private void validateInput(CreateStudentRequest createStudentRequest) throws EmptyInputFieldException {
 

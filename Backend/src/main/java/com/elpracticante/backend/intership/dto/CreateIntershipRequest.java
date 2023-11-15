@@ -8,17 +8,21 @@ import java.util.List;
 
 public record CreateIntershipRequest(
 
-        SchoolDTO school,
+        String schoolName,
 
-        CompanyDTO company,
+        Integer companyId,
 
-        DegreeDTO degree,
+        Integer studentId,
+
+        String degreeName,
 
         String startDate,
 
         String endDate,
 
         String description,
+
+        Integer rating,
 
         List<String> technologies,
 
