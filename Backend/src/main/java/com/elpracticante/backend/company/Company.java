@@ -1,5 +1,9 @@
 package com.elpracticante.backend.company;
 
-public class Company {
+public record Company(
+        String companyName,
+
+        Double rating
+) {
 
 }

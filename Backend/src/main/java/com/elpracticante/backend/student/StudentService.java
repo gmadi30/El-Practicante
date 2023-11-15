@@ -1,7 +1,15 @@
 package com.elpracticante.backend.student;
 
+import com.elpracticante.backend.company.Company;
 import com.elpracticante.backend.company.repository.CompanyRepository;
 import com.elpracticante.backend.degree.dto.DegreeDTO;
+import com.elpracticante.backend.intership.Intership;
+import com.elpracticante.backend.intership.dto.Summarize;
+import com.elpracticante.backend.intership.dto.Technology;
+import com.elpracticante.backend.intership.entity.IntershipEntity;
+import com.elpracticante.backend.intership.entity.SummarizeEntity;
+import com.elpracticante.backend.intership.entity.TechnologyEntity;
+import com.elpracticante.backend.intership.repository.IntershipRepository;
 import com.elpracticante.backend.school.dto.SchoolDTO;
 import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
@@ -34,12 +42,15 @@ public class StudentService implements StudentServiceAPI {
 
     private final StudentRepository studentRepository;
 
+    private final IntershipRepository intershipRepository;
 
-    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, DegreeRepository degreeRepository, CompanyRepository companyRepository, SchoolRepository schoolRepository1, DegreeRepository degreeRepository1, CompanyRepository companyRepository1) {
+
+    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, DegreeRepository degreeRepository, CompanyRepository companyRepository, SchoolRepository schoolRepository1, DegreeRepository degreeRepository1, CompanyRepository companyRepository1, IntershipRepository intershipRepository) {
         this.studentRepository = studentRepository;
         this.schoolRepository = schoolRepository1;
         this.degreeRepository = degreeRepository1;
         this.companyRepository = companyRepository1;
+        this.intershipRepository = intershipRepository;
     }
 
     @Override
@@ -54,7 +65,6 @@ public class StudentService implements StudentServiceAPI {
     @Override
     public GetStudentResponse getStudent(int studentId) {
         StudentEntity studentEntity = getStudentEntityById(studentId, studentRepository);
-
         return new GetStudentResponse(
                 studentEntity.getName(),
                 studentEntity.getLastName(),
@@ -64,8 +74,51 @@ public class StudentService implements StudentServiceAPI {
                         studentEntity.getSchool().getName()),
                 new DegreeDTO(
                         studentEntity.getDegree().getId(),
-                        studentEntity.getDegree().getName())
+                        studentEntity.getDegree().getName()),
+                mapToIntership(studentEntity.getInterships())
         );
+    }
+
+    private List<Intership> mapToIntership(List<IntershipEntity> interships) {
+        List<Intership> intershipList = new ArrayList<>();
+        for(IntershipEntity intershipEntity: interships) {
+           intershipList.add( new Intership(
+                    intershipEntity.getId(),
+                    intershipEntity.getDescription(),
+                    intershipEntity.getStartDate(),
+                    intershipEntity.getEndDate(),
+                    intershipEntity.getRating(),
+                    intershipEntity.getDegreeName(),
+                    intershipEntity.getSchoolName(),
+                    new Company(intershipEntity.getCompany().getName(), intershipEntity.getCompany().getRating()),
+                    mapToTechnology(intershipEntity.getTechnologies()),
+                    mapToSummarize(intershipEntity.getSummaries()))
+           );
+        }
+
+        return intershipList;
+    }
+
+    private List<Summarize> mapToSummarize(List<SummarizeEntity> summaries) {
+        List<Summarize> summarizeList = new ArrayList<>();
+        for (SummarizeEntity summarizeEntity: summaries) {
+
+            summarizeList.add(
+                    new Summarize(summarizeEntity.getName(), summarizeEntity.getType())
+            );
+        }
+        return summarizeList;
+    }
+
+    private List<Technology> mapToTechnology(List<TechnologyEntity> technologies) {
+        List<Technology> technologyList = new ArrayList<>();
+        for (TechnologyEntity technologyEntity: technologies) {
+
+            technologyList.add(
+                    new Technology(technologyEntity.getName())
+            );
+        }
+        return technologyList;
     }
 
     @Override

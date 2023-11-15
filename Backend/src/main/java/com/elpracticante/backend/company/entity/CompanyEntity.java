@@ -42,4 +42,7 @@ public class CompanyEntity {
     @OneToMany(mappedBy = "company")
     private List<IntershipEntity> interships;
 
+    @Column(name = "RATING")
+    private Double rating;
+
 }

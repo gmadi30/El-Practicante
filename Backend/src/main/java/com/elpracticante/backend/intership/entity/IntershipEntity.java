@@ -30,7 +30,7 @@ public class IntershipEntity {
     private LocalDate endDate;
 
     @Column(name = "RATING")
-    private Double rating;
+    private Integer rating;
 
     @Column(name = "DEGREE_NAME")
     private String degreeName;

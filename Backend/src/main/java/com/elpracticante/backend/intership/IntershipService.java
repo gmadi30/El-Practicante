@@ -46,7 +46,7 @@ public class IntershipService implements IntershipServiceAPI {
         intershipEntity.setDescription(createIntershipRequest.description());
         intershipEntity.setStartDate(getFormattedLocalDate(createIntershipRequest.startDate()));
         intershipEntity.setEndDate(getFormattedLocalDate(createIntershipRequest.endDate()));
-        intershipEntity.setRating(Double.valueOf(createIntershipRequest.rating()));
+        intershipEntity.setRating(createIntershipRequest.rating());
         intershipEntity.setDegreeName(createIntershipRequest.degreeName());
         intershipEntity.setSchoolName(createIntershipRequest.schoolName());
         intershipEntity.setStudent(EntityHelperUtils.getStudentEntityById(createIntershipRequest.studentId(), studentRepository));
