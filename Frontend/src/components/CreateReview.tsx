@@ -1,7 +1,7 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm, SubmitHandler } from "react-hook-form";
 import RatingBar from "./ui/RatingBar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type FormValues = {
   school: string;
@@ -26,11 +26,16 @@ export default function CreateReview() {
   let navigate = useNavigate();
   const form = useForm<FormValues>();
   const params = useParams();
+  let location = useLocation();
   const { control, register, handleSubmit } = form;
 
   const addIntership = async (data: FormValues) => {
+    console.log(
+      "Este es el valor del studentId en el create rewview " +
+        location.state.studentId
+    );
     await fetch(
-      `http://localhost:8080/api/v1/students/${params.studentId}/create-review`,
+      `http://localhost:8080/api/v1/students/${location.state.studentId}/create-review`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -43,7 +48,7 @@ export default function CreateReview() {
           technologies: [data.technology1, data.technology2, data.technology3],
           summaryBest: [data.best1, data.best2, data.best3],
           summaryWorst: [data.worst1, data.worst2, data.worst3],
-          studentId: params.studentId,
+          studentId: location.state.studentId,
         }),
         headers: {
           "Content-Type": "application/json;",

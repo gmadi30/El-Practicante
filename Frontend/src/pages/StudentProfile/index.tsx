@@ -1,19 +1,27 @@
 import Header from "./components/Header";
 import Intership from "./components/Intership";
 import indra from "../../assets/img/indra.png";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
   const [student, setStudent] = useState<any>(null);
   let location = useLocation();
   const params = useParams();
+  const navigate = useNavigate();
   let isAuthenticated = false;
-  console.log(params);
 
   if (location.state !== null) {
     isAuthenticated = location.state.isAuthenticated;
   }
+
+  const handleNewInterShipOnClick = () => {
+    navigate(`/student/${params.studentId}/create-review`, {
+      replace: true,
+      state: { studentId: params.studentId },
+    });
+  };
+
   useEffect(() => {
     console.log(location);
     fetch(`http://localhost:8080/api/v1/students/${params.studentId}`, {
@@ -61,6 +69,13 @@ export default function Profile() {
             technologies={["Spring Boot", "Java", "Postman"]}
             profilePicture={indra}
           />
+
+          <button
+            onClick={handleNewInterShipOnClick}
+            className=" rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 xl:text-2xl"
+          >
+            <p>AÑADIR PRÁCTICA</p>
+          </button>
         </div>
       </>
     );
