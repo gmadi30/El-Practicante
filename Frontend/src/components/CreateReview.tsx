@@ -1,6 +1,7 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm, SubmitHandler } from "react-hook-form";
 import RatingBar from "./ui/RatingBar";
+import { useNavigate, useParams } from "react-router-dom";
 
 type FormValues = {
   school: string;
@@ -22,11 +23,44 @@ type FormValues = {
 };
 
 export default function CreateReview() {
+  let navigate = useNavigate();
   const form = useForm<FormValues>();
+  const params = useParams();
   const { control, register, handleSubmit } = form;
+
+  const addIntership = async (data: FormValues) => {
+    await fetch(
+      `http://localhost:8080/api/v1/students/${params.studentId}/create-review`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          school: data.school,
+          company: data.company,
+          startDate: data.startDate,
+          endDate: data.endDate,
+          description: data.description,
+          rating: data.rating,
+          technologies: [data.technology1, data.technology2, data.technology3],
+          summaryBest: [data.best1, data.best2, data.best3],
+          summaryWorst: [data.worst1, data.worst2, data.worst3],
+          studentId: params.studentId,
+        }),
+        headers: {
+          "Content-Type": "application/json;",
+        },
+      }
+    )
+      .then((response) => {
+        if (response.status == 201) {
+          navigate(`/students/${params.studentId}/profile`, { replace: true });
+        }
+      })
+      .catch((error: Error) => console.log("Este es el error: " + error));
+  };
 
   const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
     console.log("Formulario", data);
+    addIntership(data);
   };
 
   return (
