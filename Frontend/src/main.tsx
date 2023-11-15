@@ -8,9 +8,9 @@ import Companies from "./pages/Companies/index.tsx";
 import Profile from "./pages/StudentProfile/index.tsx";
 import Login from "./pages/Login/index.tsx";
 import CompaniesProfile from "./pages/CompanyProfile/index.tsx";
-import CreateReview from "./components/CreateReview.tsx";
 import Register from "./pages/Register/index.tsx";
 import NavbarLayout from "./components/ui/NavbarLayout.tsx";
+import CreateReview from "./components/CreateReview.tsx";
 
 const router = createBrowserRouter([
   {

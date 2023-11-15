@@ -1,9 +1,34 @@
-import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { useForm, SubmitHandler } from "react-hook-form";
+import RatingBar from "./ui/RatingBar";
+
+type FormValues = {
+  school: string;
+  company: string;
+  degree: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  rating: string;
+  technology1: string;
+  technology2: string;
+  technology3: string;
+  best1: string;
+  best2: string;
+  best3: string;
+  worst1: string;
+  worst2: string;
+  worst3: string;
+};
 
 export default function CreateReview() {
-  const form = useForm();
+  const form = useForm<FormValues>();
   const { control, register, handleSubmit } = form;
+
+  const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
+    console.log("Formulario", data);
+  };
+
   return (
     <div className="font-body mx-auto container  xl:w-[60%]">
       <header className="bg-primary mx-3 my-24 tracking-[0.5rem]">
@@ -11,7 +36,7 @@ export default function CreateReview() {
       </header>
 
       <main className="m-3 mt-12 ">
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <section className="my-10">
             <h1 className="text-xl xl:text-2xl text-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
               DATOS GENERALES
@@ -39,7 +64,7 @@ export default function CreateReview() {
                       Selecciona un Centro de Educación
                     </option>
                     <option value=""> No aparece</option>
-                    <option id="" value="IES Francisco de Goya">
+                    <option id="" value={1}>
                       IES Francisco de Goya
                     </option>
                   </select>
@@ -151,6 +176,45 @@ export default function CreateReview() {
               w-3/4  py-2 pl-2 rounded font-normal"
               ></textarea>
             </label>
+            <h1 className="text-xl xl:text-2xl text-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              RATE IT!
+            </h1>
+            <p className="my-2  xl:text-xl">
+              Califica tus prácticas del 1 a 5 (El 0 también es una opción 👀)
+            </p>
+            <label className="flex-grow">
+              <h1 className="text-secondary-100 my-2 font-bold">
+                Calificación
+              </h1>
+              <select
+                className=" 
+                  border rounded py-2
+                  pl-2 w-fit text-black
+                   focus:focus:border-secondary-100"
+                {...register("rating")}
+                name="rating"
+                id="rating"
+              >
+                <option value="selecciona">selecciona</option>
+                <option value="0">0</option>
+                <option id="1" value="1">
+                  1
+                </option>
+                <option id="2" value="2">
+                  2
+                </option>
+                <option id="3" value="3">
+                  3
+                </option>
+                <option id="4" value="4">
+                  4
+                </option>
+                <option id="5" value="5">
+                  5
+                </option>
+              </select>
+            </label>
+            <RatingBar></RatingBar>
           </section>
           <section className="my-5 md">
             <h1 className="text-xl xl:text-2xl text-bold max-w-xs  mt-3 mb-2 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
