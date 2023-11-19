@@ -11,6 +11,10 @@ export default function Profile() {
   const navigate = useNavigate();
   let isAuthenticated = false;
 
+  console.log({
+    path: location.pathname,
+    state: location.state,
+  });
   if (location.state !== null) {
     isAuthenticated = location.state.isAuthenticated;
   }
@@ -23,7 +27,6 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    console.log(location);
     fetch(`http://localhost:8080/api/v1/students/${params.studentId}`, {
       method: "GET",
       headers: {
@@ -39,7 +42,6 @@ export default function Profile() {
   }, []);
 
   if (isAuthenticated) {
-    console.log(student);
     return (
       <>
         <div className="font-body md:container md:mx-auto">

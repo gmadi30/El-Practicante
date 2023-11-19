@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, set, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -17,9 +17,10 @@ type loginResponse = {
 export default function Login() {
   let navigate = useNavigate();
   const form = useForm<FormValues>();
-  const { control, register, handleSubmit } = form;
+  const { control, register, handleSubmit, formState } = form;
+  const { errors } = formState;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [queryResponse, setQueryResponse] = useState(null);
+  const [isCredentialsWrong, setIsCredentialsWrong] = useState(false);
 
   const retrieveStudent = async (data: FormValues) => {
     await fetch("http://localhost:8080/api/v1/students/login", {
@@ -33,23 +34,25 @@ export default function Login() {
       },
     })
       .then((response) => {
-        if (response.status == 302) {
+        if (response.status === 302) {
           console.log(response);
           response.json().then((response) => {
-            console.log(response);
+            console.log("Endpoint students/login body response", response);
             setIsLoggedIn(true);
 
             setTimeout(() => {
               navigateLoginResponse(response);
             }, 2000);
           });
+        } else if (response.status === 404) {
+          setIsCredentialsWrong(true);
         }
       })
       .catch();
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
-    console.log("Formulario", data);
+    console.log("Form collected data", data);
     retrieveStudent(data);
   };
 
@@ -61,7 +64,7 @@ export default function Login() {
     });
   };
 
-  if (isLoggedIn) {
+  if (!isLoggedIn) {
     return (
       <>
         <div className="container px-20 mx-auto max-w-screen-sm md:mx-auto lg:text-xl sm:w-[75%]">
@@ -74,7 +77,12 @@ export default function Login() {
             <label htmlFor="email" className="text-sm font-bold md:text-xl">
               <h1 className="text-secondary-100">Email</h1>
               <input
-                {...register("email")}
+                {...register("email", {
+                  required: {
+                    value: true,
+                    message: "Este campo es obligatorio",
+                  },
+                })}
                 id="email"
                 type="email"
                 placeholder="Email"
@@ -89,11 +97,19 @@ export default function Login() {
                     placeholder:opacity-60
                     "
               />
+              <p className="text-base font-light text-red">
+                {errors.email?.message}
+              </p>
             </label>
             <label htmlFor="password" className="text-sm font-bold md:text-xl">
               <h1 className="text-secondary-100">Contraseña</h1>
               <input
-                {...register("password")}
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "Este campo es obligatorio",
+                  },
+                })}
                 id="password"
                 type="password"
                 placeholder="Contraseña"
@@ -108,8 +124,16 @@ export default function Login() {
                     placeholder:opacity-60
                     "
               />
+              <p className="text-base font-light text-red">
+                {errors.password?.message}
+              </p>
             </label>
-
+            {isCredentialsWrong && (
+              <p className="font-bold text-red">
+                {" "}
+                ❌ ¡Las credenciales son incorrectas!
+              </p>
+            )}
             <div className="mt-1">
               <a href="#" className="underline hover:text-secondary-100">
                 He olvidado mi contraseña
