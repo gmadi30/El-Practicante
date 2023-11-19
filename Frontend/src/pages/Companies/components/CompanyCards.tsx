@@ -1,41 +1,47 @@
 import Card from "./Card";
-import indra from "../../../assets/img/indra.png";
-import me from "../../../assets/img/accenture.png";
+import { Company } from "../../../types/types";
 
-const CompanyCards = () => {
+type CompanyCardsProps = {
+  companies: Company[];
+};
+
+const CompanyCards: React.FC<CompanyCardsProps> = (
+  props: CompanyCardsProps
+) => {
+  const { companies } = props;
+
+  const companiesFiltered = companies.filter(
+    (company) => company.companyId !== 0
+  );
   return (
     <section className="px-5 flex flex-col ">
-      <Card
-        companyName="Indra"
-        companyReviewsAmout="20"
-        city="Madrid"
-        autonomousCommunity="Comunidad de Madrid"
-        companyBest={[
-          "Ambiente de trabajo",
-          "Dinámica de equipo",
-          "Ambiente competitivo",
-        ]}
-        grades={["DAM", "DAW", "ASIR"]}
-        workTypes={["Hibrido", "Remoto"]}
-        isEven={true}
-        profilePicture={indra}
-      />
-
-      <Card
-        companyName="Accenture"
-        companyReviewsAmout="20"
-        city="Madrid"
-        autonomousCommunity="Comunidad de Madrid"
-        companyBest={[
-          "Ambiente de trabajo",
-          "Dinámica de equipo",
-          "Ambiente competitivo",
-        ]}
-        grades={["DAM", "DAW", "ASIR"]}
-        workTypes={["Hibrido", "Remoto"]}
-        isEven={false}
-        profilePicture={me}
-      />
+      {companiesFiltered.map((company, index) => {
+        return (
+          <div>
+            <Card
+              key={company.companyId.toString()}
+              companyName={company.companyName}
+              companyReviewsAmout={
+                company.intershipsAmount === null
+                  ? "0"
+                  : company.intershipsAmount.toString()
+              }
+              city={company.city}
+              autonomousCommunity={company.autonomousCommunity}
+              companyBest={[
+                "Ambiente de trabajo",
+                "Dinámica de equipo",
+                "Ambiente competitivo",
+              ]}
+              grades={["DAM", "DAW", "ASIR"]}
+              workTypes={["Hibrido", "Remoto"]}
+              isEven={index % 2 ? true : false}
+              profilePicture={company.companyName}
+              companyRating={company.rating}
+            />
+          </div>
+        );
+      })}
     </section>
   );
 };

@@ -1,7 +1,12 @@
-import { ImSearch, ImStarFull, ImStarHalf } from "react-icons/im";
-import { Link } from "react-router-dom";
+import { ImSearch } from "react-icons/im";
+import { FilterParams } from "../../types/types";
 
-const SearchBar = () => {
+type SearchBarProps = {
+  filterBy: string;
+  setFilterBy: React.Dispatch<React.SetStateAction<FilterParams>>;
+};
+
+const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   return (
     <main className="flex flex-col container mx-auto  mb-10 max-w-[25%]   min-w-fit ">
       <section className="font-body ">
@@ -56,16 +61,22 @@ const SearchBar = () => {
       <section className="border-t border-b py-3 border-gray hidden lg:block">
         <ul className="flex space-x-5">
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button>Alfabéticamente</button>
+            <button onClick={() => props.setFilterBy("alphabetically")}>
+              Alfabéticamente
+            </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button>Más reviews</button>
+            <button onClick={() => props.setFilterBy("reviews")}>
+              Más reviews
+            </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
             <button>Menos reviews</button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button>Scoring ascendente</button>
+            <button onClick={() => props.setFilterBy("scoring")}>
+              Scoring ascendente
+            </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
             <button>Scoring descendente</button>

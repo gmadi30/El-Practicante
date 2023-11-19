@@ -1,5 +1,5 @@
-import { ImStarFull, ImStarHalf, ImCheckmark } from "react-icons/im";
 import { Link } from "react-router-dom";
+import Rating from "../../../components/ui/Rating";
 
 interface CardProps {
   profilePicture: string;
@@ -11,27 +11,31 @@ interface CardProps {
   grades: string[];
   workTypes: string[];
   isEven: boolean;
+  companyRating: number;
 }
 
 const Card: React.FC<CardProps> = (props) => {
+  const impagesFolderPath = "../../../assets/img/";
+
+  const imgUrl = new URL(
+    `${impagesFolderPath}${props.companyName}.png`,
+    import.meta.url
+  ).href;
+
   return (
     <div className="flex justify-center mb-5">
       <Link to={"/company-profile"}>
         <div className="flex flex-col px-10">
           <div className="">
             <img
-              src={props.profilePicture}
+              src={imgUrl}
               className="float-left w-[100px] h-[100px] object-cover rounded mb-3"
             ></img>
           </div>
 
           <div className="flex flex-col  justify-center items-center">
             <div className="flex text-xl">
-              <ImStarFull></ImStarFull>
-              <ImStarFull></ImStarFull>
-              <ImStarFull></ImStarFull>
-              <ImStarFull></ImStarFull>
-              <ImStarHalf></ImStarHalf>
+              <Rating rating={props.companyRating}></Rating>
             </div>
 
             <p className=" text-base">

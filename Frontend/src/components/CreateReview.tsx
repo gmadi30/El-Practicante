@@ -1,6 +1,6 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm, SubmitHandler } from "react-hook-form";
-import RatingBar from "./ui/RatingBar";
+import RatingBar from "./ui/Rating";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type FormValues = {
@@ -258,7 +258,6 @@ export default function CreateReview() {
                 </option>
               </select>
             </label>
-            <RatingBar></RatingBar>
           </section>
           <section className="my-5 md">
             <h1 className="text-xl xl:text-2xl text-bold max-w-xs  mt-3 mb-2 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">

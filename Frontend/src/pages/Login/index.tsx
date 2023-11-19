@@ -1,19 +1,13 @@
 import { Link } from "react-router-dom";
-import { SubmitHandler, set, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SuccesfulResponse from "../../components/ui/SuccesfulResponse";
-
-type FormValues = {
-  email: string;
-  password: string;
-};
-
-type loginResponse = {
-  studentId: string;
-};
-
+import {
+  RegisterFormValues as FormValues,
+  LoginResponse as loginResponse,
+} from "../../types/types";
 export default function Login() {
   let navigate = useNavigate();
   const form = useForm<FormValues>();

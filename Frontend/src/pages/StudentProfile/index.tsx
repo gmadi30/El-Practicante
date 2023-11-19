@@ -3,9 +3,10 @@ import Intership from "./components/Intership";
 import indra from "../../assets/img/indra.png";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Student } from "../../types/types";
 
 export default function Profile() {
-  const [student, setStudent] = useState<any>(null);
+  const [student, setStudent] = useState<Student>({} as Student);
   let location = useLocation();
   const params = useParams();
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ export default function Profile() {
     })
       .then((response) => {
         response.json().then((data) => {
+          console.log("Estudiante recuperado", data);
           setStudent(data);
         });
       })
@@ -46,8 +48,8 @@ export default function Profile() {
       <>
         <div className="font-body md:container md:mx-auto">
           <Header
-            name={student?.name}
-            lastName={student?.lastName}
+            name={student.name}
+            lastName={student.lastName}
             grade="DAM"
             school="IES Francisco de Goya"
             class="2022"

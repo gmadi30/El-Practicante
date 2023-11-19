@@ -3,23 +3,7 @@ import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SuccesfulResponse from "../../components/ui/SuccesfulResponse";
-
-type FormValues = {
-  name: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  birthday: string;
-  dni: string;
-  mobile: string;
-  school: string;
-  degree: string;
-  companyName: string;
-  city: string;
-  autonomousCommunity: string;
-  zipCode: string;
-};
+import { RegisterFormValues as FormValues } from "../../types/types";
 
 export default function Register() {
   let navigate = useNavigate();

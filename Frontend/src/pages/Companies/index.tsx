@@ -1,11 +1,32 @@
+import { useEffect, useState } from "react";
 import SearchBar from "../../components/ui/SearchBar";
 import CompanyCards from "./components/CompanyCards";
+import { Company, FilterParams } from "../../types/types";
 
 export default function Companies() {
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [filterBy, setFilterBy] = useState<FilterParams>("alphabetically");
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/api/v1/companies?sortBy=${filterBy}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json;",
+      },
+    })
+      .then((response) => {
+        response.json().then((data) => {
+          console.log(data.companyList);
+          setCompanies(data.companyList);
+        });
+      })
+      .catch();
+  }, [filterBy]);
+
   return (
     <>
-      <SearchBar />
-      <CompanyCards></CompanyCards>
+      <SearchBar filterBy={filterBy} setFilterBy={setFilterBy} />
+      <CompanyCards companies={companies}></CompanyCards>
     </>
   );
 }
