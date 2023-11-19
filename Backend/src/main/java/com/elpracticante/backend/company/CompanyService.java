@@ -4,7 +4,6 @@ import com.elpracticante.backend.company.api.CompanyServiceAPI;
 import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.company.repository.CompanyRepository;
-import com.elpracticante.backend.student.StudentController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,16 +27,14 @@ public class CompanyService implements CompanyServiceAPI {
 
         List<CompanyEntity> companyEntityList = companyRepository.findAll();
         List<Company> companyList = new ArrayList<>();
-        companyEntityList.stream().forEach((companyEntity) -> {
-            companyList.add( new Company(
-                    companyEntity.getId(),
-                    companyEntity.getName(),
-                    companyEntity.getRating(),
-                    companyEntity.getCity(),
-                    companyEntity.getAutonomousCommunity(),
-                    companyEntity.getInterships().size()
-            ));
-        });
+        companyEntityList.forEach((companyEntity) -> companyList.add( new Company(
+                companyEntity.getId(),
+                companyEntity.getName(),
+                companyEntity.getRating(),
+                companyEntity.getCity(),
+                companyEntity.getAutonomousCommunity(),
+                companyEntity.getInterships().size()
+        )));
 
         return new GetAllCompaniesResponse(companyList);
     }

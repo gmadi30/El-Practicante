@@ -1,25 +1,22 @@
 package com.elpracticante.backend.student;
 
 import com.elpracticante.backend.company.Company;
-import com.elpracticante.backend.company.repository.CompanyRepository;
 import com.elpracticante.backend.degree.dto.DegreeDTO;
+import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.intership.Intership;
 import com.elpracticante.backend.intership.dto.Summarize;
 import com.elpracticante.backend.intership.dto.Technology;
 import com.elpracticante.backend.intership.entity.IntershipEntity;
 import com.elpracticante.backend.intership.entity.SummarizeEntity;
 import com.elpracticante.backend.intership.entity.TechnologyEntity;
-import com.elpracticante.backend.intership.repository.IntershipRepository;
 import com.elpracticante.backend.school.dto.SchoolDTO;
-import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
-import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.school.repository.SchoolRepository;
+import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.shared.exceptions.WrongLoginCredentialsException;
 import com.elpracticante.backend.student.api.StudentServiceAPI;
 import com.elpracticante.backend.student.dto.*;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -27,7 +24,6 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import static com.elpracticante.backend.shared.utils.DateUtils.getFormattedLocalDate;
 import static com.elpracticante.backend.shared.utils.EntityHelperUtils.*;
@@ -36,23 +32,15 @@ import static com.elpracticante.backend.shared.utils.EntityHelperUtils.*;
 @Service
 public class StudentService implements StudentServiceAPI {
 
+    private final StudentRepository studentRepository;
     private final SchoolRepository schoolRepository;
-
     private final DegreeRepository degreeRepository;
 
-    private final CompanyRepository companyRepository;
 
-    private final StudentRepository studentRepository;
-
-    private final IntershipRepository intershipRepository;
-
-
-    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, DegreeRepository degreeRepository, CompanyRepository companyRepository, SchoolRepository schoolRepository1, DegreeRepository degreeRepository1, CompanyRepository companyRepository1, IntershipRepository intershipRepository) {
+    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, DegreeRepository degreeRepository) {
         this.studentRepository = studentRepository;
-        this.schoolRepository = schoolRepository1;
-        this.degreeRepository = degreeRepository1;
-        this.companyRepository = companyRepository1;
-        this.intershipRepository = intershipRepository;
+        this.schoolRepository = schoolRepository;
+        this.degreeRepository = degreeRepository;
     }
 
     @Override
@@ -148,27 +136,25 @@ public class StudentService implements StudentServiceAPI {
         List<Student> studentList = new ArrayList<>();
 
         studentEntityList.forEach(
-               studentEntity -> {
-                   studentList.add( new Student(
-                           studentEntity.getId(),
-                           studentEntity.getName(),
-                           studentEntity.getLastName(),
-                           studentEntity.getEmail(),
-                           studentEntity.getCity(),
-                           studentEntity.getAutonomousCommunity(),
-                           studentEntity.getMobile(),
-                           studentEntity.getCompanyName(),
-                           new SchoolDTO(
-                                   studentEntity.getSchool().getId(),
-                                   studentEntity.getSchool().getName()
-                           ),
-                           new DegreeDTO(
-                                   studentEntity.getDegree().getId(),
-                                   studentEntity.getDegree().getName()
-                           )
+               studentEntity -> studentList.add( new Student(
+                       studentEntity.getId(),
+                       studentEntity.getName(),
+                       studentEntity.getLastName(),
+                       studentEntity.getEmail(),
+                       studentEntity.getCity(),
+                       studentEntity.getAutonomousCommunity(),
+                       studentEntity.getMobile(),
+                       studentEntity.getCompanyName(),
+                       new SchoolDTO(
+                               studentEntity.getSchool().getId(),
+                               studentEntity.getSchool().getName()
+                       ),
+                       new DegreeDTO(
+                               studentEntity.getDegree().getId(),
+                               studentEntity.getDegree().getName()
+                       )
 
-                   ));
-               }
+               ))
         );
 
         return new GetAllStudentsResponse(studentList);
@@ -178,7 +164,7 @@ public class StudentService implements StudentServiceAPI {
     public LoginStudentResponse postLogin(LoginStudentRequest loginStudentRequest) {
         Optional<StudentEntity> studentEntity = studentRepository.findByEmail(loginStudentRequest.studentEmail());
 
-        if (!studentEntity.isPresent()){
+        if (studentEntity.isEmpty()){
             throw new WrongLoginCredentialsException("El usuario o la contraseña son incorrectas", HttpStatus.NOT_FOUND);
         }
 
@@ -186,8 +172,7 @@ public class StudentService implements StudentServiceAPI {
             throw new WrongLoginCredentialsException("El usuario o la contraseña son incorrectas", HttpStatus.NOT_FOUND);
         }
 
-        LoginStudentResponse loginStudentResponse = new LoginStudentResponse(studentEntity.get().getId());
-        return loginStudentResponse;
+        return new LoginStudentResponse(studentEntity.get().getId());
     }
 
 
