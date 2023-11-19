@@ -22,7 +22,7 @@ public class IntershipController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateIntershipResponse> addIntership(@RequestBody CreateIntershipRequest createIntershipRequest) {
-        CreateIntershipResponse createIntershipResponse = service.addStudent(createIntershipRequest);
+        CreateIntershipResponse createIntershipResponse = service.addIntership(createIntershipRequest);
         return new ResponseEntity<>(createIntershipResponse, HttpStatus.OK);
     }
 }

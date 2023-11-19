@@ -40,7 +40,7 @@ public class IntershipService implements IntershipServiceAPI {
     }
 
     @Override
-    public CreateIntershipResponse addStudent(CreateIntershipRequest createIntershipRequest) throws EmptyInputFieldException {
+    public CreateIntershipResponse addIntership(CreateIntershipRequest createIntershipRequest) throws EmptyInputFieldException {
 
         // Retrieve a company
         CompanyEntity companyEntity = EntityHelperUtils.getCompanyEntity(createIntershipRequest.companyId(), companyRepository);
