@@ -5,13 +5,9 @@ public record Company(
 
         Integer companyId,
         String companyName,
-
         Double rating,
-
         String city,
-
         String autonomousCommunity,
-
         Integer intershipsAmount
 ) {
 

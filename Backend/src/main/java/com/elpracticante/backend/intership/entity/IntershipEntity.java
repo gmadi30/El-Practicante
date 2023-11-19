@@ -37,7 +37,7 @@ public class IntershipEntity {
     @Column(name = "SCHOOL_NAME")
     private String schoolName;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name="STUDENT_ID")
     private StudentEntity student;
 
@@ -45,13 +45,13 @@ public class IntershipEntity {
     @JoinColumn(name="COMPANY_ID")
     private CompanyEntity company;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "INTERSHIP_TECHNOLOGY",
             joinColumns = @JoinColumn(name = "INTERSHIP_ID"),
             inverseJoinColumns = @JoinColumn(name = "TECHNOLOGY_ID"))
     private List<TechnologyEntity> technologies;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "INTERSHIP_SUMMARIZE",
             joinColumns = @JoinColumn(name = "INTERSHIP_ID"),
             inverseJoinColumns = @JoinColumn(name = "SUMMARIZE_ID"))

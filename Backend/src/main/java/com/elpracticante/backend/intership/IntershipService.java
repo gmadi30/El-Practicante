@@ -10,6 +10,7 @@ import com.elpracticante.backend.intership.entity.IntershipEntity;
 import com.elpracticante.backend.intership.entity.SummarizeEntity;
 import com.elpracticante.backend.intership.entity.TechnologyEntity;
 import com.elpracticante.backend.intership.repository.IntershipRepository;
+import com.elpracticante.backend.intership.repository.TechnologyRepository;
 import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
 import com.elpracticante.backend.student.repository.StudentRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.elpracticante.backend.shared.utils.DateUtils.getFormattedLocalDate;
 
@@ -33,10 +35,13 @@ public class IntershipService implements IntershipServiceAPI {
 
     private final CompanyRepository companyRepository;
 
-    public IntershipService(IntershipRepository intershipRepository, StudentRepository studentRepository, CompanyRepository companyRepository) {
+    private final TechnologyRepository technologyRepository;
+
+    public IntershipService(IntershipRepository intershipRepository, StudentRepository studentRepository, CompanyRepository companyRepository, TechnologyRepository technologyRepository) {
         this.intershipRepository = intershipRepository;
         this.studentRepository = studentRepository;
         this.companyRepository = companyRepository;
+        this.technologyRepository = technologyRepository;
     }
 
     @Override
@@ -50,8 +55,9 @@ public class IntershipService implements IntershipServiceAPI {
         Integer intershipId = intershipRepository.save(intershipEntity).getId();
 
         updateRatingCompanyEntity(companyEntity);
-        CreateIntershipResponse createIntershipResponse = new CreateIntershipResponse(intershipId);
         Double companyRating = companyRepository.save(companyEntity).getRating();
+        CreateIntershipResponse createIntershipResponse = new CreateIntershipResponse(intershipId);
+
 
         logger.debug("Company with ID: {}, updated. RatingOverallValue: {} - ReviewsAmount: {}", companyEntity.getId(), companyRating, companyEntity.getInterships().size());
         return createIntershipResponse;
@@ -84,12 +90,14 @@ public class IntershipService implements IntershipServiceAPI {
             SummarizeEntity summarizeEntity = new SummarizeEntity();
             summarizeEntity.setName(best);
             summarizeEntity.setType(SummarizeType.BEST);
+            summarizeEntityList.add(summarizeEntity);
         }
 
         for(String worst: worstList) {
             SummarizeEntity summarizeEntity = new SummarizeEntity();
             summarizeEntity.setName(worst);
             summarizeEntity.setType(SummarizeType.WORST);
+            summarizeEntityList.add(summarizeEntity);
         }
 
         return summarizeEntityList;
@@ -99,9 +107,9 @@ public class IntershipService implements IntershipServiceAPI {
         List<TechnologyEntity> technologyEntityList = new ArrayList<>();
 
         for(String technology: technologies) {
-           TechnologyEntity technologyEntity = new TechnologyEntity();
-            technologyEntity.setName(technology);
-            technologyEntityList.add(technologyEntity);
+            Optional<TechnologyEntity> technologyEntity = technologyRepository.findByName(technology);
+
+            technologyEntity.ifPresent(technologyEntityList::add);
         }
 
         return technologyEntityList;

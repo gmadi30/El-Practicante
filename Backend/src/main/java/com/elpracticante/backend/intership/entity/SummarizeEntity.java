@@ -23,6 +23,6 @@ public class SummarizeEntity {
     @Column(name = "TYPE")
     private SummarizeType type;
 
-    @ManyToMany(mappedBy = "summaries")
+    @ManyToMany(mappedBy = "summaries", fetch = FetchType.LAZY)
     private List<IntershipEntity> interships;
 }
