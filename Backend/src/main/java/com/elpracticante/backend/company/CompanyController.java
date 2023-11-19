@@ -21,10 +21,9 @@ public class CompanyController {
 
 
     @GetMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetAllCompaniesResponse> getAllCompanies() {
+    public ResponseEntity<GetAllCompaniesResponse> getAllCompanies(@RequestParam("sortBy") String sortBy) {
 
-        GetAllCompaniesResponse getAllCompaniesResponse = companyServiceAP.getAllCompanies();
-
+        GetAllCompaniesResponse getAllCompaniesResponse = companyServiceAP.getAllCompanies(sortBy);
         return new ResponseEntity<>(getAllCompaniesResponse, HttpStatus.OK);
     }
 

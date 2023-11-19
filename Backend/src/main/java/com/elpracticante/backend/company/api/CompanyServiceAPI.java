@@ -5,5 +5,5 @@ import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 
 public interface CompanyServiceAPI {
 
-    GetAllCompaniesResponse getAllCompanies();
+    GetAllCompaniesResponse getAllCompanies(String sortBy);
 }
