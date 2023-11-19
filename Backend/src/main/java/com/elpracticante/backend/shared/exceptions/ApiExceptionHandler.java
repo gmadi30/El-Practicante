@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.io.FileNotFoundException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -28,5 +27,14 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> wrongLoginCredentialsException(WrongLoginCredentialsException exception) {
         ApiException apiException = new ApiException(exception.getMessage(), exception.httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, exception.httpStatus);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> generalCustomException(Exception exception) {
+        return new ResponseEntity<>(new ApiException(
+                exception.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        ), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

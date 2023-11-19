@@ -2,7 +2,6 @@ package com.elpracticante.backend.intership.entity;
 
 
 import com.elpracticante.backend.company.entity.CompanyEntity;
-import com.elpracticante.backend.school.entity.SchoolEntity;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -42,7 +41,7 @@ public class IntershipEntity {
     @JoinColumn(name="STUDENT_ID")
     private StudentEntity student;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="COMPANY_ID")
     private CompanyEntity company;
 

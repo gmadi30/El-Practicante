@@ -1,6 +1,8 @@
 package com.elpracticante.backend.student;
 
 import com.elpracticante.backend.student.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 @CrossOrigin
 public class StudentController {
 
+    private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
+
     private final StudentService service;
 
     public StudentController(StudentService service) {
@@ -22,6 +26,7 @@ public class StudentController {
     @PostMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateStudentResponse> addStudent(@RequestBody CreateStudentRequest createStudentRequest) {
         CreateStudentResponse studentRequestOutput;
+        logger.debug("we got a post request... Input: {}", createStudentRequest);
 
         studentRequestOutput = service.addStudent(createStudentRequest);
         return new ResponseEntity<>(studentRequestOutput, HttpStatus.CREATED);
@@ -69,7 +74,7 @@ public class StudentController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetAllStudentsResponse> deleteStudent() {
-        GetAllStudentsResponse getAllStudentsResponse = null;
+        GetAllStudentsResponse getAllStudentsResponse;
         try {
             getAllStudentsResponse = service.getAllStudents();
         }catch (Exception ex) {
@@ -81,14 +86,8 @@ public class StudentController {
 
     @PostMapping(path = "/login", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginStudentResponse> postLogin(@RequestBody LoginStudentRequest body) {
-        try {
-            LoginStudentResponse loginStudentResponse = service.postLogin(body);
-            return new ResponseEntity<>(loginStudentResponse, HttpStatus.FOUND);
-        }catch (Exception ex) {
-            throw ex;
-        }
-
-
+        LoginStudentResponse loginStudentResponse = service.postLogin(body);
+        return new ResponseEntity<>(loginStudentResponse, HttpStatus.FOUND);
     }
 
 

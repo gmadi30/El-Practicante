@@ -1,7 +1,6 @@
 package com.elpracticante.backend.company.entity;
 
 
-import com.elpracticante.backend.degree.entity.DegreeEntity;
 import com.elpracticante.backend.intership.entity.IntershipEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -39,7 +38,7 @@ public class CompanyEntity {
     @Column(name = "WHY_US")
     private String whyUs;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
     private List<IntershipEntity> interships;
 
     @Column(name = "RATING")

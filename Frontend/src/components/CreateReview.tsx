@@ -29,6 +29,11 @@ export default function CreateReview() {
   let location = useLocation();
   const { control, register, handleSubmit } = form;
 
+  console.log({
+    path: location.pathname,
+    state: location.state,
+  });
+
   const addIntership = async (data: FormValues) => {
     console.log(
       "Este es el valor del studentId en el create rewview " +

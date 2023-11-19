@@ -19,6 +19,7 @@ import com.elpracticante.backend.student.api.StudentServiceAPI;
 import com.elpracticante.backend.student.dto.*;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -26,6 +27,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static com.elpracticante.backend.shared.utils.DateUtils.getFormattedLocalDate;
 import static com.elpracticante.backend.shared.utils.EntityHelperUtils.*;
@@ -55,8 +57,7 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public CreateStudentResponse addStudent(CreateStudentRequest createStudentRequest) throws EmptyInputFieldException {
-
-        validateInput(createStudentRequest);
+       // validateInput(createStudentRequest);
         StudentEntity studentEntity = createStudentEntity(createStudentRequest);
 
         return new CreateStudentResponse(insertStudent(studentEntity));
