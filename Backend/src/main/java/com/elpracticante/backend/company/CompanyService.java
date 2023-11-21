@@ -70,6 +70,32 @@ public class CompanyService implements CompanyServiceAPI {
                     );
                 }
             }
+            case "reviewsDesc" -> {
+                companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.ASC, "interships"));
+                for (CompanyEntity companyEntity : companyEntityList) {
+                    companyList.add(new Company(
+                            companyEntity.getId(),
+                            companyEntity.getName(),
+                            companyEntity.getRating(),
+                            companyEntity.getCity(),
+                            companyEntity.getAutonomousCommunity(),
+                            companyEntity.getInterships().size())
+                    );
+                }
+            }
+            case "scoringDesc" -> {
+                companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.ASC, "rating"));
+                for (CompanyEntity companyEntity : companyEntityList) {
+                    companyList.add(new Company(
+                            companyEntity.getId(),
+                            companyEntity.getName(),
+                            companyEntity.getRating(),
+                            companyEntity.getCity(),
+                            companyEntity.getAutonomousCommunity(),
+                            companyEntity.getInterships().size())
+                    );
+                }
+            }
         }
 
 
