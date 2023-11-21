@@ -4,9 +4,15 @@ import { FilterParams } from "../../types/types";
 type SearchBarProps = {
   filterBy: string;
   setFilterBy: React.Dispatch<React.SetStateAction<FilterParams>>;
+  companySearched: string;
+  setCompanySearched: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
+  const searchItems = (searchValue: string) => {
+    props.setCompanySearched(searchValue);
+  };
+
   return (
     <main className="flex flex-col container mx-auto  mb-10 max-w-[25%]   min-w-fit ">
       <section className="font-body ">
@@ -14,6 +20,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           <form className="my-10">
             <label className="flex placeholder:text-sm text-secondary-100 font-bold  focus:border-secondary-100 border-2 px-4 rounded-full shadow">
               <input
+                onChange={(e) => {
+                  searchItems(e.target.value);
+                }}
                 type="search"
                 placeholder="Qué empresa estás buscando..."
                 size={30}
@@ -71,7 +80,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button>Menos reviews</button>
+            <button onClick={() => props.setFilterBy("reviewsDesc")}>
+              Menos reviews
+            </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
             <button onClick={() => props.setFilterBy("scoring")}>
@@ -79,7 +90,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button>Scoring descendente</button>
+            <button onClick={() => props.setFilterBy("scoringDesc")}>
+              Scoring descendente
+            </button>
           </li>
         </ul>
       </section>

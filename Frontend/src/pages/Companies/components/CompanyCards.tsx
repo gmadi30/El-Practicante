@@ -3,6 +3,7 @@ import { Company } from "../../../types/types";
 
 type CompanyCardsProps = {
   companies: Company[];
+  companySearched: string;
 };
 
 const CompanyCards: React.FC<CompanyCardsProps> = (
@@ -10,9 +11,15 @@ const CompanyCards: React.FC<CompanyCardsProps> = (
 ) => {
   const { companies } = props;
 
-  const companiesFiltered = companies.filter(
-    (company) => company.companyId !== 0
-  );
+  let companiesFiltered = companies.filter((company) => {
+    return (
+      company.companyName
+        .toLowerCase()
+        .includes(props.companySearched.toLowerCase()) &&
+      company.companyId !== 0
+    );
+  });
+
   return (
     <section className="px-5 flex flex-col ">
       {companiesFiltered.map((company, index) => {

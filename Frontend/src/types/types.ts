@@ -70,4 +70,9 @@ export type Company = {
   intershipsAmount: number;
 };
 
-export type FilterParams = "alphabetically" | "reviews" | "scoring";
+export type FilterParams =
+  | "alphabetically"
+  | "reviews"
+  | "scoring"
+  | "reviewsDesc"
+  | "scoringDesc";

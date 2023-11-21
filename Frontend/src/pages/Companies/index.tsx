@@ -6,6 +6,7 @@ import { Company, FilterParams } from "../../types/types";
 export default function Companies() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [filterBy, setFilterBy] = useState<FilterParams>("alphabetically");
+  const [companySearched, setCompanySearched] = useState("");
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/v1/companies?sortBy=${filterBy}`, {
@@ -25,8 +26,16 @@ export default function Companies() {
 
   return (
     <>
-      <SearchBar filterBy={filterBy} setFilterBy={setFilterBy} />
-      <CompanyCards companies={companies}></CompanyCards>
+      <SearchBar
+        filterBy={filterBy}
+        setFilterBy={setFilterBy}
+        companySearched={companySearched}
+        setCompanySearched={setCompanySearched}
+      />
+      <CompanyCards
+        companies={companies}
+        companySearched={companySearched}
+      ></CompanyCards>
     </>
   );
 }
