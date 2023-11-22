@@ -5,7 +5,7 @@ import { Company, FilterParams } from "../../types/types";
 
 export default function Companies() {
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [filterBy, setFilterBy] = useState<FilterParams>("alphabetically");
+  const [filterBy, setFilterBy] = useState<string>("alphabetically");
   const [companySearched, setCompanySearched] = useState("");
 
   useEffect(() => {

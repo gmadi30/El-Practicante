@@ -15,7 +15,6 @@ const Rating: React.FC<RatingProps> = ({ rating }) => {
           key={index}
           style={{
             color: index < clampedRating ? "gold" : "gray",
-            cursor: "pointer",
           }}
         >
           &#9733; {/* Unicode star character */}

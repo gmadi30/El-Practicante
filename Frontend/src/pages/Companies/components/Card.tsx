@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Rating from "../../../components/ui/Rating";
 
 interface CardProps {
   profilePicture: string;
   companyName: string;
-  companyReviewsAmout: string;
+  companyReviewsAmount: string;
   city: string;
   autonomousCommunity: string;
   companyBest: string[];
@@ -12,39 +12,46 @@ interface CardProps {
   workTypes: string[];
   isEven: boolean;
   companyRating: number;
+  companyId: number;
 }
 
 const Card: React.FC<CardProps> = (props) => {
   const impagesFolderPath = "../../../assets/img/";
+  let navigate = useNavigate();
 
   const imgUrl = new URL(
     `${impagesFolderPath}${props.companyName}.png`,
     import.meta.url
   ).href;
 
+  const navigateToProfile = () => {
+    navigate(`/companies/${props.companyId}/profile`);
+  };
+
   return (
-    <div className="flex justify-center mb-5">
-      <Link to={"/company-profile"}>
-        <div className="flex flex-col px-10">
-          <div className="">
-            <img
-              src={imgUrl}
-              className="float-left w-[100px] h-[100px] object-cover rounded mb-3"
-            ></img>
-          </div>
-
-          <div className="flex flex-col  justify-center items-center">
-            <div className="flex text-xl">
-              <Rating rating={props.companyRating}></Rating>
-            </div>
-
-            <p className=" text-base">
-              <span className="font-bold">{props.companyReviewsAmout}</span>{" "}
-              opiniones
-            </p>
-          </div>
+    <div className="flex justify-center mb-5 ">
+      <div
+        onClick={navigateToProfile}
+        className="flex flex-col px-10 hoverCompanyProfileImage"
+      >
+        <div className="">
+          <img
+            src={imgUrl}
+            className="float-left w-[100px] h-[100px] object-cover rounded mb-3"
+          ></img>
         </div>
-      </Link>
+
+        <div className="flex flex-col  justify-center items-center">
+          <div className="flex text-xl">
+            <Rating rating={props.companyRating}></Rating>
+          </div>
+
+          <p className=" text-base">
+            <span className="font-bold">{props.companyReviewsAmount}</span>{" "}
+            opiniones
+          </p>
+        </div>
+      </div>
       <div
         className={`flex ${props.isEven && "bg-primary"}  pb-1  w-fit md:w-1/4`}
       >

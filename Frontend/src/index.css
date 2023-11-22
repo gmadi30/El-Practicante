@@ -12,3 +12,7 @@
   text-decoration: underline;
   color: #0891b2;
 }
+
+.hoverCompanyProfileImage:hover {
+  cursor: pointer;
+}

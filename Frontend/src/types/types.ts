@@ -62,7 +62,7 @@ export type Technology = {
 
 // Company Type
 export type Company = {
-  companyId: Number;
+  companyId: number;
   companyName: string;
   rating: number;
   city: string;

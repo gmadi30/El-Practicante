@@ -26,7 +26,7 @@ const router = createBrowserRouter([
         element: <Companies />,
       },
       {
-        path: "/register",
+        path: "register",
         element: <Register />,
       },
       {
@@ -35,12 +35,12 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
       {
         // /companies/id
-        path: "companies/:companyId/company-profile",
+        path: "companies/:companyId/profile",
         element: <CompaniesProfile />,
       },
       {

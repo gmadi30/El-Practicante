@@ -3,7 +3,7 @@ import { FilterParams } from "../../types/types";
 
 type SearchBarProps = {
   filterBy: string;
-  setFilterBy: React.Dispatch<React.SetStateAction<FilterParams>>;
+  setFilterBy: React.Dispatch<React.SetStateAction<string>>;
   companySearched: string;
   setCompanySearched: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -56,12 +56,13 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
               className="border rounded w-full focus:border-secondary-100"
               name="lenguajes"
               id="lang"
+              onChange={(event) => props.setFilterBy(event.target.value)}
             >
-              <option value="ByAlphabet">Alfabéticamente</option>
-              <option value="ByMoreReviews">Más reviews</option>
-              <option value="ByLessReviews">Menos reviews</option>
-              <option value="ByHighScore">Scoring ascendente</option>
-              <option value="ByLowScore">Scoring descendente</option>
+              <option value="alphabetically">Alfabéticamente</option>
+              <option value="reviews">Más reviews</option>
+              <option value="reviewsDesc">Menos reviews</option>
+              <option value="scoring">Scoring ascendente</option>
+              <option value="scoringDesc">Scoring descendente</option>
             </select>
           </div>
         </label>

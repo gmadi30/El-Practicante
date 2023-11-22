@@ -27,8 +27,9 @@ const CompanyCards: React.FC<CompanyCardsProps> = (
           <div>
             <Card
               key={company.companyId.toString()}
+              companyId={company.companyId}
               companyName={company.companyName}
-              companyReviewsAmout={
+              companyReviewsAmount={
                 company.intershipsAmount === null
                   ? "0"
                   : company.intershipsAmount.toString()
