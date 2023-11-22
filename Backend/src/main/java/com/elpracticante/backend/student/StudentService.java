@@ -34,6 +34,7 @@ public class StudentService implements StudentServiceAPI {
 
     private final StudentRepository studentRepository;
     private final SchoolRepository schoolRepository;
+
     private final DegreeRepository degreeRepository;
 
 
