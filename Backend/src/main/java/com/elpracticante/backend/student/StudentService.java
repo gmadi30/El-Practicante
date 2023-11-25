@@ -1,7 +1,6 @@
 package com.elpracticante.backend.student;
 
 import com.elpracticante.backend.company.Company;
-import com.elpracticante.backend.degree.dto.DegreeDTO;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.intership.Intership;
 import com.elpracticante.backend.intership.dto.Summarize;
@@ -9,7 +8,6 @@ import com.elpracticante.backend.intership.dto.Technology;
 import com.elpracticante.backend.intership.entity.IntershipEntity;
 import com.elpracticante.backend.intership.entity.SummarizeEntity;
 import com.elpracticante.backend.intership.entity.TechnologyEntity;
-import com.elpracticante.backend.school.dto.SchoolDTO;
 import com.elpracticante.backend.school.repository.SchoolRepository;
 import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.shared.exceptions.WrongLoginCredentialsException;
@@ -59,12 +57,6 @@ public class StudentService implements StudentServiceAPI {
                 studentEntity.getName(),
                 studentEntity.getLastName(),
                 studentEntity.getCompanyName(),
-                new SchoolDTO(
-                        studentEntity.getSchool().getId(),
-                        studentEntity.getSchool().getName()),
-                new DegreeDTO(
-                        studentEntity.getDegree().getId(),
-                        studentEntity.getDegree().getName()),
                 mapToIntership(studentEntity.getInterships())
         );
     }
@@ -80,7 +72,7 @@ public class StudentService implements StudentServiceAPI {
                     intershipEntity.getRating(),
                     intershipEntity.getDegreeName(),
                     intershipEntity.getSchoolName(),
-                    new Company(intershipEntity.getCompany().getName(), intershipEntity.getCompany().getRating()),
+                    new Company(intershipEntity.getCompany().getId(), intershipEntity.getCompany().getName(), intershipEntity.getCompany().getRating(), intershipEntity.getCompany().getInterships().size()),
                     mapToTechnology(intershipEntity.getTechnologies()),
                     mapToSummarize(intershipEntity.getSummaries()))
            );
@@ -145,16 +137,7 @@ public class StudentService implements StudentServiceAPI {
                        studentEntity.getCity(),
                        studentEntity.getAutonomousCommunity(),
                        studentEntity.getMobile(),
-                       studentEntity.getCompanyName(),
-                       new SchoolDTO(
-                               studentEntity.getSchool().getId(),
-                               studentEntity.getSchool().getName()
-                       ),
-                       new DegreeDTO(
-                               studentEntity.getDegree().getId(),
-                               studentEntity.getDegree().getName()
-                       )
-
+                       studentEntity.getCompanyName()
                ))
         );
 

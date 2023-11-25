@@ -1,9 +1,5 @@
 package com.elpracticante.backend.student;
 
-import com.elpracticante.backend.company.dto.CompanyDTO;
-import com.elpracticante.backend.degree.dto.DegreeDTO;
-import com.elpracticante.backend.school.dto.SchoolDTO;
-
 public record Student(
         Integer id,
         String name,
@@ -12,11 +8,7 @@ public record Student(
         String city,
         String autonomousCommunity,
         String mobile,
-        String companyName,
-        SchoolDTO schoolDTO,
-        DegreeDTO degreeDTO
-
-
+        String companyName
 
 
 ) {
