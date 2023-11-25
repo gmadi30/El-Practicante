@@ -11,11 +11,10 @@ const CompanyCards: React.FC<CompanyCardsProps> = (
 ) => {
   const { companies } = props;
 
+  const companySearchedToLowerCase = props.companySearched.toLowerCase();
   let companiesFiltered = companies.filter((company) => {
     return (
-      company.companyName
-        .toLowerCase()
-        .includes(props.companySearched.toLowerCase()) &&
+      company.companyName.toLowerCase().includes(companySearchedToLowerCase) &&
       company.companyId !== 0
     );
   });

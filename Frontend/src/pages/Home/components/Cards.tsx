@@ -4,7 +4,7 @@ const Cards = () => {
   return (
     <section className="my-20 xl:grid xl:grid-cols-3">
       <Card
-        name="Georges"
+        name="Tulio"
         lastName="Madi"
         school="IES Francisco de Goya"
         grade="DAM"

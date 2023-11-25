@@ -7,6 +7,7 @@ import { Student } from "../../types/types";
 
 export default function Profile() {
   const [student, setStudent] = useState<Student>({} as Student);
+  const [loading, setLoading] = useState(true);
   let location = useLocation();
   const params = useParams();
   const navigate = useNavigate();
@@ -16,11 +17,12 @@ export default function Profile() {
     path: location.pathname,
     state: location.state,
   });
+
   if (location.state !== null) {
     isAuthenticated = location.state.isAuthenticated;
   }
 
-  const handleNewInterShipOnClick = () => {
+  const handleNewIntershipOnClick = () => {
     navigate(`/student/${params.studentId}/create-review`, {
       replace: true,
       state: { studentId: params.studentId },
@@ -40,18 +42,46 @@ export default function Profile() {
           setStudent(data);
         });
       })
-      .catch();
+      .catch((error) => {
+        console.log("Error fetching data", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    fetch(`http://localhost:8080/api/v1/students/${params.studentId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json;",
+      },
+    })
+      .then((response) => {
+        response.json().then((data) => {
+          console.log("Estudiante recuperado", data);
+          setStudent(data);
+        });
+      })
+      .catch((error) => {
+        console.log("Error fetching data", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   if (isAuthenticated) {
     return (
       <>
         <div className="font-body md:container md:mx-auto">
           <Header
-            name={student.name}
-            lastName={student.lastName}
-            grade="DAM"
-            school="IES Francisco de Goya"
+            name={student?.name}
+            lastName={student?.lastName}
+            grade={student?.degreeDTO?.name}
+            school={student?.schoolDTO?.name}
             class="2022"
             city="Madrid"
             autonomousCommunity="Comunidad de Madrid"
@@ -75,7 +105,7 @@ export default function Profile() {
           />
 
           <button
-            onClick={handleNewInterShipOnClick}
+            onClick={handleNewIntershipOnClick}
             className=" rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 xl:text-2xl"
           >
             <p>AÑADIR PRÁCTICA</p>

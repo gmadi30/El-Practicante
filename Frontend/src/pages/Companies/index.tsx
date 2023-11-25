@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SearchBar from "../../components/ui/SearchBar";
 import CompanyCards from "./components/CompanyCards";
-import { Company, FilterParams } from "../../types/types";
+import { Company } from "../../types/types";
 
 export default function Companies() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -16,6 +16,7 @@ export default function Companies() {
       },
     })
       .then((response) => {
+        console.log(response);
         response.json().then((data) => {
           console.log(data.companyList);
           setCompanies(data.companyList);

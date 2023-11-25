@@ -9,6 +9,11 @@ interface CardProps {
   websiteThoughts: string;
   middle: boolean;
 }
+const impagesFolderPath = "../../../assets/img/";
+
+const imgStudentProfile = (name: string) => {
+  return new URL(`${impagesFolderPath}${name}.png`, import.meta.url).href;
+};
 
 const Card: React.FC<CardProps> = (props) => {
   return (
@@ -19,7 +24,7 @@ const Card: React.FC<CardProps> = (props) => {
     >
       <header className="flex flex-col justify-center items-center">
         <img
-          src={profilePicture}
+          src={imgStudentProfile(props.name)}
           className="float-left w-[100px] h-[100px] object-cover rounded-full mb-3"
         ></img>
 

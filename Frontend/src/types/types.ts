@@ -52,10 +52,16 @@ export type Intership = {
   degreeName: string;
   schoolName: string;
   company: Company;
-  technologies: Technology[];
+  summarizeList: Sammaries[];
+  technologyList: Technology[];
+  student: Student;
 };
 
-// Company Type
+export type Sammaries = {
+  name: string;
+  type: string;
+};
+
 export type Technology = {
   name: string;
 };
@@ -67,6 +73,23 @@ export type Company = {
   rating: number;
   city: string;
   autonomousCommunity: string;
+  intershipsAmount: number;
+  aboutUs: string;
+  email: string;
+  interships: Intership[];
+};
+
+export type CompanyProfileType = {
+  aboutUs: string;
+  city: string;
+  autonomousCommunity: string;
+  email: string;
+  employeesAmount: number;
+  interships: Intership[];
+  companyId: number;
+  name: string;
+  rating: number;
+  whyUs: string;
   intershipsAmount: number;
 };
 
