@@ -2,6 +2,7 @@ package com.elpracticante.backend.intership;
 
 import com.elpracticante.backend.intership.dto.CreateIntershipRequest;
 import com.elpracticante.backend.intership.dto.CreateIntershipResponse;
+import com.elpracticante.backend.intership.dto.GetIntershipResponse;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,4 +26,11 @@ public class IntershipController {
         CreateIntershipResponse createIntershipResponse = service.addIntership(createIntershipRequest);
         return new ResponseEntity<>(createIntershipResponse, HttpStatus.OK);
     }
+    @GetMapping(path = "/{intershipId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GetIntershipResponse> getIntership(@PathVariable Integer intershipId) {
+        GetIntershipResponse getIntershipResponse = service.getIntership(intershipId);
+        return new ResponseEntity<>(getIntershipResponse, HttpStatus.OK);
+    }
 }
+
+

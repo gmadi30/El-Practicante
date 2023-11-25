@@ -5,6 +5,7 @@ import com.elpracticante.backend.company.repository.CompanyRepository;
 import com.elpracticante.backend.intership.api.IntershipServiceAPI;
 import com.elpracticante.backend.intership.dto.CreateIntershipRequest;
 import com.elpracticante.backend.intership.dto.CreateIntershipResponse;
+import com.elpracticante.backend.intership.dto.GetIntershipResponse;
 import com.elpracticante.backend.intership.dto.SummarizeType;
 import com.elpracticante.backend.intership.entity.IntershipEntity;
 import com.elpracticante.backend.intership.entity.SummarizeEntity;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.elpracticante.backend.shared.utils.DateUtils.getFormattedLocalDate;
+import static com.elpracticante.backend.shared.utils.EntityHelperUtils.*;
 
 @Service
 public class IntershipService implements IntershipServiceAPI {
@@ -62,6 +64,31 @@ public class IntershipService implements IntershipServiceAPI {
         logger.debug("Company with ID: {}, updated. RatingOverallValue: {} - ReviewsAmount: {}", companyEntity.getId(), companyRating, companyEntity.getInterships().size());
         return createIntershipResponse;
     }
+
+    @Override
+    public GetIntershipResponse getIntership(Integer intershipId) {
+
+        IntershipEntity intershipEntity = getIntershipEntity(intershipId, intershipRepository);
+
+        Intership intership = new Intership(
+                intershipEntity.getId(),
+                intershipEntity.getDescription(),
+                intershipEntity.getStartDate(),
+                intershipEntity.getEndDate(),
+                intershipEntity.getRating(),
+                intershipEntity.getDegreeName(),
+                intershipEntity.getSchoolName(),
+                mapToCompany(intershipEntity.getCompany()),
+                mapToStudent(intershipEntity.getStudent()),
+                mapToTechonologiesList(intershipEntity.getTechnologies()),
+                mapToSummaryList(intershipEntity.getSummaries())
+                );
+
+        GetIntershipResponse getIntershipResponse = new GetIntershipResponse(intership);
+        return getIntershipResponse;
+    }
+
+
 
     private void updateRatingCompanyEntity(CompanyEntity companyEntity) {
        Double average =intershipRepository.calculateRatingAverageByCompanyId(companyEntity.getId());
