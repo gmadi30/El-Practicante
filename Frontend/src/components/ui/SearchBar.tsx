@@ -1,5 +1,4 @@
 import { ImSearch } from "react-icons/im";
-import { FilterParams } from "../../types/types";
 
 type SearchBarProps = {
   filterBy: string;
