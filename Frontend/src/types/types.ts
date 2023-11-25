@@ -28,9 +28,18 @@ export type LoginResponse = {
 
 // Student type
 export type Student = {
+  id: number;
   name: string;
   lastName: string;
+  email: string;
+  city: string;
+  autonomousCommunity: string;
+  mobile: string;
   companyName: string;
+};
+
+export type StudentProfile = {
+  student: Student;
   schoolDTO: {
     id: Number;
     name: string;
@@ -46,18 +55,18 @@ export type Student = {
 export type Intership = {
   id: Number;
   description: string;
-  startDate: Date;
+  startDate: string;
   endDate: Date;
   rating: Number;
   degreeName: string;
   schoolName: string;
   company: Company;
-  summarizeList: Sammaries[];
+  summarizeList: Summary[];
   technologyList: Technology[];
   student: Student;
 };
 
-export type Sammaries = {
+export type Summary = {
   name: string;
   type: string;
 };

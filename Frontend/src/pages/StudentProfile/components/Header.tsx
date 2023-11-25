@@ -1,22 +1,21 @@
 import { TiMail, TiSocialLinkedin } from "react-icons/ti";
-import profilePicture from "../../../assets/img/me.png";
+import { StudentProfile } from "../../../types/types";
 
 interface HeaderProps {
-  name: string;
-  lastName: string;
-  grade: string;
-  school: string;
-  class: string;
-  city: string;
-  autonomousCommunity: string;
+  student: StudentProfile;
 }
+
+const impagesFolderPath = "../../../assets/img/";
+const imgStudentProfile = (name: string) => {
+  return new URL(`${impagesFolderPath}${name}.png`, import.meta.url).href;
+};
 
 const Header: React.FC<HeaderProps> = (props) => {
   return (
     <header>
       <div className="flex justify-center items-center py-10 bg-primary h-32 mt-20 rounded">
         <img
-          src={profilePicture}
+          src={imgStudentProfile(props.student?.student?.name)}
           className="block w-[176px] h-[176px] object-cover rounded-full border-4 border-secondary-300"
         ></img>
       </div>
@@ -28,17 +27,25 @@ const Header: React.FC<HeaderProps> = (props) => {
           </h1>
 
           <div className="flex space-x-1">
-            <h1 className="text-2xl font-semibold">{props.name}</h1>
-            <h1 className="text-2xl font-semibold">{props.lastName}</h1>
+            <h1 className="text-2xl font-semibold">
+              {props.student?.student?.name}
+            </h1>
+            <h1 className="text-2xl font-semibold">
+              {props.student?.student?.lastName}
+            </h1>
           </div>
 
           <div className="text-gray-400 ">
-            <span>Estudiante de {props.grade} | </span>
-            <span className="text-gray-400"> {props.school} |</span>
-            <span className="text-gray-400"> Clase de {props.class}</span>
+            <span>Estudiante de {props.student?.degreeDTO?.name} | </span>
+            <span className="text-gray-400">
+              {" "}
+              {props.student?.schoolDTO?.name} |
+            </span>
+            <span className="text-gray-400"> Clase de {2022}</span>
           </div>
           <h3 className="">
-            {props.city}, {props.autonomousCommunity}
+            {props.student?.student?.city},{" "}
+            {props.student?.student?.autonomousCommunity}
           </h3>
         </div>
 
@@ -47,7 +54,7 @@ const Header: React.FC<HeaderProps> = (props) => {
             <div className="text-secondary-100 text-3xl mr-1">
               <TiMail></TiMail>
             </div>
-            <h1>georges@elpracticante.com </h1>
+            <h1>{props.student?.student?.email} </h1>
           </div>
           <div className="flex align-middle items-center">
             <div className="text-secondary-100 text-3xl mr-1">

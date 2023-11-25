@@ -5,18 +5,20 @@ import {
   ImCross,
   ImFloppyDisk,
 } from "react-icons/im";
+import { Intership } from "../../../types/types";
+import Rating from "../../../components/ui/Rating";
 
 interface IntershipProps {
-  company: string;
-  companyReviewsAmout: string;
-  intershipDescription: string;
-  intershipBest: string[];
-  intershipWorst: string[];
-  technologies: string[];
-  profilePicture: string;
+  intership: Intership;
 }
 
-const Intership: React.FC<IntershipProps> = (props) => {
+const impagesFolderPath = "../../../assets/img/";
+const imgCompanyProfile = (name: string) => {
+  return new URL(`${impagesFolderPath}${name}.png`, import.meta.url).href;
+};
+
+const IntershipComponent: React.FC<IntershipProps> = (props) => {
+  const { intership } = props;
   return (
     <>
       <div className="lg:flex lg:justify-between">
@@ -29,22 +31,18 @@ const Intership: React.FC<IntershipProps> = (props) => {
             <div className="flex">
               <div className=" space-y-4 ">
                 <img
-                  src={props.profilePicture}
+                  src={imgCompanyProfile(intership?.company?.companyName)}
                   className=" w-[110px] h-[110px] object-cover mb-3"
                 ></img>
 
                 <div className="flex flex-col  justify-center items-center text-center">
-                  <div className="flex text-xl">
-                    <ImStarFull></ImStarFull>
-                    <ImStarFull></ImStarFull>
-                    <ImStarFull></ImStarFull>
-                    <ImStarFull></ImStarFull>
-                    <ImStarHalf></ImStarHalf>
+                  <div className="text-xl">
+                    <Rating rating={intership?.company?.rating}></Rating>
                   </div>
 
                   <p className="text-sm w-full">
                     <span className="font-bold">
-                      {props.companyReviewsAmout}
+                      {intership?.company?.intershipsAmount}
                     </span>{" "}
                     opiniones
                   </p>
@@ -52,14 +50,22 @@ const Intership: React.FC<IntershipProps> = (props) => {
               </div>
               <div className="px-10">
                 <h1 className="text-secondary-100 font-bold tracking-wider text-xl">
-                  DESCRIPCIÓN DE MIS PRÁCTICAS
+                  DESCRIPCIÓN
                 </h1>
-                <h2>IES Fransico de Goya</h2>
-                <h2>DAM</h2>
-                <h2>Fecha de inicio 01/03/2023</h2>
-                <h2>Fecha de Fin 01/06/2023</h2>
+                <h2>{intership?.schoolName}</h2>
+                <h2>{intership?.degreeName}</h2>
+                <h2>
+                  Fecha de inicio{" "}
+                  {intership?.startDate &&
+                    new Date(intership?.startDate).toLocaleDateString("en-GB")}
+                </h2>
+                <h2>
+                  Fecha de fin{" "}
+                  {intership?.endDate &&
+                    new Date(intership?.endDate).toLocaleDateString("en-GB")}
+                </h2>
                 <p className="text-justify pr-1 pt-2 text-xl">
-                  {props.intershipDescription}
+                  {intership?.description}
                 </p>
               </div>
             </div>
@@ -72,15 +78,17 @@ const Intership: React.FC<IntershipProps> = (props) => {
               LO MEJOR
             </h1>
             <ul className="flex flex-col gap-3 list-none mt-4 leading-4 lg:text-xl">
-              {props.intershipBest.map((element) => {
-                return (
-                  <div className="flex items-center">
-                    <div className="text-secondary-100">
-                      <ImCheckmark></ImCheckmark>
+              {intership?.summarizeList?.map((element) => {
+                if (element.type === "BEST") {
+                  return (
+                    <div className="flex items-center">
+                      <div className="text-secondary-100">
+                        <ImCheckmark></ImCheckmark>
+                      </div>
+                      <li className="ml-1">{element.name}</li>
                     </div>
-                    <li className="ml-1">{element}</li>
-                  </div>
-                );
+                  );
+                }
               })}
             </ul>
           </div>
@@ -89,15 +97,17 @@ const Intership: React.FC<IntershipProps> = (props) => {
               LO PEOR
             </h1>
             <ul className="flex flex-col gap-3 list-none mt-4 leading-4 lg:text-xl ">
-              {props.intershipWorst.map((element) => {
-                return (
-                  <div className="flex">
-                    <div className="text-red">
-                      <ImCross></ImCross>
+              {intership?.summarizeList.map((element) => {
+                if (element.type === "WORST") {
+                  return (
+                    <div className="flex items-center">
+                      <div className="text-red">
+                        <ImCross></ImCross>
+                      </div>
+                      <li className="ml-1">{element.name}</li>
                     </div>
-                    <li className="ml-1">{element}</li>
-                  </div>
-                );
+                  );
+                }
               })}
             </ul>
           </div>
@@ -106,13 +116,13 @@ const Intership: React.FC<IntershipProps> = (props) => {
               TECNOLOGÍAS
             </h1>
             <ul className="flex flex-col gap-3 list-none mt-4 sleading-4 lg:text-xl">
-              {props.technologies.map((element) => {
+              {intership?.technologyList?.map((element) => {
                 return (
                   <div className="flex items-center">
                     <div className="text-secondary-100">
                       <ImFloppyDisk></ImFloppyDisk>
                     </div>
-                    <li className="ml-1">{element}</li>
+                    <li className="ml-1">{element.name}</li>
                   </div>
                 );
               })}
@@ -124,4 +134,4 @@ const Intership: React.FC<IntershipProps> = (props) => {
   );
 };
 
-export default Intership;
+export default IntershipComponent;

@@ -9,7 +9,6 @@ export default function CompanyProfile() {
     {} as CompanyProfileType
   );
   const [loading, setLoading] = useState(true);
-  const [studentName, setStudentName] = useState<string | null>(null);
   let location = useLocation();
   const params = useParams();
 

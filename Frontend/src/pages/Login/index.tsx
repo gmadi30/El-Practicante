@@ -143,7 +143,7 @@ export default function Login() {
           </form>
           <p className="">
             ¿Todavía no tienes una cuenta?{" "}
-            <Link to="/signup">
+            <Link to="/register">
               <span className="font-bold text-secondary-100 hover:underline">
                 Createla aquí{" "}
               </span>

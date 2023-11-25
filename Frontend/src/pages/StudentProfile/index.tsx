@@ -1,12 +1,11 @@
 import Header from "./components/Header";
-import Intership from "./components/Intership";
-import indra from "../../assets/img/indra.png";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Student } from "../../types/types";
+import { StudentProfile } from "../../types/types";
+import IntershipComponent from "./components/Intership";
 
 export default function Profile() {
-  const [student, setStudent] = useState<Student>({} as Student);
+  const [student, setStudent] = useState<StudentProfile>({} as StudentProfile);
   const [loading, setLoading] = useState(true);
   let location = useLocation();
   const params = useParams();
@@ -40,25 +39,7 @@ export default function Profile() {
         response.json().then((data) => {
           console.log("Estudiante recuperado", data);
           setStudent(data);
-        });
-      })
-      .catch((error) => {
-        console.log("Error fetching data", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-    fetch(`http://localhost:8080/api/v1/students/${params.studentId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json;",
-      },
-    })
-      .then((response) => {
-        response.json().then((data) => {
-          console.log("Estudiante recuperado", data);
-          setStudent(data);
+          console.log("Objeto estudiante", student);
         });
       })
       .catch((error) => {
@@ -77,39 +58,19 @@ export default function Profile() {
     return (
       <>
         <div className="font-body md:container md:mx-auto">
-          <Header
-            name={student?.name}
-            lastName={student?.lastName}
-            grade={student?.degreeDTO?.name}
-            school={student?.schoolDTO?.name}
-            class="2022"
-            city="Madrid"
-            autonomousCommunity="Comunidad de Madrid"
-          />
-          <Intership
-            company={student?.companyName}
-            companyReviewsAmout="20"
-            intershipDescription="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias magni atque laborum error, laboriosam eveniet blanditiis officia nostrum tempore repellendus, odio nemo deleniti architecto sequi. Dicta ratione alias voluptatibus veniam."
-            intershipBest={[
-              "Buen tutor",
-              "Excelente ambiente de trabajo",
-              "100% remoto",
-            ]}
-            intershipWorst={[
-              "Proyectos irrelevantes",
-              "Seguimiento pobre",
-              "Equipos defectuosos",
-            ]}
-            technologies={["Spring Boot", "Java", "Postman"]}
-            profilePicture={indra}
-          />
+          <Header student={student} />
 
-          <button
-            onClick={handleNewIntershipOnClick}
-            className=" rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 xl:text-2xl"
-          >
-            <p>AÑADIR PRÁCTICA</p>
-          </button>
+          {student?.interships?.map((intership, index) => {
+            return <IntershipComponent key={index} intership={intership} />;
+          })}
+          <div className="flex justify-center">
+            <button
+              onClick={handleNewIntershipOnClick}
+              className="container w-fit  rounded border-cyan-600 bg-secondary-100 text-white px-5 py-2 font-bold uppercase tracking-[0.1rem] my-5 hover:bg-secondary-200 xl:text-2xl"
+            >
+              <p>AÑADIR PRÁCTICA</p>
+            </button>
+          </div>
         </div>
       </>
     );
@@ -117,15 +78,7 @@ export default function Profile() {
     return (
       <>
         <div className="font-body md:container md:mx-auto">
-          <Header
-            name={student?.name}
-            lastName={student?.lastName}
-            grade="DAM"
-            school="IES Francisco de Goya"
-            class="2022"
-            city="Madrid"
-            autonomousCommunity="Comunidad de Madrid"
-          />
+          <Header student={student} />
 
           <h1>Oooops... No puedes ver la review de este practicante</h1>
           <h1>Inicia sesión para acceder a todo el contenido</h1>
