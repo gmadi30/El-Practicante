@@ -1,15 +1,9 @@
-import {
-  ImStarFull,
-  ImStarHalf,
-  ImCheckmark,
-  ImCross,
-  ImFloppyDisk,
-} from "react-icons/im";
-import { Intership } from "../../../types/types";
+import { ImCheckmark, ImCross, ImFloppyDisk } from "react-icons/im";
+import { Internship } from "../../../types/types";
 import Rating from "../../../components/ui/Rating";
 
 interface IntershipProps {
-  intership: Intership;
+  internship: Internship;
 }
 
 const impagesFolderPath = "../../../assets/img/";
@@ -17,8 +11,9 @@ const imgCompanyProfile = (name: string) => {
   return new URL(`${impagesFolderPath}${name}.png`, import.meta.url).href;
 };
 
-const IntershipComponent: React.FC<IntershipProps> = (props) => {
-  const { intership } = props;
+const InternshipComponent: React.FC<IntershipProps> = (props) => {
+  const { internship } = props;
+  console.log("Intership prop", internship);
   return (
     <>
       <div className="lg:flex lg:justify-between">
@@ -29,20 +24,20 @@ const IntershipComponent: React.FC<IntershipProps> = (props) => {
 
           <div>
             <div className="flex">
-              <div className=" space-y-4 ">
+              <div className="flex-shrink-0 space-y-4 ">
                 <img
-                  src={imgCompanyProfile(intership?.company?.companyName)}
+                  src={imgCompanyProfile(internship?.company?.companyName)}
                   className=" w-[110px] h-[110px] object-cover mb-3"
                 ></img>
 
                 <div className="flex flex-col  justify-center items-center text-center">
                   <div className="text-xl">
-                    <Rating rating={intership?.company?.rating}></Rating>
+                    <Rating rating={internship?.company?.rating}></Rating>
                   </div>
 
                   <p className="text-sm w-full">
                     <span className="font-bold">
-                      {intership?.company?.intershipsAmount}
+                      {internship?.company?.intershipsAmount}
                     </span>{" "}
                     opiniones
                   </p>
@@ -52,20 +47,20 @@ const IntershipComponent: React.FC<IntershipProps> = (props) => {
                 <h1 className="text-secondary-100 font-bold tracking-wider text-xl">
                   DESCRIPCIÓN
                 </h1>
-                <h2>{intership?.schoolName}</h2>
-                <h2>{intership?.degreeName}</h2>
+                <h2>{internship?.schoolName}</h2>
+                <h2>{internship?.degreeName}</h2>
                 <h2>
                   Fecha de inicio{" "}
-                  {intership?.startDate &&
-                    new Date(intership?.startDate).toLocaleDateString("en-GB")}
+                  {internship?.startDate &&
+                    new Date(internship?.startDate).toLocaleDateString("en-GB")}
                 </h2>
                 <h2>
                   Fecha de fin{" "}
-                  {intership?.endDate &&
-                    new Date(intership?.endDate).toLocaleDateString("en-GB")}
+                  {internship?.endDate &&
+                    new Date(internship?.endDate).toLocaleDateString("en-GB")}
                 </h2>
                 <p className="text-justify pr-1 pt-2 text-xl">
-                  {intership?.description}
+                  {internship?.description}
                 </p>
               </div>
             </div>
@@ -78,8 +73,8 @@ const IntershipComponent: React.FC<IntershipProps> = (props) => {
               LO MEJOR
             </h1>
             <ul className="flex flex-col gap-3 list-none mt-4 leading-4 lg:text-xl">
-              {intership?.summarizeList?.map((element) => {
-                if (element.type === "BEST") {
+              {internship?.summarizeList?.map((element) => {
+                if (element.type === "BEST" && element.name !== "") {
                   return (
                     <div className="flex items-center">
                       <div className="text-secondary-100">
@@ -97,8 +92,8 @@ const IntershipComponent: React.FC<IntershipProps> = (props) => {
               LO PEOR
             </h1>
             <ul className="flex flex-col gap-3 list-none mt-4 leading-4 lg:text-xl ">
-              {intership?.summarizeList.map((element) => {
-                if (element.type === "WORST") {
+              {internship?.summarizeList?.map((element) => {
+                if (element.type === "WORST" && element.name !== "") {
                   return (
                     <div className="flex items-center">
                       <div className="text-red">
@@ -116,7 +111,7 @@ const IntershipComponent: React.FC<IntershipProps> = (props) => {
               TECNOLOGÍAS
             </h1>
             <ul className="flex flex-col gap-3 list-none mt-4 sleading-4 lg:text-xl">
-              {intership?.technologyList?.map((element) => {
+              {internship?.technologyList?.map((element) => {
                 return (
                   <div className="flex items-center">
                     <div className="text-secondary-100">
@@ -134,4 +129,4 @@ const IntershipComponent: React.FC<IntershipProps> = (props) => {
   );
 };
 
-export default IntershipComponent;
+export default InternshipComponent;

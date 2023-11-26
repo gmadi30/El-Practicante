@@ -48,11 +48,11 @@ export type StudentProfile = {
     id: Number;
     name: string;
   };
-  interships: Intership[];
+  internships: Internship[];
 };
 
 // Intership Type
-export type Intership = {
+export type Internship = {
   id: Number;
   description: string;
   startDate: string;
@@ -85,7 +85,7 @@ export type Company = {
   intershipsAmount: number;
   aboutUs: string;
   email: string;
-  interships: Intership[];
+  interships: Internship[];
 };
 
 export type CompanyProfileType = {
@@ -94,7 +94,7 @@ export type CompanyProfileType = {
   autonomousCommunity: string;
   email: string;
   employeesAmount: number;
-  interships: Intership[];
+  interships: Internship[];
   companyId: number;
   name: string;
   rating: number;

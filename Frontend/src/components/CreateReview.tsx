@@ -1,12 +1,12 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm, SubmitHandler } from "react-hook-form";
-import RatingBar from "./ui/Rating";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import SuccesfulResponse from "./ui/SuccesfulResponse";
 
 type FormValues = {
-  school: string;
-  company: string;
-  degree: string;
+  schoolId: string;
+  companyId: string;
+  degreeId: string;
   startDate: string;
   endDate: string;
   description: string;
@@ -24,45 +24,51 @@ type FormValues = {
 
 export default function CreateReview() {
   let navigate = useNavigate();
-  const form = useForm<FormValues>();
+  const { control, register, handleSubmit, formState } = useForm<FormValues>();
+
+  const { errors, isDirty, isValid } = formState;
   const params = useParams();
   let location = useLocation();
-  const { control, register, handleSubmit } = form;
 
   console.log({
+    param: params,
     path: location.pathname,
     state: location.state,
   });
 
-  const addIntership = async (data: FormValues) => {
+  const addInternship = async (data: FormValues) => {
     console.log(
       "Este es el valor del studentId en el create rewview " +
         location.state.studentId
     );
-    await fetch(
-      `http://localhost:8080/api/v1/students/${location.state.studentId}/create-review`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          school: data.school,
-          company: data.company,
-          startDate: data.startDate,
-          endDate: data.endDate,
-          description: data.description,
-          rating: data.rating,
-          technologies: [data.technology1, data.technology2, data.technology3],
-          summaryBest: [data.best1, data.best2, data.best3],
-          summaryWorst: [data.worst1, data.worst2, data.worst3],
-          studentId: location.state.studentId,
-        }),
-        headers: {
-          "Content-Type": "application/json;",
-        },
-      }
-    )
+    console.log("Valores a guardar en la Base de datos" + data);
+    await fetch(`http://localhost:8080/api/v1/internships`, {
+      method: "POST",
+      body: JSON.stringify({
+        schoolId: data.schoolId,
+        companyId: data.companyId,
+        degreeId: data.degreeId,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        description: data.description,
+        rating: data.rating,
+        technologies: [data.technology1, data.technology2, data.technology3],
+        summaryBest: [data.best1, data.best2, data.best3],
+        summaryWorst: [data.worst1, data.worst2, data.worst3],
+        studentId: params.studentId,
+      }),
+      headers: {
+        "Content-Type": "application/json;",
+      },
+    })
       .then((response) => {
         if (response.status == 201) {
-          navigate(`/students/${params.studentId}/profile`, { replace: true });
+          <SuccesfulResponse message="¡Práctica creada con éxito!"></SuccesfulResponse>;
+          setTimeout(() => {
+            navigate(`/students/${params.studentId}/profile`, {
+              replace: true,
+            });
+          }, 3000);
         }
       })
       .catch((error: Error) => console.log("Este es el error: " + error));
@@ -70,9 +76,8 @@ export default function CreateReview() {
 
   const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
     console.log("Formulario", data);
-    addIntership(data);
+    addInternship(data);
   };
-
   return (
     <div className="font-body mx-auto container  xl:w-[60%]">
       <header className="bg-primary mx-3 my-24 tracking-[0.5rem]">
@@ -80,7 +85,7 @@ export default function CreateReview() {
       </header>
 
       <main className="m-3 mt-12 ">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <section className="my-10">
             <h1 className="text-xl xl:text-2xl text-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
               DATOS GENERALES
@@ -100,18 +105,20 @@ export default function CreateReview() {
                   border rounded py-2
                   pl-2 w-3/4 text-black
                    focus:focus:border-secondary-100"
-                    {...register("school")}
-                    name="school"
+                    {...register("schoolId", {
+                      required: {
+                        value: true,
+                        message: "Este campo es obligatorio",
+                      },
+                    })}
                     id="school"
                   >
-                    <option value="selecciona">
-                      Selecciona un Centro de Educación
-                    </option>
-                    <option value=""> No aparece</option>
-                    <option id="" value={1}>
-                      IES Francisco de Goya
-                    </option>
+                    <option value="">Selecciona un Centro de Educación</option>
+                    <option value={1}>IES Francisco de Goya</option>
                   </select>
+                  <p className="text-base font-light text-red">
+                    {errors.schoolId?.message}
+                  </p>
                 </label>
                 <label className="flex-grow">
                   <h1 className="text-secondary-100 my-2 font-bold">Empresa</h1>
@@ -120,21 +127,22 @@ export default function CreateReview() {
                   border rounded py-2
                   pl-2  w-3/4 text-black
                    focus:focus:border-secondary-100"
-                    {...register("company")}
-                    name="company"
-                    id="company"
+                    {...register("companyId", {
+                      required: {
+                        value: true,
+                        message: "Este campo es obligatorio",
+                      },
+                    })}
+                    id="co mpany"
                   >
-                    <option value="selecciona">Selecciona una Empresa</option>
-                    <option id="0" value="">
-                      No aparece
-                    </option>
-                    <option value="Indra"> Indra</option>
-                    <option value="Accenture"> Accenture</option>
-                    <option id="1" value="DXC Technology">
-                      {" "}
-                      DXC Technology
-                    </option>
+                    <option value="">Selecciona una Empresa</option>
+                    <option value={3}> Indra</option>
+                    <option value={1}> Accenture</option>
+                    <option value={2}> DXC Technology</option>
                   </select>
+                  <p className="text-base font-light text-red">
+                    {errors.companyId?.message}
+                  </p>
                 </label>
 
                 <label className="md:ml-10 flex-shrink">
@@ -143,21 +151,28 @@ export default function CreateReview() {
                       Grado profesional
                     </h1>
                     <select
-                      {...register("degree")}
+                      {...register("degreeId", {
+                        required: {
+                          value: true,
+                          message: "Este campo es obligatorio",
+                        },
+                      })}
                       className="border rounded py-2
                     pl-2 w-3/4  text-black
                      focus:focus:border-secondary-100"
-                      id="degree"
+                      id="degreeId"
                     >
                       <option value="selecciona" className="">
                         Selecciona un Grado
                       </option>
-                      <option value=""> No aparece</option>
-                      <option value="DAM"> DAM</option>
-                      <option value="DAW"> DAW</option>
-                      <option value="ASIR"> ASIR</option>
+                      <option value={1}> DAM</option>
+                      <option value={2}> DAW</option>
+                      <option value={3}> ASIR</option>
                     </select>
                   </div>
+                  <p className="text-base font-light text-red">
+                    {errors.degreeId?.message}
+                  </p>
                 </label>
               </div>
               <div className="md:flex">
@@ -167,7 +182,6 @@ export default function CreateReview() {
                     {...register("startDate")}
                     id="startDate"
                     type="date"
-                    placeholder="Spring Boot"
                     className="
         border
         focus:outline-none
@@ -179,6 +193,9 @@ export default function CreateReview() {
         rounded
         font-normal"
                   />
+                  <p className="text-base font-light text-red">
+                    {errors.startDate?.message}
+                  </p>
                 </label>
 
                 <label className="md:ml-10 font-bold">
@@ -187,7 +204,6 @@ export default function CreateReview() {
                     {...register("endDate")}
                     id="endDate"
                     type="date"
-                    placeholder="Spring Boot"
                     className="
         border
         focus:outline-none
@@ -199,6 +215,9 @@ export default function CreateReview() {
         rounded
         font-normal"
                   />
+                  <p className="text-base font-light text-red">
+                    {errors.endDate?.message}
+                  </p>
                 </label>
               </div>
             </div>
@@ -213,12 +232,20 @@ export default function CreateReview() {
             </p>
             <label>
               <textarea
-                {...register("description")}
+                {...register("description", {
+                  required: {
+                    value: true,
+                    message: "Este campo es obligatorio",
+                  },
+                })}
                 placeholder="He realizado mis prácticas en Indra y no puedo estar más contento de lo que he aprendido..."
                 rows={6}
                 className=" resize-none border focus:outline-none focus:border-secondary-100
               w-3/4  py-2 pl-2 rounded font-normal"
               ></textarea>
+              <p className="text-base font-light text-red">
+                {errors.description?.message}
+              </p>
             </label>
             <h1 className="text-xl xl:text-2xl text-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
               RATE IT!
@@ -235,28 +262,26 @@ export default function CreateReview() {
                   border rounded py-2
                   pl-2 w-fit text-black
                    focus:focus:border-secondary-100"
-                {...register("rating")}
+                {...register("rating", {
+                  required: {
+                    value: true,
+                    message: "Este campo es obligatorio",
+                  },
+                })}
                 name="rating"
                 id="rating"
               >
-                <option value="selecciona">selecciona</option>
-                <option value="0">0</option>
-                <option id="1" value="1">
-                  1
-                </option>
-                <option id="2" value="2">
-                  2
-                </option>
-                <option id="3" value="3">
-                  3
-                </option>
-                <option id="4" value="4">
-                  4
-                </option>
-                <option id="5" value="5">
-                  5
-                </option>
+                <option value="">selecciona</option>
+                <option value={0}>0</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
               </select>
+              <p className="text-base font-light text-red">
+                {errors.rating?.message}
+              </p>
             </label>
           </section>
           <section className="my-5 md">
@@ -271,7 +296,12 @@ export default function CreateReview() {
               <label className="font-bold">
                 <h1 className="text-secondary-100 my-2">Opción 1</h1>
                 <input
-                  {...register("technology1")}
+                  {...register("technology1", {
+                    required: {
+                      value: true,
+                      message: "Este campo es obligatorio",
+                    },
+                  })}
                   id="technology1"
                   type="text"
                   placeholder="Spring Boot"
@@ -285,6 +315,9 @@ export default function CreateReview() {
         rounded
         font-normal"
                 />
+                <p className="text-base font-light text-red">
+                  {errors.technology1?.message}
+                </p>
               </label>
               <label className=" font-bold">
                 <h1 className="text-secondary-100 my-2">Opción 2</h1>
@@ -338,7 +371,12 @@ export default function CreateReview() {
               <label className="font-bold">
                 <h1 className="text-secondary-100 my-2">Opción 1</h1>
                 <input
-                  {...register("best1")}
+                  {...register("best1", {
+                    required: {
+                      value: true,
+                      message: "Este campo es obligatorio",
+                    },
+                  })}
                   id="best1"
                   type="text"
                   placeholder="El ambiente de trabajo"
@@ -352,6 +390,9 @@ export default function CreateReview() {
         rounded
         font-normal"
                 />
+                <p className="text-base font-light text-red">
+                  {errors.best1?.message}
+                </p>
               </label>
               <label className="font-bold">
                 {" "}
@@ -407,7 +448,12 @@ export default function CreateReview() {
                 {" "}
                 <h1 className="text-secondary-100 my-2">Opción 1</h1>
                 <input
-                  {...register("worst1")}
+                  {...register("worst1", {
+                    required: {
+                      value: true,
+                      message: "Este campo es obligatorio",
+                    },
+                  })}
                   id="worst1"
                   type="text"
                   placeholder="El ordenador, poca calidad"
@@ -421,6 +467,9 @@ export default function CreateReview() {
         rounded
         font-normal"
                 />
+                <p className="text-base font-light text-red">
+                  {errors.worst1?.message}
+                </p>
               </label>
               <label className="font-bold">
                 {" "}
@@ -467,6 +516,7 @@ export default function CreateReview() {
           </section>
           <div className="xl:flex ">
             <button
+              disabled={!isDirty || !isValid}
               type="submit"
               className="container mx-auto rounded max-w-sm xl:text-2xl text-xl border-cyan-600 bg-secondary-100 text-white py-2 font-bold uppercase tracking-[0.3rem] my-5 hover:bg-secondary-200"
             >

@@ -4,13 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SuccesfulResponse from "../../components/ui/SuccesfulResponse";
 import { RegisterFormValues as FormValues } from "../../types/types";
-
 export default function Register() {
   let navigate = useNavigate();
   const { control, register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
   const [isStudentCreated, setIsStudentCreated] = useState(false);
-
   const addStudent = async (data: FormValues) => {
     await fetch("http://localhost:8080/api/v1/students", {
       method: "POST",
@@ -37,7 +35,6 @@ export default function Register() {
       .then((response) => {
         if (response.status == 201) {
           setIsStudentCreated(true);
-
           setTimeout(() => {
             navigate("/login", { replace: true });
           }, 3000);
@@ -347,7 +344,6 @@ export default function Register() {
                   <option value="3"> ASIR</option>
                 </select>
               </div>
-
               <div className="mt-1">
                 <a
                   href="#"

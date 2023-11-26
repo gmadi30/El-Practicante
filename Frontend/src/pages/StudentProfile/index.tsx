@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { StudentProfile } from "../../types/types";
-import IntershipComponent from "./components/Intership";
+import IntershipComponent from "./components/Internship";
 
 export default function Profile() {
   const [student, setStudent] = useState<StudentProfile>({} as StudentProfile);
@@ -23,7 +23,6 @@ export default function Profile() {
 
   const handleNewIntershipOnClick = () => {
     navigate(`/student/${params.studentId}/create-review`, {
-      replace: true,
       state: { studentId: params.studentId },
     });
   };
@@ -60,8 +59,9 @@ export default function Profile() {
         <div className="font-body md:container md:mx-auto">
           <Header student={student} />
 
-          {student?.interships?.map((intership, index) => {
-            return <IntershipComponent key={index} intership={intership} />;
+          {student?.internships?.map((internship, index) => {
+            console.log("Intership enviada al componente", internship);
+            return <IntershipComponent key={index} internship={internship} />;
           })}
           <div className="flex justify-center">
             <button
