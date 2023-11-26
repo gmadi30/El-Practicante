@@ -1,4 +1,4 @@
-package com.elpracticante.backend.intership.entity;
+package com.elpracticante.backend.internship.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class TechnologyEntity {
     private String name;
 
     @ManyToMany(mappedBy = "technologies")
-    private List<IntershipEntity> interships;
+    private List<InternshipEntity> internships;
 
 }
 

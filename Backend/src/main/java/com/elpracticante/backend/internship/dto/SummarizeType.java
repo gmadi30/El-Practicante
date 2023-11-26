@@ -1,4 +1,4 @@
-package com.elpracticante.backend.intership.dto;
+package com.elpracticante.backend.internship.dto;
 
 public enum SummarizeType {
 

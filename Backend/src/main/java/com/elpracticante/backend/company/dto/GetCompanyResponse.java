@@ -1,6 +1,6 @@
 package com.elpracticante.backend.company.dto;
 
-import com.elpracticante.backend.intership.Intership;
+import com.elpracticante.backend.internship.Internship;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public record GetCompanyResponse(
        String city,
        String aboutUs,
        String whyUs,
-       List<Intership> interships,
+       List<Internship> internships,
        Double rating
 
 ) {

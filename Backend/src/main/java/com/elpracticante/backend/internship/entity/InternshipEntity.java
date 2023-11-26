@@ -1,4 +1,4 @@
-package com.elpracticante.backend.intership.entity;
+package com.elpracticante.backend.internship.entity;
 
 
 import com.elpracticante.backend.company.entity.CompanyEntity;
@@ -11,12 +11,12 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "INTERSHIP")
-public class IntershipEntity {
+@Table(name = "INTERNSHIP")
+public class InternshipEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "INTERSHIP_ID")
+    @Column(name = "INTERNSHIP_ID")
     private Integer id;
 
     @Column(name = "DESCRIPTION")
@@ -46,14 +46,14 @@ public class IntershipEntity {
     private CompanyEntity company;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "INTERSHIP_TECHNOLOGY",
-            joinColumns = @JoinColumn(name = "INTERSHIP_ID"),
+    @JoinTable(name = "INTERNSHIP_TECHNOLOGY",
+            joinColumns = @JoinColumn(name = "INTERNSHIP_ID"),
             inverseJoinColumns = @JoinColumn(name = "TECHNOLOGY_ID"))
     private List<TechnologyEntity> technologies;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "INTERSHIP_SUMMARIZE",
-            joinColumns = @JoinColumn(name = "INTERSHIP_ID"),
+    @JoinTable(name = "INTERNSHIP_SUMMARIZE",
+            joinColumns = @JoinColumn(name = "INTERNSHIP_ID"),
             inverseJoinColumns = @JoinColumn(name = "SUMMARIZE_ID"))
     private List<SummarizeEntity> summaries;
 

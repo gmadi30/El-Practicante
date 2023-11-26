@@ -1,6 +1,6 @@
-package com.elpracticante.backend.intership.repository;
+package com.elpracticante.backend.internship.repository;
 
-import com.elpracticante.backend.intership.entity.TechnologyEntity;
+import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

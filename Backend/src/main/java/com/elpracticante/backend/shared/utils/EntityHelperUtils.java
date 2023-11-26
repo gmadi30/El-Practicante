@@ -5,12 +5,12 @@ import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.company.repository.CompanyRepository;
 import com.elpracticante.backend.degree.entity.DegreeEntity;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
-import com.elpracticante.backend.intership.dto.Summarize;
-import com.elpracticante.backend.intership.dto.Technology;
-import com.elpracticante.backend.intership.entity.IntershipEntity;
-import com.elpracticante.backend.intership.entity.SummarizeEntity;
-import com.elpracticante.backend.intership.entity.TechnologyEntity;
-import com.elpracticante.backend.intership.repository.IntershipRepository;
+import com.elpracticante.backend.internship.dto.Summarize;
+import com.elpracticante.backend.internship.dto.Technology;
+import com.elpracticante.backend.internship.entity.InternshipEntity;
+import com.elpracticante.backend.internship.entity.SummarizeEntity;
+import com.elpracticante.backend.internship.entity.TechnologyEntity;
+import com.elpracticante.backend.internship.repository.InternshipRepository;
 import com.elpracticante.backend.school.entity.SchoolEntity;
 import com.elpracticante.backend.school.repository.SchoolRepository;
 import com.elpracticante.backend.student.Student;
@@ -63,8 +63,8 @@ public final class EntityHelperUtils {
         return companyEntity.get();
     }
 
-    public static IntershipEntity getIntershipEntity(Integer companyId, IntershipRepository intershipRepository) {
-        Optional<IntershipEntity> intershipEntityOptional = intershipRepository.findById(companyId);
+    public static InternshipEntity getIntershipEntity(Integer companyId, InternshipRepository internshipRepository) {
+        Optional<InternshipEntity> intershipEntityOptional = internshipRepository.findById(companyId);
 
         if (!intershipEntityOptional.isPresent()) {
             throw new EntityNotFoundException("No record was found in the INTERSHIP table by the given ID");
@@ -116,7 +116,7 @@ public final class EntityHelperUtils {
                 companyEntity.getRating(),
                 companyEntity.getCity(),
                 companyEntity.getAutonomousCommunity(),
-                companyEntity.getInterships().size()
+                companyEntity.getInternships().size()
         );
     }
 

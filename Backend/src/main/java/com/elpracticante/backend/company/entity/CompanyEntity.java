@@ -1,7 +1,7 @@
 package com.elpracticante.backend.company.entity;
 
 
-import com.elpracticante.backend.intership.entity.IntershipEntity;
+import com.elpracticante.backend.internship.entity.InternshipEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -39,7 +39,7 @@ public class CompanyEntity {
     private String whyUs;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
-    private List<IntershipEntity> interships;
+    private List<InternshipEntity> internships;
 
     @Column(name = "RATING")
     private Double rating;

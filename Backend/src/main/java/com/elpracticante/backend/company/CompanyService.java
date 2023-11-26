@@ -5,8 +5,8 @@ import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.dto.GetCompanyResponse;
 import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.company.repository.CompanyRepository;
-import com.elpracticante.backend.intership.Intership;
-import com.elpracticante.backend.intership.entity.IntershipEntity;
+import com.elpracticante.backend.internship.Internship;
+import com.elpracticante.backend.internship.entity.InternshipEntity;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class CompanyService implements CompanyServiceAPI {
                             companyEntity.getRating(),
                             companyEntity.getCity(),
                             companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInterships().size())
+                            companyEntity.getInternships().size())
                     );
                 }
             }
@@ -59,7 +59,7 @@ public class CompanyService implements CompanyServiceAPI {
                             companyEntity.getRating(),
                             companyEntity.getCity(),
                             companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInterships().size())
+                            companyEntity.getInternships().size())
                     );
                 }
             }
@@ -72,7 +72,7 @@ public class CompanyService implements CompanyServiceAPI {
                             companyEntity.getRating(),
                             companyEntity.getCity(),
                             companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInterships().size())
+                            companyEntity.getInternships().size())
                     );
                 }
             }
@@ -85,7 +85,7 @@ public class CompanyService implements CompanyServiceAPI {
                             companyEntity.getRating(),
                             companyEntity.getCity(),
                             companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInterships().size())
+                            companyEntity.getInternships().size())
                     );
                 }
             }
@@ -98,7 +98,7 @@ public class CompanyService implements CompanyServiceAPI {
                             companyEntity.getRating(),
                             companyEntity.getCity(),
                             companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInterships().size())
+                            companyEntity.getInternships().size())
                     );
                 }
             }
@@ -125,18 +125,18 @@ public class CompanyService implements CompanyServiceAPI {
                 companyEntity.get().getCity(),
                 companyEntity.get().getAboutUs(),
                 companyEntity.get().getWhyUs(),
-                mapToIntership(companyEntity.get().getInterships()),
+                mapToIntership(companyEntity.get().getInternships()),
                 companyEntity.get().getRating()
         );
 
         return getCompanyResponse;
     }
 
-    private List<Intership> mapToIntership(List<IntershipEntity> interships) {
-        List<Intership> intershipList = new ArrayList<>();
+    private List<Internship> mapToIntership(List<InternshipEntity> interships) {
+        List<Internship> internshipList = new ArrayList<>();
 
-        interships.forEach(intershipEntity -> intershipList.add(
-                new Intership(
+        interships.forEach(intershipEntity -> internshipList.add(
+                new Internship(
                         intershipEntity.getId(),
                         intershipEntity.getDescription(),
                         intershipEntity.getStartDate(),
@@ -151,7 +151,7 @@ public class CompanyService implements CompanyServiceAPI {
                 )
         ));
 
-        return intershipList;
+        return internshipList;
     }
 }
 

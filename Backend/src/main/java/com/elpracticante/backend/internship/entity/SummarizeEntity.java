@@ -1,7 +1,7 @@
-package com.elpracticante.backend.intership.entity;
+package com.elpracticante.backend.internship.entity;
 
 
-import com.elpracticante.backend.intership.dto.SummarizeType;
+import com.elpracticante.backend.internship.dto.SummarizeType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,5 +24,5 @@ public class SummarizeEntity {
     private SummarizeType type;
 
     @ManyToMany(mappedBy = "summaries", fetch = FetchType.LAZY)
-    private List<IntershipEntity> interships;
+    private List<InternshipEntity> internships;
 }

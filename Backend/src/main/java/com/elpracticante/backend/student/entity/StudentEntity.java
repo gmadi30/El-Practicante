@@ -2,7 +2,7 @@ package com.elpracticante.backend.student.entity;
 
 
 import com.elpracticante.backend.degree.entity.DegreeEntity;
-import com.elpracticante.backend.intership.entity.IntershipEntity;
+import com.elpracticante.backend.internship.entity.InternshipEntity;
 import com.elpracticante.backend.school.entity.SchoolEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -62,7 +62,7 @@ public class StudentEntity {
     private DegreeEntity degree;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<IntershipEntity> interships;
+    private List<InternshipEntity> interships;
 
 
 

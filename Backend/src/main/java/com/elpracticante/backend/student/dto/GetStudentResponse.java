@@ -1,17 +1,21 @@
 package com.elpracticante.backend.student.dto;
 
-import com.elpracticante.backend.intership.Intership;
+import com.elpracticante.backend.degree.dto.DegreeDTO;
+import com.elpracticante.backend.internship.Internship;
+import com.elpracticante.backend.school.dto.SchoolDTO;
+import com.elpracticante.backend.student.Student;
 
 import java.util.List;
 
 public record GetStudentResponse (
-        String name,
 
-        String lastName,
+        Student student,
 
-        String companyName,
+        SchoolDTO schoolDTO,
 
-        List<Intership> interships
+        DegreeDTO degreeDTO,
+
+        List<Internship> internships
 
 ) {
 }
