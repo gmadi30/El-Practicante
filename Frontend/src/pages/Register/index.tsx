@@ -9,28 +9,30 @@ export default function Register() {
   const { control, register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
   const [isStudentCreated, setIsStudentCreated] = useState(false);
+
   const addStudent = async (data: FormValues) => {
+    let formData = new FormData();
+
+    formData.append("name", data.name);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("birthday", data.birthday);
+    formData.append("city", "Madrid");
+    formData.append("autonomousCommunity", "Comunidad de Madrid");
+    formData.append("zipcode", "28033");
+    formData.append("dni", data.dni);
+    formData.append("mobile", data.mobile);
+    formData.append("schoolId", data.schoolId);
+    formData.append("companyId", data.companyId);
+    formData.append("degreeId", data.degreeId);
+    if (data.profilePicture[0]) {
+      formData.append("profilePicture", data.profilePicture[0]);
+    }
+
     await fetch("http://localhost:8080/api/v1/students", {
       method: "POST",
-      body: JSON.stringify({
-        name: data.name,
-        lastName: data.lastName,
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-        birthDay: data.birthday,
-        DNI: data.dni,
-        mobile: data.mobile,
-        school: data.school,
-        degree: data.degree,
-        companyName: data.companyName,
-        city: "Madrid",
-        autonomousCommunity: "Comunidad de Madrid",
-        zipCode: "29044",
-      }),
-      headers: {
-        "Content-Type": "application/json;",
-      },
+      body: formData,
     })
       .then((response) => {
         if (response.status == 201) {
@@ -44,7 +46,7 @@ export default function Register() {
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log("Form", data);
+    console.log("Form", data.profilePicture[0]);
     addStudent(data);
   };
   if (!isStudentCreated) {
@@ -59,21 +61,22 @@ export default function Register() {
             className="border-4 border-primary rounded-xl font-body flex flex-col mt-3 mb-10 px-20 space-y-7 py-10"
             noValidate
           >
-            <label htmlFor="name" className="text-sm font-bold md:text-xl">
-              <h1 className="text-secondary-100">Nombre</h1>
-              <input
-                {...register("name", {
-                  required: {
-                    value: true,
-                    message: "Este campo es obligatorio",
-                  },
-                  minLength: 3,
-                  maxLength: 20,
-                })}
-                id="name"
-                type="text"
-                placeholder="Nombre"
-                className="border
+            <div className="flex flex-col space-y-5 md:flex-row md:space-y-0 md:space-x-2">
+              <label htmlFor="name" className="text-sm font-bold md:text-xl">
+                <h1 className="text-secondary-100">Nombre</h1>
+                <input
+                  {...register("name", {
+                    required: {
+                      value: true,
+                      message: "Este campo es obligatorio",
+                    },
+                    minLength: 3,
+                    maxLength: 20,
+                  })}
+                  id="name"
+                  type="text"
+                  placeholder="Nombre"
+                  className="border
                       focus:outline-none
                       focus:bg-primary
                       w-full
@@ -83,24 +86,27 @@ export default function Register() {
                       font-normal
                       placeholder:opacity-60
                       "
-              />
-              <p className="text-base font-light text-red">
-                {errors.name?.message}
-              </p>
-            </label>
-            <label htmlFor="lastName" className="text-sm font-bold md:text-xl">
-              <h1 className="text-secondary-100">Apellido</h1>
-              <input
-                {...register("lastName", {
-                  required: {
-                    value: true,
-                    message: "Este campo es obligatorio",
-                  },
-                })}
-                id="lastName"
-                type="text"
-                placeholder="Apellido"
-                className="border
+                />
+                <p className="text-base font-light text-red">
+                  {errors.name?.message}
+                </p>
+              </label>
+              <label
+                htmlFor="lastName"
+                className="text-sm font-bold md:text-xl"
+              >
+                <h1 className="text-secondary-100">Apellido</h1>
+                <input
+                  {...register("lastName", {
+                    required: {
+                      value: true,
+                      message: "Este campo es obligatorio",
+                    },
+                  })}
+                  id="lastName"
+                  type="text"
+                  placeholder="Apellido"
+                  className="border
                       focus:outline-none
                       focus:bg-primary
                       w-full
@@ -110,11 +116,12 @@ export default function Register() {
                       font-normal
                       placeholder:opacity-60
                       "
-              />
-              <p className="text-base font-light text-red">
-                {errors.lastName?.message}
-              </p>
-            </label>
+                />
+                <p className="text-base font-light text-red">
+                  {errors.lastName?.message}
+                </p>
+              </label>
+            </div>
             <label htmlFor="email" className="text-sm font-bold md:text-xl">
               <h1 className="text-secondary-100">Email</h1>
               <input
@@ -231,6 +238,32 @@ export default function Register() {
               </p>
             </label>
 
+            <label
+              htmlFor="profilePicture"
+              className="text-sm font-bold md:text-xl"
+            >
+              <h1 className="text-secondary-100">Foto de perfil</h1>
+              <p className="text-sm my-2">
+                Si no eliges una foto de perfil se colocara una por defecto
+              </p>
+              <input
+                {...register("profilePicture")}
+                id="profilePicture"
+                type="file"
+                placeholder="A1234591-B"
+                className="border
+                      focus:outline-none
+                      focus:bg-primary
+                      w-full
+                      py-2
+                      pl-2
+                      rounded
+                      font-normal
+                      placeholder:opacity-60
+                      "
+              />
+            </label>
+
             <label htmlFor="DNI" className="text-sm font-bold md:text-xl">
               <h1 className="text-secondary-100">DNI</h1>
               <input
@@ -293,17 +326,17 @@ export default function Register() {
                 </h1>
                 <select
                   className="md:text-xl px-2 py-4 border rounded w-full text-black focus:focus:border-secondary-100"
-                  {...register("school", {
+                  {...register("schoolId", {
                     required: {
                       value: true,
                       message: "Este campo es obligatorio",
                     },
                   })}
-                  name="school"
+                  name="schoolId"
                 >
                   <option value="">Selecciona un Centro de Educación</option>
-                  <option value="0"> No aparece</option>
-                  <option value="1">IES Francisco de Goya</option>
+                  <option value={0}> No aparece</option>
+                  <option value={1}>IES Francisco de Goya</option>
                 </select>
               </div>
 
@@ -316,7 +349,7 @@ export default function Register() {
                 </a>
               </div>
               <p className="text-base font-light text-red">
-                {errors.school?.message}
+                {errors.schoolId?.message}
               </p>
             </label>
 
@@ -326,7 +359,7 @@ export default function Register() {
                   Grado profesional
                 </h1>
                 <select
-                  {...register("degree", {
+                  {...register("degreeId", {
                     required: {
                       value: true,
                       message: "Este campo es obligatorio",
@@ -338,10 +371,10 @@ export default function Register() {
                   <option value="" className="">
                     Selecciona un Grado
                   </option>
-                  <option value="0"> No aparece</option>
-                  <option value="1"> DAM</option>
-                  <option value="2"> DAW</option>
-                  <option value="3"> ASIR</option>
+                  <option value={0}> No aparece</option>
+                  <option value={1}> DAM</option>
+                  <option value={2}> DAW</option>
+                  <option value={3}> ASIR</option>
                 </select>
               </div>
               <div className="mt-1">
@@ -353,7 +386,7 @@ export default function Register() {
                 </a>
               </div>
               <p className="text-base font-light text-red">
-                {errors.degree?.message}
+                {errors.degreeId?.message}
               </p>
             </label>
             <label>
@@ -361,28 +394,19 @@ export default function Register() {
                 <h1 className="font-bold text-secondary-100">Empresa</h1>
                 <select
                   className="px-2 py-4 border rounded w-full focus:border-secondary-100"
-                  {...register("companyName", {
+                  {...register("companyId", {
                     required: {
                       value: true,
                       message: "Este campo es obligatorio",
                     },
                   })}
-                  id="companyName"
+                  id="companyId"
                 >
                   <option value="">Selecciona una Empresa</option>
-                  <option value="0">No aparece</option>
-                  <option id="2" value="Indra">
-                    {" "}
-                    Indra
-                  </option>
-                  <option id="3" value="Accenture">
-                    {" "}
-                    Accenture
-                  </option>
-                  <option id="1" value="DXC Technology">
-                    {" "}
-                    DXC Technology
-                  </option>
+                  <option value={0}> No aparece</option>
+                  <option value={1}>Accenture</option>
+                  <option value={2}>DXC Technology</option>
+                  <option value={3}>Indra</option>
                 </select>
               </div>
 
@@ -395,7 +419,7 @@ export default function Register() {
                 </a>
               </div>
               <p className="text-base font-light text-red">
-                {errors.companyName?.message}
+                {errors.companyId?.message}
               </p>
             </label>
 

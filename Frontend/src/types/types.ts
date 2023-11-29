@@ -8,12 +8,13 @@ export type RegisterFormValues = {
   birthday: string;
   dni: string;
   mobile: string;
-  school: string;
-  degree: string;
-  companyName: string;
+  schoolId: string;
+  degreeId: string;
+  companyId: string;
   city: string;
   autonomousCommunity: string;
   zipCode: string;
+  profilePicture: string;
 };
 
 // Login types
@@ -36,6 +37,7 @@ export type Student = {
   autonomousCommunity: string;
   mobile: string;
   companyName: string;
+  profilePictureName: string;
 };
 
 export type StudentProfile = {
@@ -49,6 +51,9 @@ export type StudentProfile = {
     name: string;
   };
   internships: Internship[];
+  profilePicture: {
+    name: string;
+  };
 };
 
 // Intership Type
@@ -57,7 +62,7 @@ export type Internship = {
   description: string;
   startDate: string;
   endDate: Date;
-  rating: Number;
+  rating: number;
   degreeName: string;
   schoolName: string;
   company: Company;
@@ -94,7 +99,7 @@ export type CompanyProfileType = {
   autonomousCommunity: string;
   email: string;
   employeesAmount: number;
-  interships: Internship[];
+  internships: Internship[];
   companyId: number;
   name: string;
   rating: number;

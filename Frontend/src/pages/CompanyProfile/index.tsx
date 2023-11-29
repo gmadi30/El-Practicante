@@ -1,8 +1,8 @@
 import { TiMail, TiSocialLinkedin, TiHome } from "react-icons/ti";
-import { ImStarFull, ImStarHalf } from "react-icons/im";
 import { useState, useEffect } from "react";
 import { CompanyProfileType } from "../../types/types";
 import { useLocation, useParams } from "react-router-dom";
+import Rating from "../../components/ui/Rating";
 
 export default function CompanyProfile() {
   const [company, setCompany] = useState<CompanyProfileType>(
@@ -12,14 +12,15 @@ export default function CompanyProfile() {
   let location = useLocation();
   const params = useParams();
 
-  const impagesFolderPath = "../../assets/img/";
+  const impagesFolderPath = "../../assets/";
   const imgUrl = new URL(
-    `${impagesFolderPath}${company.name}.png`,
+    `${impagesFolderPath}/img/${company.name}.png`,
     import.meta.url
   ).href;
 
   const imgStudentProfile = (name: string) => {
-    return new URL(`${impagesFolderPath}${name}.png`, import.meta.url).href;
+    return new URL(`${impagesFolderPath}/students/${name}`, import.meta.url)
+      .href;
   };
 
   console.log("URL", imgStudentProfile("Tulio"));
@@ -73,7 +74,7 @@ export default function CompanyProfile() {
             </h3>
             <h3 className="text-sm lg:text-xl">
               {" "}
-              {company.interships && company.interships.length}{" "}
+              {company.internships && company.internships.length}{" "}
               <span className="text-secondary-100 font-bold">Practicantes</span>{" "}
               de FP
             </h3>
@@ -161,55 +162,54 @@ export default function CompanyProfile() {
                 OPINIONES
               </h1>
 
-              {company.interships &&
-                company.interships.map((intership, index) => {
+              {company.internships &&
+                company.internships.map((internships, index) => {
                   return (
                     <div className="flex mx-2 space-y-2">
                       <div className="flex flex-col items-center justify-center text-center p-2 min-w-fit">
                         <img
                           className="max-h-25 rounded-full"
-                          src={imgStudentProfile(intership?.student?.name)}
+                          src={imgStudentProfile(
+                            internships?.student?.profilePictureName
+                          )}
                           alt=""
                           height={0}
                           width={120}
                         />
                         <div className="flex flex-col justify-center items-center text-sm my-3">
                           <h1 className="font-bold">
-                            {intership.student.name}{" "}
-                            {intership.student.lastName}
+                            {internships.student.name}{" "}
+                            {internships.student.lastName}
                           </h1>
-                          <h2>{intership.schoolName}</h2>
-                          <h2>Estudiante de {intership.degreeName}</h2>
+                          <h2>{internships.schoolName}</h2>
+                          <h2>Estudiante de {internships.degreeName}</h2>
                         </div>
                       </div>
                       <div className="flex flex-col w-full pb-1 bg-primary py-3 px-2 justify-between">
                         <div className="text-sm">
                           <div className="flex">
-                            <ImStarFull></ImStarFull>
-                            <ImStarFull></ImStarFull>
-                            <ImStarFull></ImStarFull>
-                            <ImStarFull></ImStarFull>
-                            <ImStarHalf></ImStarHalf>
+                            <Rating rating={internships.rating}></Rating>
                             <h1 className="font-semibold ml-2">EMPRESA TOP!</h1>
                           </div>
                           <div className="flex flex-col space-between">
                             <p className="line-clamp-7 mt-1 text-left text-sm">
-                              Lorem ipsum dolor sit, amet consectetur
-                              adipisicing elit. Soluta voluptas fugit voluptates
-                              consequatur distinctio tempora exercitationem
-                              corporis reiciendis. Dolore accusantium, qui animi
-                              voluptas quisquam voluptate quasi libero a et
-                              ipsum?
+                              {internships?.description}
                             </p>
                           </div>
                         </div>
 
                         <p className="flex text-sm my-2">
                           <span className="text-secondary-100 font-bold mr-1">
-                            Tecnologías:
-                            <span> {intership?.technologyList[0]?.name}, </span>
-                            <span>{intership?.technologyList[1]?.name}, </span>
-                            <span>{intership?.technologyList[2]?.name}</span>
+                            Tecnologías: {""}
+                            {internships?.technologyList?.map(
+                              (technology, index) => {
+                                return (
+                                  <span>
+                                    {technology.name} {""}
+                                  </span>
+                                );
+                              }
+                            )}
                           </span>
                         </p>
                       </div>

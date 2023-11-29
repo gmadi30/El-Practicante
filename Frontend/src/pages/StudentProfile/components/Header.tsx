@@ -5,17 +5,18 @@ interface HeaderProps {
   student: StudentProfile;
 }
 
-const impagesFolderPath = "../../../assets/img/";
-const imgStudentProfile = (name: string) => {
-  return new URL(`${impagesFolderPath}${name}.png`, import.meta.url).href;
-};
-
 const Header: React.FC<HeaderProps> = (props) => {
+  const impagesFolderPath = "../../../assets/students/";
+
+  const handleProfilePicture = (name: string) => {
+    return new URL(`${impagesFolderPath}${name}`, import.meta.url).href;
+  };
+
   return (
     <header>
       <div className="flex justify-center items-center py-10 bg-primary h-32 mt-20 rounded">
         <img
-          src={imgStudentProfile(props.student?.student?.name)}
+          src={handleProfilePicture(props.student?.profilePicture?.name)}
           className="block w-[176px] h-[176px] object-cover rounded-full border-4 border-secondary-300"
         ></img>
       </div>

@@ -12,7 +12,7 @@ const CompanyCards: React.FC<CompanyCardsProps> = (
   const { companies } = props;
 
   const companySearchedToLowerCase = props.companySearched.toLowerCase();
-  let companiesFiltered = companies.filter((company) => {
+  let companiesFiltered = companies?.filter((company) => {
     return (
       company.companyName.toLowerCase().includes(companySearchedToLowerCase) &&
       company.companyId !== 0
@@ -21,7 +21,7 @@ const CompanyCards: React.FC<CompanyCardsProps> = (
 
   return (
     <section className="px-5 flex flex-col ">
-      {companiesFiltered.map((company, index) => {
+      {companiesFiltered?.map((company, index) => {
         return (
           <div>
             <Card
