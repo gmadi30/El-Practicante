@@ -9,7 +9,6 @@ import lombok.Data;
 @Table(name = "SCHOOL")
 public class SchoolEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "SCHOOL_ID")
@@ -32,8 +31,6 @@ public class SchoolEntity {
 
     @Column(name = "FULL_ADRESS")
     private String fullAddress;
-
-
 
 
 }

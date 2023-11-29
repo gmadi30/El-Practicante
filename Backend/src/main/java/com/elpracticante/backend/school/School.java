@@ -1,5 +1,3 @@
 package com.elpracticante.backend.school;
 
-public class School {
-
-}
+public record School (Integer id, String name) {}
