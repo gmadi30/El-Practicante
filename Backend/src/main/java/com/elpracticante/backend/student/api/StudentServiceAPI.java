@@ -4,10 +4,12 @@ import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.student.dto.*;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 public interface StudentServiceAPI {
 
-    CreateStudentResponse addStudent(CreateStudentRequest studentBodyDTO) throws EmptyInputFieldException;
+    CreateStudentResponse addStudent(CreateStudentRequest studentBodyDTO) throws EmptyInputFieldException, IOException;
 
     GetStudentResponse getStudent(int studentId);
 

@@ -9,10 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+
 
 @RestController
 @RequestMapping("api/v1/students")
-@CrossOrigin
+@CrossOrigin()
 public class StudentController {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
@@ -23,8 +25,9 @@ public class StudentController {
         this.service = service;
     }
 
-    @PostMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CreateStudentResponse> addStudent(@RequestBody CreateStudentRequest createStudentRequest) {
+
+    @PostMapping(consumes =  {"multipart/form-data"})
+    public ResponseEntity<CreateStudentResponse> addStudent(@ModelAttribute  CreateStudentRequest createStudentRequest) throws IOException {
         CreateStudentResponse studentRequestOutput;
         logger.debug("we got a post request... Input: {}", createStudentRequest);
 

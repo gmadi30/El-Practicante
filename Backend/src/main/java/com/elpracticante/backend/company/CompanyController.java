@@ -1,7 +1,6 @@
 package com.elpracticante.backend.company;
 
 
-import com.elpracticante.backend.company.api.CompanyServiceAPI;
 import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.dto.GetCompanyResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,23 +14,22 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class CompanyController {
 
-    private final CompanyServiceAPI companyServiceAP;
+    private final CompanyService companyService;
 
-    public CompanyController(CompanyServiceAPI companyServiceAP) {
-        this.companyServiceAP = companyServiceAP;
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
     }
 
 
     @GetMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetAllCompaniesResponse> getAllCompanies(@RequestParam("sortBy") String sortBy) {
-
-        GetAllCompaniesResponse getAllCompaniesResponse = companyServiceAP.getAllCompanies(sortBy);
+        GetAllCompaniesResponse getAllCompaniesResponse = companyService.getAllCompanies(sortBy);
         return new ResponseEntity<>(getAllCompaniesResponse, HttpStatus.OK);
     }
 
     @GetMapping(path = {"/{companyId}"}, consumes =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetCompanyResponse> getCompany(@PathVariable int companyId) throws EntityNotFoundException {
-        GetCompanyResponse getCompanyResponse = companyServiceAP.getCompany(companyId);
+        GetCompanyResponse getCompanyResponse = companyService.getCompany(companyId);
         return new ResponseEntity<>(getCompanyResponse, HttpStatus.OK);
     }
 

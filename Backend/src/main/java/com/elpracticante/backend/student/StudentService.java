@@ -1,6 +1,7 @@
 package com.elpracticante.backend.student;
 
 import com.elpracticante.backend.company.Company;
+import com.elpracticante.backend.company.repository.CompanyRepository;
 import com.elpracticante.backend.degree.dto.DegreeDTO;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.internship.Internship;
@@ -11,8 +12,11 @@ import com.elpracticante.backend.internship.entity.SummarizeEntity;
 import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import com.elpracticante.backend.school.dto.SchoolDTO;
 import com.elpracticante.backend.school.repository.SchoolRepository;
+import com.elpracticante.backend.shared.dto.ProfilePicture;
 import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.shared.exceptions.WrongLoginCredentialsException;
+import com.elpracticante.backend.shared.repository.ProfilePictureRepository;
+import com.elpracticante.backend.shared.utils.EntityHelperUtils;
 import com.elpracticante.backend.student.api.StudentServiceAPI;
 import com.elpracticante.backend.student.dto.*;
 import com.elpracticante.backend.student.entity.StudentEntity;
@@ -21,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,18 +39,21 @@ public class StudentService implements StudentServiceAPI {
 
     private final StudentRepository studentRepository;
     private final SchoolRepository schoolRepository;
-
+    private final CompanyRepository companyRepository;
     private final DegreeRepository degreeRepository;
+    private final ProfilePictureRepository profiePictureReposiroty;
 
 
-    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, DegreeRepository degreeRepository) {
+    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, CompanyRepository companyRepository, DegreeRepository degreeRepository, ProfilePictureRepository profiePictureReposiroty) {
         this.studentRepository = studentRepository;
         this.schoolRepository = schoolRepository;
+        this.companyRepository = companyRepository;
         this.degreeRepository = degreeRepository;
+        this.profiePictureReposiroty = profiePictureReposiroty;
     }
 
     @Override
-    public CreateStudentResponse addStudent(CreateStudentRequest createStudentRequest) throws EmptyInputFieldException {
+    public CreateStudentResponse addStudent(CreateStudentRequest createStudentRequest) throws EmptyInputFieldException, IOException {
        // validateInput(createStudentRequest);
         StudentEntity studentEntity = createStudentEntity(createStudentRequest);
 
@@ -64,10 +72,12 @@ public class StudentService implements StudentServiceAPI {
                         studentEntity.getCity(),
                         studentEntity.getAutonomousCommunity(),
                         studentEntity.getMobile(),
-                        studentEntity.getCompanyName()),
+                        studentEntity.getCompanyName(),
+                        studentEntity.getProfilePicture().getName()),
                 new SchoolDTO(studentEntity.getSchool().getId(), studentEntity.getSchool().getName()),
                 new DegreeDTO(studentEntity.getDegree().getId(), studentEntity.getDegree().getName()),
-                mapToIntership(studentEntity.getInterships())
+                mapToIntership(studentEntity.getInterships()),
+                new ProfilePicture(studentEntity.getProfilePicture().getName())
         );
     }
 
@@ -147,7 +157,8 @@ public class StudentService implements StudentServiceAPI {
                        studentEntity.getCity(),
                        studentEntity.getAutonomousCommunity(),
                        studentEntity.getMobile(),
-                       studentEntity.getCompanyName()
+                       studentEntity.getCompanyName(),
+                       studentEntity.getProfilePicture().getName()
                ))
         );
 
@@ -174,22 +185,22 @@ public class StudentService implements StudentServiceAPI {
         return studentRepository.save(studentEntity).getId();
     }
 
-    private StudentEntity createStudentEntity(CreateStudentRequest createStudentRequest) {
+    private StudentEntity createStudentEntity(CreateStudentRequest createStudentRequest) throws IOException {
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setName(createStudentRequest.name());
         studentEntity.setLastName(createStudentRequest.lastName());
-        studentEntity.setDni(StringUtils.hasLength(createStudentRequest.DNI()) ? createStudentRequest.DNI() : null);
+        studentEntity.setDni(StringUtils.hasLength(createStudentRequest.dni()) ? createStudentRequest.dni() : null);
         studentEntity.setEmail(createStudentRequest.email());
         studentEntity.setPassword(createStudentRequest.password());
-        studentEntity.setBirthday(getFormattedLocalDate(createStudentRequest.birthDay()));
+        studentEntity.setBirthday(getFormattedLocalDate(createStudentRequest.birthday()));
         studentEntity.setCity(createStudentRequest.city());
         studentEntity.setAutonomousCommunity(createStudentRequest.autonomousCommunity());
-        studentEntity.setZipCode(createStudentRequest.zipCode());
+        studentEntity.setZipCode(createStudentRequest.zipcode());
         studentEntity.setMobile(StringUtils.hasLength(createStudentRequest.mobile()) ? createStudentRequest.mobile() : null);
-        studentEntity.setSchool(getSchoolEntity(Integer.parseInt(createStudentRequest.school()), schoolRepository));
-        studentEntity.setDegree(getDegreeEntity(Integer.parseInt(createStudentRequest.degree()), degreeRepository));
-        studentEntity.setCompanyName(createStudentRequest.companyName());
-
+        studentEntity.setSchool(getSchoolEntity(createStudentRequest.schoolId(), schoolRepository));
+        studentEntity.setDegree(getDegreeEntity(createStudentRequest.degreeId(), degreeRepository));
+        studentEntity.setCompanyName(EntityHelperUtils.getCompanyEntity(createStudentRequest.companyId(), companyRepository).getName());
+        studentEntity.setProfilePicture(uploadProfilePicture(createStudentRequest.profilePicture(), profiePictureReposiroty));
         return studentEntity;
     }
 
@@ -223,8 +234,8 @@ public class StudentService implements StudentServiceAPI {
             throw new EmptyInputFieldException("Input field autonomousCommunity cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
-        if (!StringUtils.hasLength(createStudentRequest.zipCode())){
-            throw new EmptyInputFieldException("Input field zipCode cannot be empty", HttpStatus.BAD_REQUEST);
+        if (!StringUtils.hasLength(createStudentRequest.zipcode())){
+            throw new EmptyInputFieldException("Input field zipcode cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
 

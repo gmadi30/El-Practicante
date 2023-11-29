@@ -13,17 +13,29 @@ import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import com.elpracticante.backend.internship.repository.InternshipRepository;
 import com.elpracticante.backend.school.entity.SchoolEntity;
 import com.elpracticante.backend.school.repository.SchoolRepository;
+import com.elpracticante.backend.shared.entity.ProfilePictureEntity;
+import com.elpracticante.backend.shared.repository.ProfilePictureRepository;
 import com.elpracticante.backend.student.Student;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public final class EntityHelperUtils {
 
+   // private static final String FOLDER_PATH = "C:/Users/georg/Documents/El Practicante/Frontend/src/assets/img/";
+
+    private static final String FOLDER_PATH ="/Users/georg/Documents/El Practicante/Frontend/src/assets/students/";
     private EntityHelperUtils() {
     }
 
@@ -105,7 +117,8 @@ public final class EntityHelperUtils {
                 studentEntity.getAutonomousCommunity(),
                 studentEntity.getMobile(),
                 null,
-                studentEntity.getCompanyName()
+                studentEntity.getCompanyName(),
+                studentEntity.getProfilePicture().getName()
         );
     }
 
@@ -120,4 +133,46 @@ public final class EntityHelperUtils {
         );
     }
 
+    public static ProfilePictureEntity uploadProfilePicture(MultipartFile file, ProfilePictureRepository profilePictureRepository) throws IOException {
+        ProfilePictureEntity profilePictureEntity = new ProfilePictureEntity();
+        String filePath = FOLDER_PATH;
+        if (null != file) {
+            if (file.isEmpty()) {
+                throw new NoSuchFileException("The file provided is empty");
+            }
+
+            profilePictureEntity.setName(file.getOriginalFilename());
+            profilePictureEntity.setType(file.getContentType());
+            profilePictureEntity.setPath(filePath + file.getOriginalFilename());
+
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(filePath + file.getOriginalFilename());
+            Files.write(path, bytes);
+
+
+
+        } else {
+            profilePictureEntity.setName("NoProfilePicture.png");
+            profilePictureEntity.setType("png");
+            profilePictureEntity.setPath(filePath + "NoProfilePicture.png");
+        }
+
+
+
+        ProfilePictureEntity entitySaved = profilePictureRepository.save(profilePictureEntity);
+
+        return entitySaved;
+    }
+
+    public static byte[] downloadProfilePicture(String fileName, ProfilePictureRepository profilePictureRepository) throws IOException {
+        Optional<ProfilePictureEntity> profilePictureEntityOptional = profilePictureRepository.findByName(fileName);
+
+        if (!profilePictureEntityOptional.isPresent()){
+            throw new EntityNotFoundException("Profile picture not found");
+        }
+        String filePath = profilePictureEntityOptional.get().getPath();
+        byte[] image = Files.readAllBytes(new File(filePath).toPath());
+        return image;
+
+    }
 }

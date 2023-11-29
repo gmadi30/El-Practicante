@@ -51,7 +51,7 @@ public class CompanyService implements CompanyServiceAPI {
                 }
             }
             case "reviews" -> {
-                companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.DESC, "interships"));
+                companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.DESC, "internships"));
                 for (CompanyEntity companyEntity : companyEntityList) {
                     companyList.add(new Company(
                             companyEntity.getId(),
@@ -77,7 +77,7 @@ public class CompanyService implements CompanyServiceAPI {
                 }
             }
             case "reviewsDesc" -> {
-                companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.ASC, "interships"));
+                companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.ASC, "internships"));
                 for (CompanyEntity companyEntity : companyEntityList) {
                     companyList.add(new Company(
                             companyEntity.getId(),

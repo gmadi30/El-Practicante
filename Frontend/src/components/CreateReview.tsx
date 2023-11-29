@@ -26,7 +26,7 @@ export default function CreateReview() {
   let navigate = useNavigate();
   const { control, register, handleSubmit, formState } = useForm<FormValues>();
 
-  const { errors, isDirty, isValid } = formState;
+  const { errors } = formState;
   const params = useParams();
   let location = useLocation();
 
@@ -65,7 +65,7 @@ export default function CreateReview() {
         if (response.status == 201) {
           <SuccesfulResponse message="¡Práctica creada con éxito!"></SuccesfulResponse>;
           setTimeout(() => {
-            navigate(`/students/${params.studentId}/profile`, {
+            navigate(`/student/${params.studentId}/profile`, {
               replace: true,
             });
           }, 3000);
@@ -516,7 +516,6 @@ export default function CreateReview() {
           </section>
           <div className="xl:flex ">
             <button
-              disabled={!isDirty || !isValid}
               type="submit"
               className="container mx-auto rounded max-w-sm xl:text-2xl text-xl border-cyan-600 bg-secondary-100 text-white py-2 font-bold uppercase tracking-[0.3rem] my-5 hover:bg-secondary-200"
             >

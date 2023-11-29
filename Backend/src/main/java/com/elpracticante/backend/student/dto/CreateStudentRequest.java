@@ -1,30 +1,34 @@
 package com.elpracticante.backend.student.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public record CreateStudentRequest(
 
         String name,
 
         String lastName,
 
-        String DNI,
+        String dni,
 
         String email,
 
         String password,
 
-        String birthDay,
+        String birthday,
 
         String city,
 
         String autonomousCommunity,
 
-        String zipCode,
+        String zipcode,
 
         String mobile,
 
-        String companyName,
+        Integer companyId,
 
-        String school,
+        Integer schoolId,
 
-        String degree
+        Integer degreeId,
+
+        MultipartFile profilePicture
 ) {}

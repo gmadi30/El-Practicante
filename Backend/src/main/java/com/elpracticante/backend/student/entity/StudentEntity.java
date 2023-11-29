@@ -4,6 +4,7 @@ package com.elpracticante.backend.student.entity;
 import com.elpracticante.backend.degree.entity.DegreeEntity;
 import com.elpracticante.backend.internship.entity.InternshipEntity;
 import com.elpracticante.backend.school.entity.SchoolEntity;
+import com.elpracticante.backend.shared.entity.ProfilePictureEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -47,7 +48,7 @@ public class StudentEntity {
     @Column(name = "MOBILE")
     private String mobile;
 
-    @Column(name = "DNI")
+    @Column(name = "dni")
     private String dni;
 
     @Column(name = "COMPANY_NAME")
@@ -64,7 +65,9 @@ public class StudentEntity {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<InternshipEntity> interships;
 
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PROFILE_PICTURE_ID", referencedColumnName = "PROFILE_PICTURE_ID")
+    private ProfilePictureEntity profilePicture;
 
 }
 
