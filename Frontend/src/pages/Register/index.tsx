@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SuccesfulResponse from "../../components/ui/SuccesfulResponse";
 import { RegisterFormValues as FormValues } from "../../types/types";
 export default function Register() {

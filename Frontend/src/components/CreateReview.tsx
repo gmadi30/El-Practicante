@@ -2,6 +2,8 @@ import { DevTool } from "@hookform/devtools";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import SuccesfulResponse from "./ui/SuccesfulResponse";
+import { useEffect, useState } from "react";
+import { School } from "../types/types";
 
 type FormValues = {
   schoolId: string;
@@ -25,10 +27,28 @@ type FormValues = {
 export default function CreateReview() {
   let navigate = useNavigate();
   const { control, register, handleSubmit, formState } = useForm<FormValues>();
-
   const { errors } = formState;
   const params = useParams();
   let location = useLocation();
+
+  const [schools, setSchools] = useState<School[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/v1/schools", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json;",
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        response.json().then((data) => {
+          console.log(data);
+          setSchools(data.schools);
+        });
+      })
+      .catch();
+  }, []);
 
   console.log({
     param: params,
@@ -114,7 +134,13 @@ export default function CreateReview() {
                     id="school"
                   >
                     <option value="">Selecciona un Centro de Educación</option>
-                    <option value={1}>IES Francisco de Goya</option>
+                    {(schools ?? [])
+                      .filter((school: School) => school.id !== 0)
+                      .map((school: School) => {
+                        return (
+                          <option value={school?.id}>{school?.name}</option>
+                        );
+                      })}
                   </select>
                   <p className="text-base font-light text-red">
                     {errors.schoolId?.message}
@@ -133,7 +159,7 @@ export default function CreateReview() {
                         message: "Este campo es obligatorio",
                       },
                     })}
-                    id="co mpany"
+                    id="company"
                   >
                     <option value="">Selecciona una Empresa</option>
                     <option value={3}> Indra</option>

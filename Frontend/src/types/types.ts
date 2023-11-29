@@ -113,3 +113,9 @@ export type FilterParams =
   | "scoring"
   | "reviewsDesc"
   | "scoringDesc";
+
+// School type
+export type School = {
+  id: number;
+  name: string;
+};
