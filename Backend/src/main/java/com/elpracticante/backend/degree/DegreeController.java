@@ -1,13 +1,12 @@
 package com.elpracticante.backend.degree;
 
+import com.elpracticante.backend.degree.dto.CreateDegreeRequest;
+import com.elpracticante.backend.degree.dto.CreateDegreeResponse;
 import com.elpracticante.backend.degree.dto.GetDegreesResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -19,6 +18,12 @@ public class DegreeController {
 
     public DegreeController(DegreeService degreeService) {
         this.degreeService = degreeService;
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CreateDegreeResponse> addDegree(@RequestBody CreateDegreeRequest createDegreeRequest) {
+        CreateDegreeResponse createDegreeResponse = degreeService.addScool(createDegreeRequest);
+        return new ResponseEntity<>(createDegreeResponse, HttpStatus.CREATED);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

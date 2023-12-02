@@ -49,6 +49,7 @@ public class SchoolService implements SchoolServiceAPI {
         schoolEntity.setAutonomousCommunity(createSchoolRequest.autonomousCommunity());
         schoolEntity.setZipcode(createSchoolRequest.zipCode());
         schoolEntity.setFullAddress(createSchoolRequest.fullAddress());
+        schoolEntity.setInternships(new ArrayList<>());
 
         SchoolEntity schoolEntitySaved = schoolRepository.save(schoolEntity);
         return new CreateSchoolResponse(schoolEntitySaved.getId());
