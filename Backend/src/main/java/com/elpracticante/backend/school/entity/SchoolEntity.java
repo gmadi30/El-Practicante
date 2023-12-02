@@ -1,7 +1,10 @@
 package com.elpracticante.backend.school.entity;
 
+import com.elpracticante.backend.internship.entity.InternshipEntity;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 
 @Entity
@@ -32,5 +35,7 @@ public class SchoolEntity {
     @Column(name = "FULL_ADRESS")
     private String fullAddress;
 
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<InternshipEntity> internships;
 
 }

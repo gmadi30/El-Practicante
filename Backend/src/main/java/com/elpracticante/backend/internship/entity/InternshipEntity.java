@@ -2,6 +2,8 @@ package com.elpracticante.backend.internship.entity;
 
 
 import com.elpracticante.backend.company.entity.CompanyEntity;
+import com.elpracticante.backend.degree.entity.DegreeEntity;
+import com.elpracticante.backend.school.entity.SchoolEntity;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -31,17 +33,21 @@ public class InternshipEntity {
     @Column(name = "RATING")
     private Integer rating;
 
-    @Column(name = "DEGREE_NAME")
-    private String degreeName;
 
-    @Column(name = "SCHOOL_NAME")
-    private String schoolName;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "SCHOOL_ID")
+    private SchoolEntity school;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "DEGREE_ID")
+    private DegreeEntity degree;
+
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
     @JoinColumn(name="STUDENT_ID")
     private StudentEntity student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="COMPANY_ID")
     private CompanyEntity company;
 

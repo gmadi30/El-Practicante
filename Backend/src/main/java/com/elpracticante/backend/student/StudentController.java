@@ -27,8 +27,8 @@ public class StudentController {
 
     @PostMapping(consumes =  {"multipart/form-data"})
     public ResponseEntity<CreateStudentResponse> addStudent(@ModelAttribute  CreateStudentRequest createStudentRequest) throws IOException {
-        CreateStudentResponse studentRequestOutput;
         logger.debug("we got a post request... Input: {}", createStudentRequest);
+        CreateStudentResponse studentRequestOutput;
 
         studentRequestOutput = service.addStudent(createStudentRequest);
         return new ResponseEntity<>(studentRequestOutput, HttpStatus.CREATED);

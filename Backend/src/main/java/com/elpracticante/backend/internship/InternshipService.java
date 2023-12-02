@@ -2,6 +2,7 @@ package com.elpracticante.backend.internship;
 
 import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.company.repository.CompanyRepository;
+import com.elpracticante.backend.degree.Degree;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.internship.api.InternshipServiceAPI;
 import com.elpracticante.backend.internship.dto.CreateInternshipRequest;
@@ -13,6 +14,7 @@ import com.elpracticante.backend.internship.entity.SummarizeEntity;
 import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import com.elpracticante.backend.internship.repository.InternshipRepository;
 import com.elpracticante.backend.internship.repository.TechnologyRepository;
+import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.school.repository.SchoolRepository;
 import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
@@ -85,8 +87,8 @@ public class InternshipService implements InternshipServiceAPI {
                 internshipEntity.getStartDate(),
                 internshipEntity.getEndDate(),
                 internshipEntity.getRating(),
-                internshipEntity.getDegreeName(),
-                internshipEntity.getSchoolName(),
+                new Degree(internshipEntity.getDegree().getId(), internshipEntity.getDegree().getName()),
+                new School(internshipEntity.getSchool().getId(), internshipEntity.getSchool().getName()),
                 mapToCompany(internshipEntity.getCompany()),
                 mapToStudent(internshipEntity.getStudent()),
                 mapToTechonologiesList(internshipEntity.getTechnologies()),
@@ -110,8 +112,8 @@ public class InternshipService implements InternshipServiceAPI {
         internshipEntity.setStartDate(getFormattedLocalDate(createInternshipRequest.startDate()));
         internshipEntity.setEndDate(getFormattedLocalDate(createInternshipRequest.endDate()));
         internshipEntity.setRating(createInternshipRequest.rating());
-        internshipEntity.setDegreeName(EntityHelperUtils.getDegreeEntity(createInternshipRequest.degreeId(), degreeRepository).getName());
-        internshipEntity.setSchoolName(EntityHelperUtils.getSchoolEntity(createInternshipRequest.schoolId(), schoolRepository).getName());
+        internshipEntity.setDegree(EntityHelperUtils.getDegreeEntity(createInternshipRequest.degreeId(), degreeRepository));
+        internshipEntity.setSchool(EntityHelperUtils.getSchoolEntity(createInternshipRequest.schoolId(), schoolRepository));
         internshipEntity.setStudent(EntityHelperUtils.getStudentEntityById(createInternshipRequest.studentId(), studentRepository));
         internshipEntity.setCompany(companyEntity);
         internshipEntity.setTechnologies(getTechnologiesList(createInternshipRequest.technologies()));

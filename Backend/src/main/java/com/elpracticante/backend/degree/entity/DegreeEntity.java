@@ -1,7 +1,7 @@
 package com.elpracticante.backend.degree.entity;
 
 
-import com.elpracticante.backend.student.entity.StudentEntity;
+import com.elpracticante.backend.internship.entity.InternshipEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,6 +20,6 @@ public class DegreeEntity {
     @Column(name = "NAME")
     private String name;
 
-    @OneToMany(mappedBy = "degree")
-    private List<StudentEntity> students;
+    @OneToMany(mappedBy = "degree", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<InternshipEntity> internships;
 }

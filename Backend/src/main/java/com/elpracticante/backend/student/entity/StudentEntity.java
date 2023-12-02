@@ -1,10 +1,8 @@
 package com.elpracticante.backend.student.entity;
 
 
-import com.elpracticante.backend.degree.entity.DegreeEntity;
 import com.elpracticante.backend.internship.entity.InternshipEntity;
-import com.elpracticante.backend.school.entity.SchoolEntity;
-import com.elpracticante.backend.shared.entity.ProfilePictureEntity;
+import com.elpracticante.backend.shared.entity.StudentProfilePictureEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,7 +22,7 @@ public class StudentEntity {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "LASTNAME")
     private String lastName;
 
     @Column(name = "EMAIL")
@@ -54,20 +52,18 @@ public class StudentEntity {
     @Column(name = "COMPANY_NAME")
     private String companyName;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "SCHOOL_ID")
-    private SchoolEntity school;
+    @Column(name = "SCHOOL_NAME")
+    private String schoolName;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "DEGREE_ID")
-    private DegreeEntity degree;
+    @Column(name = "DEGREE_NAME")
+    private String degreeName;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<InternshipEntity> interships;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<InternshipEntity> internships;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PROFILE_PICTURE_ID", referencedColumnName = "PROFILE_PICTURE_ID")
-    private ProfilePictureEntity profilePicture;
+    @JoinColumn(name = "STUDENT_PROFILE_PICTURE_ID", referencedColumnName = "STUDENT_PROFILE_PICTURE_ID")
+    private StudentProfilePictureEntity StudentProfilePicture;
 
 }
 

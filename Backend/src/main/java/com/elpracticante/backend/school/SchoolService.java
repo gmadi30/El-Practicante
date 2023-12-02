@@ -27,10 +27,10 @@ public class SchoolService implements SchoolServiceAPI {
             throw new EntityNotFoundException("No school was found at the SCHOOL table");
         }
 
-        return new GetSchoolsResponse(mapToSchool(schoolEntityList));
+        return new GetSchoolsResponse(mapToSchoolList(schoolEntityList));
     }
 
-    private List<School> mapToSchool(List<SchoolEntity> schoolEntityList) {
+    private List<School> mapToSchoolList(List<SchoolEntity> schoolEntityList) {
         List<School> schoolList = new ArrayList<>();
 
         schoolEntityList.forEach((

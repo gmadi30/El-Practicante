@@ -13,8 +13,8 @@ import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import com.elpracticante.backend.internship.repository.InternshipRepository;
 import com.elpracticante.backend.school.entity.SchoolEntity;
 import com.elpracticante.backend.school.repository.SchoolRepository;
-import com.elpracticante.backend.shared.entity.ProfilePictureEntity;
-import com.elpracticante.backend.shared.repository.ProfilePictureRepository;
+import com.elpracticante.backend.shared.entity.StudentProfilePictureEntity;
+import com.elpracticante.backend.shared.repository.StudentProfilePictureRepository;
 import com.elpracticante.backend.student.Student;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
@@ -118,7 +118,7 @@ public final class EntityHelperUtils {
                 studentEntity.getMobile(),
                 null,
                 studentEntity.getCompanyName(),
-                studentEntity.getProfilePicture().getName()
+                studentEntity.getStudentProfilePicture().getName()
         );
     }
 
@@ -133,17 +133,17 @@ public final class EntityHelperUtils {
         );
     }
 
-    public static ProfilePictureEntity uploadProfilePicture(MultipartFile file, ProfilePictureRepository profilePictureRepository) throws IOException {
-        ProfilePictureEntity profilePictureEntity = new ProfilePictureEntity();
+    public static StudentProfilePictureEntity uploadProfilePicture(MultipartFile file, StudentProfilePictureRepository studentProfilePictureRepository) throws IOException {
+        StudentProfilePictureEntity studentProfilePictureEntity = new StudentProfilePictureEntity();
         String filePath = FOLDER_PATH;
         if (null != file) {
             if (file.isEmpty()) {
                 throw new NoSuchFileException("The file provided is empty");
             }
 
-            profilePictureEntity.setName(file.getOriginalFilename());
-            profilePictureEntity.setType(file.getContentType());
-            profilePictureEntity.setPath(filePath + file.getOriginalFilename());
+            studentProfilePictureEntity.setName(file.getOriginalFilename());
+            studentProfilePictureEntity.setType(file.getContentType());
+            studentProfilePictureEntity.setPath(filePath + file.getOriginalFilename());
 
             byte[] bytes = file.getBytes();
             Path path = Paths.get(filePath + file.getOriginalFilename());
@@ -152,20 +152,20 @@ public final class EntityHelperUtils {
 
 
         } else {
-            profilePictureEntity.setName("NoProfilePicture.png");
-            profilePictureEntity.setType("png");
-            profilePictureEntity.setPath(filePath + "NoProfilePicture.png");
+            studentProfilePictureEntity.setName("NoProfilePicture.png");
+            studentProfilePictureEntity.setType("png");
+            studentProfilePictureEntity.setPath(filePath + "NoProfilePicture.png");
         }
 
 
 
-        ProfilePictureEntity entitySaved = profilePictureRepository.save(profilePictureEntity);
+        StudentProfilePictureEntity entitySaved = studentProfilePictureRepository.save(studentProfilePictureEntity);
 
         return entitySaved;
     }
 
-    public static byte[] downloadProfilePicture(String fileName, ProfilePictureRepository profilePictureRepository) throws IOException {
-        Optional<ProfilePictureEntity> profilePictureEntityOptional = profilePictureRepository.findByName(fileName);
+    public static byte[] downloadProfilePicture(String fileName, StudentProfilePictureRepository studentProfilePictureRepository) throws IOException {
+        Optional<StudentProfilePictureEntity> profilePictureEntityOptional = studentProfilePictureRepository.findByName(fileName);
 
         if (!profilePictureEntityOptional.isPresent()){
             throw new EntityNotFoundException("Profile picture not found");

@@ -1,8 +1,8 @@
 package com.elpracticante.backend.student.dto;
 
-import com.elpracticante.backend.degree.dto.DegreeDTO;
+import com.elpracticante.backend.degree.Degree;
 import com.elpracticante.backend.internship.Internship;
-import com.elpracticante.backend.school.dto.SchoolDTO;
+import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.shared.dto.ProfilePicture;
 import com.elpracticante.backend.student.Student;
 
@@ -12,9 +12,9 @@ public record GetStudentResponse (
 
         Student student,
 
-        SchoolDTO schoolDTO,
+        School school,
 
-        DegreeDTO degreeDTO,
+        Degree degree,
 
         List<Internship> internships,
 

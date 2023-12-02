@@ -6,6 +6,6 @@ import java.util.List;
 
 public record GetAllCompaniesResponse(
 
-        List<Company> companyList
+        List<Company> companies
 ) {
 }

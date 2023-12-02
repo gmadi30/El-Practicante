@@ -1,6 +1,8 @@
 package com.elpracticante.backend.company;
 
 
+import com.elpracticante.backend.company.dto.CreateCompanyRequest;
+import com.elpracticante.backend.company.dto.CreateCompoanyResponse;
 import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.dto.GetCompanyResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,10 +23,16 @@ public class CompanyController {
     }
 
 
+
     @GetMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetAllCompaniesResponse> getAllCompanies(@RequestParam("sortBy") String sortBy) {
         GetAllCompaniesResponse getAllCompaniesResponse = companyService.getAllCompanies(sortBy);
         return new ResponseEntity<>(getAllCompaniesResponse, HttpStatus.OK);
+    }
+    @PostMapping(consumes =  {"multipart/form-data"})
+    public ResponseEntity<CreateCompoanyResponse> addCompany(@ModelAttribute CreateCompanyRequest createCompanyRequest) {
+        CreateCompoanyResponse createCompoanyResponse = companyService.addCompany(createCompanyRequest);
+        return new ResponseEntity<>(createCompoanyResponse, HttpStatus.CREATED);
     }
 
     @GetMapping(path = {"/{companyId}"}, consumes =  MediaType.APPLICATION_JSON_VALUE)

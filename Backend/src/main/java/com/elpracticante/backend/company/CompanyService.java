@@ -1,12 +1,17 @@
 package com.elpracticante.backend.company;
 
 import com.elpracticante.backend.company.api.CompanyServiceAPI;
+import com.elpracticante.backend.company.dto.CreateCompanyRequest;
+import com.elpracticante.backend.company.dto.CreateCompoanyResponse;
 import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.dto.GetCompanyResponse;
 import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.company.repository.CompanyRepository;
+import com.elpracticante.backend.degree.Degree;
 import com.elpracticante.backend.internship.Internship;
 import com.elpracticante.backend.internship.entity.InternshipEntity;
+import com.elpracticante.backend.school.School;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,22 +137,49 @@ public class CompanyService implements CompanyServiceAPI {
         return getCompanyResponse;
     }
 
+    @Override
+    public CreateCompoanyResponse addCompany(CreateCompanyRequest createCompanyRequest) {
+
+        // Verificar que no exista la empresa
+        Optional<CompanyEntity> companyEntityOptional = companyRepository.findByNif(createCompanyRequest.nif());
+        if (companyEntityOptional.isPresent()) {
+            throw new EntityExistsException("The Company with CIF " + createCompanyRequest.nif() + " already exists in the database");
+        }
+
+        CompanyEntity companyEntity = new CompanyEntity();
+        companyEntity.setName(createCompanyRequest.name());
+        companyEntity.setEmail(createCompanyRequest.email());
+        companyEntity.setNif(createCompanyRequest.nif());
+        companyEntity.setEmployeesAmount(createCompanyRequest.empoyeesAmount());
+        companyEntity.setAutonomousCommunity(createCompanyRequest.autonomousCommunity());
+        companyEntity.setZipcode(createCompanyRequest.zipcode());
+        companyEntity.setCity(createCompanyRequest.city());
+        companyEntity.setAboutUs(createCompanyRequest.aboutUs());
+        companyEntity.setWhyUs(createCompanyRequest.whyUs());
+        companyEntity.setRating(createCompanyRequest.rating());
+        companyEntity.setInternships(new ArrayList<>());
+
+        CompanyEntity companyEntitySaved = companyRepository.save(companyEntity);
+
+        return new CreateCompoanyResponse(companyEntitySaved.getId());
+    }
+
     private List<Internship> mapToIntership(List<InternshipEntity> interships) {
         List<Internship> internshipList = new ArrayList<>();
 
-        interships.forEach(intershipEntity -> internshipList.add(
+        interships.forEach(internshipEntity -> internshipList.add(
                 new Internship(
-                        intershipEntity.getId(),
-                        intershipEntity.getDescription(),
-                        intershipEntity.getStartDate(),
-                        intershipEntity.getEndDate(),
-                        intershipEntity.getRating(),
-                        intershipEntity.getDegreeName(),
-                        intershipEntity.getSchoolName(),
-                        new Company(intershipEntity.getCompany().getName(), intershipEntity.getCompany().getRating()),
-                        mapToStudent(intershipEntity.getStudent()),
-                        mapToTechonologiesList(intershipEntity.getTechnologies()),
-                        mapToSummaryList(intershipEntity.getSummaries())
+                        internshipEntity.getId(),
+                        internshipEntity.getDescription(),
+                        internshipEntity.getStartDate(),
+                        internshipEntity.getEndDate(),
+                        internshipEntity.getRating(),
+                        new Degree(internshipEntity.getDegree().getId(), internshipEntity.getDegree().getName()),
+                        new School(internshipEntity.getSchool().getId(), internshipEntity.getSchool().getName()),
+                        new Company(internshipEntity.getCompany().getName(), internshipEntity.getCompany().getRating()),
+                        mapToStudent(internshipEntity.getStudent()),
+                        mapToTechonologiesList(internshipEntity.getTechnologies()),
+                        mapToSummaryList(internshipEntity.getSummaries())
                 )
         ));
 

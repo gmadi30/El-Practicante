@@ -23,11 +23,17 @@ public class CompanyEntity {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "NIF")
+    private String nif;
+
     @Column(name = "EMPLOYEES_AMOUNT")
     private Integer employeesAmount;
 
     @Column(name = "AUTONOMOUS_COMMUNITY")
     private String autonomousCommunity;
+
+    @Column(name = "ZIPCODE")
+    private String zipcode;
 
     @Column(name = "CITY")
     private String city;
@@ -38,7 +44,7 @@ public class CompanyEntity {
     @Column(name = "WHY_US")
     private String whyUs;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<InternshipEntity> internships;
 
     @Column(name = "RATING")

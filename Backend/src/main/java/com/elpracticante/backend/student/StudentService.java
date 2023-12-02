@@ -2,7 +2,7 @@ package com.elpracticante.backend.student;
 
 import com.elpracticante.backend.company.Company;
 import com.elpracticante.backend.company.repository.CompanyRepository;
-import com.elpracticante.backend.degree.dto.DegreeDTO;
+import com.elpracticante.backend.degree.Degree;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.internship.Internship;
 import com.elpracticante.backend.internship.dto.Summarize;
@@ -10,12 +10,12 @@ import com.elpracticante.backend.internship.dto.Technology;
 import com.elpracticante.backend.internship.entity.InternshipEntity;
 import com.elpracticante.backend.internship.entity.SummarizeEntity;
 import com.elpracticante.backend.internship.entity.TechnologyEntity;
-import com.elpracticante.backend.school.dto.SchoolDTO;
+import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.school.repository.SchoolRepository;
 import com.elpracticante.backend.shared.dto.ProfilePicture;
 import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.shared.exceptions.WrongLoginCredentialsException;
-import com.elpracticante.backend.shared.repository.ProfilePictureRepository;
+import com.elpracticante.backend.shared.repository.StudentProfilePictureRepository;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
 import com.elpracticante.backend.student.api.StudentServiceAPI;
 import com.elpracticante.backend.student.dto.*;
@@ -41,10 +41,10 @@ public class StudentService implements StudentServiceAPI {
     private final SchoolRepository schoolRepository;
     private final CompanyRepository companyRepository;
     private final DegreeRepository degreeRepository;
-    private final ProfilePictureRepository profiePictureReposiroty;
+    private final StudentProfilePictureRepository profiePictureReposiroty;
 
 
-    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, CompanyRepository companyRepository, DegreeRepository degreeRepository, ProfilePictureRepository profiePictureReposiroty) {
+    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, CompanyRepository companyRepository, DegreeRepository degreeRepository, StudentProfilePictureRepository profiePictureReposiroty) {
         this.studentRepository = studentRepository;
         this.schoolRepository = schoolRepository;
         this.companyRepository = companyRepository;
@@ -73,11 +73,11 @@ public class StudentService implements StudentServiceAPI {
                         studentEntity.getAutonomousCommunity(),
                         studentEntity.getMobile(),
                         studentEntity.getCompanyName(),
-                        studentEntity.getProfilePicture().getName()),
-                new SchoolDTO(studentEntity.getSchool().getId(), studentEntity.getSchool().getName()),
-                new DegreeDTO(studentEntity.getDegree().getId(), studentEntity.getDegree().getName()),
-                mapToIntership(studentEntity.getInterships()),
-                new ProfilePicture(studentEntity.getProfilePicture().getName())
+                        studentEntity.getStudentProfilePicture().getName()),
+                        new School(studentEntity.getSchoolName()),
+                        new Degree(studentEntity.getDegreeName()),
+                        mapToIntership(studentEntity.getInternships()),
+                        new ProfilePicture(studentEntity.getStudentProfilePicture().getName())
         );
     }
 
@@ -90,9 +90,10 @@ public class StudentService implements StudentServiceAPI {
                     internshipEntity.getStartDate(),
                     internshipEntity.getEndDate(),
                     internshipEntity.getRating(),
-                    internshipEntity.getDegreeName(),
-                    internshipEntity.getSchoolName(),
+                    new Degree(internshipEntity.getDegree().getId(), internshipEntity.getDegree().getName()),
+                    new School(internshipEntity.getSchool().getId(), internshipEntity.getSchool().getName()),
                     new Company(internshipEntity.getCompany().getId(), internshipEntity.getCompany().getName(), internshipEntity.getCompany().getRating(), internshipEntity.getCompany().getInternships().size()),
+                    new Student(internshipEntity.getStudent().getId(), internshipEntity.getStudent().getName(), internshipEntity.getStudent().getLastName(), internshipEntity.getStudent().getEmail(), internshipEntity.getStudent().getCity(), internshipEntity.getStudent().getAutonomousCommunity(), internshipEntity.getStudent().getMobile(), internshipEntity.getStudent().getCompanyName(), internshipEntity.getStudent().getStudentProfilePicture().getName()),
                     mapToTechnology(internshipEntity.getTechnologies()),
                     mapToSummarize(internshipEntity.getSummaries()))
            );
@@ -158,7 +159,7 @@ public class StudentService implements StudentServiceAPI {
                        studentEntity.getAutonomousCommunity(),
                        studentEntity.getMobile(),
                        studentEntity.getCompanyName(),
-                       studentEntity.getProfilePicture().getName()
+                       studentEntity.getStudentProfilePicture().getName()
                ))
         );
 
@@ -197,10 +198,10 @@ public class StudentService implements StudentServiceAPI {
         studentEntity.setAutonomousCommunity(createStudentRequest.autonomousCommunity());
         studentEntity.setZipCode(createStudentRequest.zipcode());
         studentEntity.setMobile(StringUtils.hasLength(createStudentRequest.mobile()) ? createStudentRequest.mobile() : null);
-        studentEntity.setSchool(getSchoolEntity(createStudentRequest.schoolId(), schoolRepository));
-        studentEntity.setDegree(getDegreeEntity(createStudentRequest.degreeId(), degreeRepository));
+        studentEntity.setSchoolName(getSchoolEntity(createStudentRequest.schoolId(), schoolRepository).getName());
+        studentEntity.setDegreeName(getDegreeEntity(createStudentRequest.degreeId(), degreeRepository).getName());
         studentEntity.setCompanyName(EntityHelperUtils.getCompanyEntity(createStudentRequest.companyId(), companyRepository).getName());
-        studentEntity.setProfilePicture(uploadProfilePicture(createStudentRequest.profilePicture(), profiePictureReposiroty));
+        studentEntity.setStudentProfilePicture(uploadProfilePicture(createStudentRequest.profilePicture(), profiePictureReposiroty));
         return studentEntity;
     }
 

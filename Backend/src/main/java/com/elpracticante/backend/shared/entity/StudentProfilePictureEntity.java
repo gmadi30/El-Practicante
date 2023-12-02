@@ -6,24 +6,24 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "PROFILE_PICTURE")
-public class ProfilePictureEntity {
+@Table(name = "STUDENT_PROFILE_PICTURE")
+public class StudentProfilePictureEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "PROFILE_PICTURE_ID")
+    @Column(name = "STUDENT_PROFILE_PICTURE_ID")
     private Integer id;
 
-    @Column(name = "PICTURE_NAME")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "PICTURE_TYPE")
+    @Column(name = "TYPE")
     private String type;
 
-    @Column(name = "PICTURE_PATH")
+    @Column(name = "PATH")
     private String path;
 
 
-    @OneToOne(mappedBy = "profilePicture")
+    @OneToOne(mappedBy = "StudentProfilePicture")
     private StudentEntity student;
 }
