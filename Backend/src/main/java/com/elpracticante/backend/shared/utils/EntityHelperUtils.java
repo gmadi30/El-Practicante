@@ -19,12 +19,13 @@ import com.elpracticante.backend.student.Student;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public final class EntityHelperUtils {
 
    // private static final String FOLDER_PATH = "C:/Users/georg/Documents/El Practicante/Frontend/src/assets/img/";
 
+    private static final Logger logger = LoggerFactory.getLogger(EntityHelperUtils.class);
     private static final String FOLDER_PATH ="/Users/georg/Documents/El Practicante/Frontend/src/assets/students/";
     private EntityHelperUtils() {
     }
@@ -136,11 +138,7 @@ public final class EntityHelperUtils {
     public static StudentProfilePictureEntity uploadProfilePicture(MultipartFile file, StudentProfilePictureRepository studentProfilePictureRepository) throws IOException {
         StudentProfilePictureEntity studentProfilePictureEntity = new StudentProfilePictureEntity();
         String filePath = FOLDER_PATH;
-        if (null != file) {
-            if (file.isEmpty()) {
-                throw new NoSuchFileException("The file provided is empty");
-            }
-
+        if (!file.isEmpty()) {
             studentProfilePictureEntity.setName(file.getOriginalFilename());
             studentProfilePictureEntity.setType(file.getContentType());
             studentProfilePictureEntity.setPath(filePath + file.getOriginalFilename());
@@ -148,10 +146,8 @@ public final class EntityHelperUtils {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(filePath + file.getOriginalFilename());
             Files.write(path, bytes);
-
-
-
         } else {
+            logger.error("The file provided is empty and a default image will be provided");
             studentProfilePictureEntity.setName("NoProfilePicture.png");
             studentProfilePictureEntity.setType("png");
             studentProfilePictureEntity.setPath(filePath + "NoProfilePicture.png");
