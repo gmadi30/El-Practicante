@@ -30,7 +30,7 @@ public class SchoolEntity {
     private String autonomousCommunity;
 
     @Column(name = "ZIPCODE")
-    private String zipCode;
+    private String zipcode;
 
     @Column(name = "FULL_ADRESS")
     private String fullAddress;

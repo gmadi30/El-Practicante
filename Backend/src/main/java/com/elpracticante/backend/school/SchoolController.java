@@ -1,13 +1,12 @@
 package com.elpracticante.backend.school;
 
+import com.elpracticante.backend.school.dto.CreateSchoolRequest;
+import com.elpracticante.backend.school.dto.CreateSchoolResponse;
 import com.elpracticante.backend.school.dto.GetSchoolsResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -19,6 +18,13 @@ public class SchoolController {
 
     public SchoolController(SchoolService schoolService) {
         this.schoolService = schoolService;
+    }
+
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CreateSchoolResponse> addSchool(@RequestBody CreateSchoolRequest createSchoolRequest) {
+        CreateSchoolResponse createSchoolResponse = schoolService.addScool(createSchoolRequest);
+        return new ResponseEntity<>(createSchoolResponse, HttpStatus.CREATED);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
