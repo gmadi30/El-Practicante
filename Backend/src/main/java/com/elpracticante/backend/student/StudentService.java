@@ -13,7 +13,6 @@ import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.school.repository.SchoolRepository;
 import com.elpracticante.backend.shared.dto.ProfilePicture;
-import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.shared.exceptions.WrongLoginCredentialsException;
 import com.elpracticante.backend.shared.repository.StudentProfilePictureRepository;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
@@ -21,6 +20,7 @@ import com.elpracticante.backend.student.api.StudentServiceAPI;
 import com.elpracticante.backend.student.dto.*;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -53,8 +53,8 @@ public class StudentService implements StudentServiceAPI {
     }
 
     @Override
-    public CreateStudentResponse addStudent(CreateStudentRequest createStudentRequest) throws EmptyInputFieldException, IOException {
-       // validateInput(createStudentRequest);
+    public CreateStudentResponse addStudent(CreateStudentRequest createStudentRequest) throws IOException {
+        validateInput(createStudentRequest);
         StudentEntity studentEntity = createStudentEntity(createStudentRequest);
 
         return new CreateStudentResponse(insertStudent(studentEntity));
@@ -205,39 +205,19 @@ public class StudentService implements StudentServiceAPI {
         return studentEntity;
     }
 
+    private void validateInput(CreateStudentRequest createStudentRequest) {
+
+       if (studentRepository.existsByDni(createStudentRequest.dni())) {
+           throw new EntityExistsException("A user with that DNI already exists");
+       }
+       if (studentRepository.existsByMobile(createStudentRequest.mobile())){
+           throw new EntityExistsException("A user with that mobile already exists");
+       };
+       if (studentRepository.existsByEmail(createStudentRequest.email())){
+            throw new EntityExistsException("A user with that email already exists");
+       };
 
 
-
-
-    private void validateInput(CreateStudentRequest createStudentRequest) throws EmptyInputFieldException {
-
-        if (!StringUtils.hasLength(createStudentRequest.name())){
-            throw new EmptyInputFieldException("Input field name cannot be empty", HttpStatus.BAD_REQUEST);
-        }
-
-        if (!StringUtils.hasLength(createStudentRequest.lastName())){
-            throw new EmptyInputFieldException("Input field lastname cannot be empty", HttpStatus.BAD_REQUEST);
-        }
-
-        if (!StringUtils.hasLength(createStudentRequest.email())){
-            throw new EmptyInputFieldException("Input field email cannot be empty", HttpStatus.BAD_REQUEST);
-        }
-
-        if (!StringUtils.hasLength(createStudentRequest.password())){
-            throw new EmptyInputFieldException("Input field password cannot be empty", HttpStatus.BAD_REQUEST);
-        }
-
-        if (!StringUtils.hasLength(createStudentRequest.city())){
-            throw new EmptyInputFieldException("Input field city cannot be empty", HttpStatus.BAD_REQUEST);
-        }
-
-        if (!StringUtils.hasLength(createStudentRequest.autonomousCommunity())){
-            throw new EmptyInputFieldException("Input field autonomousCommunity cannot be empty", HttpStatus.BAD_REQUEST);
-        }
-
-        if (!StringUtils.hasLength(createStudentRequest.zipcode())){
-            throw new EmptyInputFieldException("Input field zipcode cannot be empty", HttpStatus.BAD_REQUEST);
-        }
 
 
     }

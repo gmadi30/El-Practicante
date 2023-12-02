@@ -1,6 +1,7 @@
 package com.elpracticante.backend.student;
 
 import com.elpracticante.backend.student.dto.*;
+import jakarta.persistence.EntityExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,11 @@ public class StudentController {
         logger.debug("we got a post request... Input: {}", createStudentRequest);
         CreateStudentResponse studentRequestOutput;
 
-        studentRequestOutput = service.addStudent(createStudentRequest);
+        try {
+            studentRequestOutput = service.addStudent(createStudentRequest);
+        } catch (EntityExistsException exception) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, exception.getMessage());
+        }
         return new ResponseEntity<>(studentRequestOutput, HttpStatus.CREATED);
     }
 
