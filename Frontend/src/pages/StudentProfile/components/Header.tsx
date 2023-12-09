@@ -37,12 +37,11 @@ const Header: React.FC<HeaderProps> = (props) => {
           </div>
 
           <div className="text-gray-400 ">
-            <span>Estudiante de {props.student?.degreeDTO?.name} | </span>
+            <span>Estudiante de {props.student?.degree?.name} | </span>
             <span className="text-gray-400">
               {" "}
-              {props.student?.schoolDTO?.name} |
+              {props.student?.school?.name}
             </span>
-            <span className="text-gray-400"> Clase de {2022}</span>
           </div>
           <h3 className="">
             {props.student?.student?.city},{" "}

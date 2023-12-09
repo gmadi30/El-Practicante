@@ -86,12 +86,12 @@ export default function CompanyProfile() {
 
         <main className="xl:mx-64 px-10 space-y-5">
           <div className="lg:flex lg:space-x-10 justify-between  ">
-            <section className="flex flex-col lg:w-[75%] xl:w-1/2">
-              <h1 className="text-xl text-bold w-full py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+            <section className="flex flex-col lg:w-[75%]">
+              <h1 className="text-xl text-bold w-full py-1 mb-4 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 DESCRIPCIÓN PRINCIPAL
               </h1>
               <p className="">{company.aboutUs}</p>
-              <div className="">
+              <div className="mt-5">
                 <h2 className="font-semibold text-xl text-darkgray">
                   PRÁCTICAS FCT PARA
                 </h2>
@@ -114,9 +114,9 @@ export default function CompanyProfile() {
                 </ul>
               </div>
             </section>
-            <section className="flex ">
+            <section className="flex">
               <aside className="w-full">
-                <h1 className="text-xl text-bold w-full pb-1 py-1  mb-4 rounded indent-4 text-secondary-100 bg-primary uppercase  ">
+                <h1 className="text-xl text-bold w-full pb-1 py-1 mb-4 mt-5 lg:mt-0 rounded indent-4 text-secondary-100 bg-primary uppercase">
                   CONTACTO
                 </h1>
                 <ul className=" ">
@@ -128,7 +128,8 @@ export default function CompanyProfile() {
                       <h1>{company.email}</h1>
                     </div>
                   </li>
-                  <li>
+                  {/*
+                    <li>
                     <div className="flex items-center">
                       <div className="text-secondary-100 text-xl mr-1">
                         <TiSocialLinkedin></TiSocialLinkedin>
@@ -136,14 +137,26 @@ export default function CompanyProfile() {
                       <h1>Linkedin</h1>
                     </div>
                   </li>
-                  <li>
-                    <div className="flex items-center">
-                      <div className="text-secondary-100 text-xl mr-1">
-                        <TiHome></TiHome>
+                    */}
+                  {company.website && (
+                    <li>
+                      <div className="flex items-center">
+                        <div className="text-secondary-100 text-xl mr-1">
+                          <TiHome></TiHome>
+                        </div>
+                        <h1></h1>
+
+                        <a
+                          href={`${company.website}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="hover:underline"
+                        >
+                          {company.website}
+                        </a>
                       </div>
-                      <h1>https://www.indra.com</h1>
-                    </div>
-                  </li>
+                    </li>
+                  )}
                 </ul>
               </aside>
             </section>
@@ -178,17 +191,17 @@ export default function CompanyProfile() {
                         />
                         <div className="flex flex-col justify-center items-center text-sm my-3">
                           <h1 className="font-bold">
-                            {internships.student.name}{" "}
-                            {internships.student.lastName}
+                            {internships?.student?.name}{" "}
+                            {internships?.student?.lastName}
                           </h1>
-                          <h2>{internships.schoolName}</h2>
-                          <h2>Estudiante de {internships.degreeName}</h2>
+                          <h2>{internships?.school.name}</h2>
+                          <h2>Estudiante de {internships?.degree?.name}</h2>
                         </div>
                       </div>
                       <div className="flex flex-col w-full pb-1 bg-primary py-3 px-2 justify-between">
                         <div className="text-sm">
                           <div className="flex">
-                            <Rating rating={internships.rating}></Rating>
+                            <Rating rating={internships?.rating}></Rating>
                             <h1 className="font-semibold ml-2">EMPRESA TOP!</h1>
                           </div>
                           <div className="flex flex-col space-between">

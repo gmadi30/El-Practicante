@@ -18,8 +18,8 @@ export default function Companies() {
       .then((response) => {
         console.log(response);
         response.json().then((data) => {
-          console.log(data.companyList);
-          setCompanies(data.companyList);
+          console.log(data.companies);
+          setCompanies(data.companies);
         });
       })
       .catch();

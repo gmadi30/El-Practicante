@@ -42,14 +42,8 @@ export type Student = {
 
 export type StudentProfile = {
   student: Student;
-  schoolDTO: {
-    id: Number;
-    name: string;
-  };
-  degreeDTO: {
-    id: Number;
-    name: string;
-  };
+  school: School;
+  degree: Degree;
   internships: Internship[];
   profilePicture: {
     name: string;
@@ -63,8 +57,8 @@ export type Internship = {
   startDate: string;
   endDate: Date;
   rating: number;
-  degreeName: string;
-  schoolName: string;
+  degree: Degree;
+  school: School;
   company: Company;
   summarizeList: Summary[];
   technologyList: Technology[];
@@ -104,6 +98,7 @@ export type CompanyProfileType = {
   name: string;
   rating: number;
   whyUs: string;
+  website: string;
   intershipsAmount: number;
 };
 
@@ -116,6 +111,12 @@ export type FilterParams =
 
 // School type
 export type School = {
+  id: number;
+  name: string;
+};
+
+// Degree type
+export type Degree = {
   id: number;
   name: string;
 };

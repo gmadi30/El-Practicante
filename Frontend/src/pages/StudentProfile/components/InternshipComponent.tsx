@@ -67,8 +67,8 @@ const InternshipComponent: React.FC<IntershipProps> = (props) => {
           </div>
         </section>
 
-        <section className="space-y-5 flex flex-col m-3 mt-12 text-xl md:w-[75%] lg:w-fit">
-          <div className=" ">
+        <section className="space-y-5 flex flex-col m-3 mt-12 text-xl md:w-[75%] lg:w-[25%]">
+          <div className="">
             <h1 className="rounded indent-4 font-bold mb-1 bg-secondary-100 text-white uppercase tracking-wider ">
               LO MEJOR
             </h1>
