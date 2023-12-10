@@ -212,13 +212,9 @@ public class StudentService implements StudentServiceAPI {
        }
        if (studentRepository.existsByMobile(createStudentRequest.mobile())){
            throw new EntityExistsException("A user with that mobile already exists");
-       };
+       }
        if (studentRepository.existsByEmail(createStudentRequest.email())){
             throw new EntityExistsException("A user with that email already exists");
-       };
-
-
-
-
+       }
     }
 }

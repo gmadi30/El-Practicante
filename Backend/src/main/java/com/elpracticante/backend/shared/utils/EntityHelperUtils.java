@@ -3,14 +3,17 @@ package com.elpracticante.backend.shared.utils;
 import com.elpracticante.backend.company.Company;
 import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.company.repository.CompanyRepository;
+import com.elpracticante.backend.degree.Degree;
 import com.elpracticante.backend.degree.entity.DegreeEntity;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
+import com.elpracticante.backend.internship.Internship;
 import com.elpracticante.backend.internship.dto.Summarize;
 import com.elpracticante.backend.internship.dto.Technology;
 import com.elpracticante.backend.internship.entity.InternshipEntity;
 import com.elpracticante.backend.internship.entity.SummarizeEntity;
 import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import com.elpracticante.backend.internship.repository.InternshipRepository;
+import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.school.entity.SchoolEntity;
 import com.elpracticante.backend.school.repository.SchoolRepository;
 import com.elpracticante.backend.shared.entity.StudentProfilePictureEntity;
@@ -130,9 +133,13 @@ public final class EntityHelperUtils {
                 companyEntity.getName(),
                 companyEntity.getRating(),
                 companyEntity.getCity(),
+                companyEntity.getEmail(),
                 companyEntity.getAutonomousCommunity(),
-                companyEntity.getInternships().size()
-        );
+                companyEntity.getInternships().size(),
+                companyEntity.getAboutUs(),
+                companyEntity.getWhyUs(),
+                companyEntity.getWebsite(),
+                mapToIntershipList(companyEntity.getInternships()));
     }
 
     public static StudentProfilePictureEntity uploadProfilePicture(MultipartFile file, StudentProfilePictureRepository studentProfilePictureRepository) throws IOException {
@@ -153,11 +160,7 @@ public final class EntityHelperUtils {
             studentProfilePictureEntity.setPath(filePath + "NoProfilePicture.png");
         }
 
-
-
-        StudentProfilePictureEntity entitySaved = studentProfilePictureRepository.save(studentProfilePictureEntity);
-
-        return entitySaved;
+        return studentProfilePictureRepository.save(studentProfilePictureEntity);
     }
 
     public static byte[] downloadProfilePicture(String fileName, StudentProfilePictureRepository studentProfilePictureRepository) throws IOException {
@@ -167,8 +170,35 @@ public final class EntityHelperUtils {
             throw new EntityNotFoundException("Profile picture not found");
         }
         String filePath = profilePictureEntityOptional.get().getPath();
-        byte[] image = Files.readAllBytes(new File(filePath).toPath());
-        return image;
+        return Files.readAllBytes(new File(filePath).toPath());
 
+    }
+
+    public static List<Internship> mapToIntershipList(List<InternshipEntity> interships) {
+        List<Internship> internshipList = new ArrayList<>();
+
+        interships.forEach(internshipEntity -> internshipList.add(
+                new Internship(
+                        internshipEntity.getId(),
+                        internshipEntity.getDescription(),
+                        internshipEntity.getStartDate(),
+                        internshipEntity.getEndDate(),
+                        internshipEntity.getRating(),
+                        new Degree(internshipEntity.getDegree().getId(), internshipEntity.getDegree().getName()),
+                        new School(internshipEntity.getSchool().getId(), internshipEntity.getSchool().getName()),
+                        new Company(internshipEntity.getCompany().getName(), internshipEntity.getCompany().getRating()),
+                        mapToStudent(internshipEntity.getStudent()),
+                        mapToTechonologiesList(internshipEntity.getTechnologies()),
+                        mapToSummaryList(internshipEntity.getSummaries())
+                )
+        ));
+
+        return internshipList;
+    }
+
+    public static void mapToCompanyList(List<CompanyEntity> companyEntityList, List<Company> companyList) {
+        for (CompanyEntity companyEntity : companyEntityList) {
+            companyList.add(mapToCompany(companyEntity));
+        }
     }
 }

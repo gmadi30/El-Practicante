@@ -7,10 +7,7 @@ import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.dto.GetCompanyResponse;
 import com.elpracticante.backend.company.entity.CompanyEntity;
 import com.elpracticante.backend.company.repository.CompanyRepository;
-import com.elpracticante.backend.degree.Degree;
-import com.elpracticante.backend.internship.Internship;
-import com.elpracticante.backend.internship.entity.InternshipEntity;
-import com.elpracticante.backend.school.School;
+import com.elpracticante.backend.student.dto.CompanySortBy;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -22,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.elpracticante.backend.shared.utils.EntityHelperUtils.*;
+import static com.elpracticante.backend.shared.utils.EntityHelperUtils.mapToCompany;
+import static com.elpracticante.backend.shared.utils.EntityHelperUtils.mapToCompanyList;
 
 @Service
 public class CompanyService implements CompanyServiceAPI {
@@ -37,76 +35,32 @@ public class CompanyService implements CompanyServiceAPI {
     }
 
     @Override
-    public GetAllCompaniesResponse getAllCompanies(String sortBy) {
+    public GetAllCompaniesResponse getAllCompanies(CompanySortBy sortBy) {
 
         List<CompanyEntity> companyEntityList;
-        List<Company> companyList = new ArrayList<>();
+        ArrayList<Company> companyList = new ArrayList<>();
         switch (sortBy) {
-            case "alphabetically" -> {
+            case ALPHABETICALLY-> {
                 companyEntityList = companyRepository.findAll();
-                for (CompanyEntity companyEntity : companyEntityList) {
-                    companyList.add(new Company(
-                            companyEntity.getId(),
-                            companyEntity.getName(),
-                            companyEntity.getRating(),
-                            companyEntity.getCity(),
-                            companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInternships().size())
-                    );
-                }
+                mapToCompanyList(companyEntityList, companyList);
             }
-            case "reviews" -> {
+            case REVIEWS -> {
                 companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.DESC, "internships"));
-                for (CompanyEntity companyEntity : companyEntityList) {
-                    companyList.add(new Company(
-                            companyEntity.getId(),
-                            companyEntity.getName(),
-                            companyEntity.getRating(),
-                            companyEntity.getCity(),
-                            companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInternships().size())
-                    );
-                }
+                mapToCompanyList(companyEntityList, companyList);
             }
-            case "scoring" -> {
+            case SCORING -> {
                 companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.DESC, "rating"));
-                for (CompanyEntity companyEntity : companyEntityList) {
-                    companyList.add(new Company(
-                            companyEntity.getId(),
-                            companyEntity.getName(),
-                            companyEntity.getRating(),
-                            companyEntity.getCity(),
-                            companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInternships().size())
-                    );
-                }
+                mapToCompanyList(companyEntityList, companyList);
             }
-            case "reviewsDesc" -> {
+            case REVIEWSDESC -> {
                 companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.ASC, "internships"));
-                for (CompanyEntity companyEntity : companyEntityList) {
-                    companyList.add(new Company(
-                            companyEntity.getId(),
-                            companyEntity.getName(),
-                            companyEntity.getRating(),
-                            companyEntity.getCity(),
-                            companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInternships().size())
-                    );
-                }
+                mapToCompanyList(companyEntityList, companyList);
             }
-            case "scoringDesc" -> {
+            case SCORINGDESC -> {
                 companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.ASC, "rating"));
-                for (CompanyEntity companyEntity : companyEntityList) {
-                    companyList.add(new Company(
-                            companyEntity.getId(),
-                            companyEntity.getName(),
-                            companyEntity.getRating(),
-                            companyEntity.getCity(),
-                            companyEntity.getAutonomousCommunity(),
-                            companyEntity.getInternships().size())
-                    );
-                }
+                mapToCompanyList(companyEntityList, companyList);
             }
+            default -> throw new IllegalStateException("Unexpected value: " + sortBy);
         }
 
 
@@ -121,20 +75,7 @@ public class CompanyService implements CompanyServiceAPI {
             throw new EntityNotFoundException("La empresa con ID: " + companyId + " no existe.");
         }
 
-
-        GetCompanyResponse getCompanyResponse = new GetCompanyResponse(
-                companyEntity.get().getName(),
-                companyEntity.get().getEmail(),
-                companyEntity.get().getEmployeesAmount(),
-                companyEntity.get().getAutonomousCommunity(),
-                companyEntity.get().getCity(),
-                companyEntity.get().getAboutUs(),
-                companyEntity.get().getWhyUs(),
-                mapToIntership(companyEntity.get().getInternships()),
-                companyEntity.get().getRating()
-        );
-
-        return getCompanyResponse;
+        return new GetCompanyResponse(mapToCompany(companyEntity.get()));
     }
 
     @Override
@@ -158,32 +99,11 @@ public class CompanyService implements CompanyServiceAPI {
         companyEntity.setWhyUs(createCompanyRequest.whyUs());
         companyEntity.setRating(createCompanyRequest.rating());
         companyEntity.setInternships(new ArrayList<>());
+        companyEntity.setWebsite(createCompanyRequest.website());
 
         CompanyEntity companyEntitySaved = companyRepository.save(companyEntity);
 
         return new CreateCompoanyResponse(companyEntitySaved.getId());
-    }
-
-    private List<Internship> mapToIntership(List<InternshipEntity> interships) {
-        List<Internship> internshipList = new ArrayList<>();
-
-        interships.forEach(internshipEntity -> internshipList.add(
-                new Internship(
-                        internshipEntity.getId(),
-                        internshipEntity.getDescription(),
-                        internshipEntity.getStartDate(),
-                        internshipEntity.getEndDate(),
-                        internshipEntity.getRating(),
-                        new Degree(internshipEntity.getDegree().getId(), internshipEntity.getDegree().getName()),
-                        new School(internshipEntity.getSchool().getId(), internshipEntity.getSchool().getName()),
-                        new Company(internshipEntity.getCompany().getName(), internshipEntity.getCompany().getRating()),
-                        mapToStudent(internshipEntity.getStudent()),
-                        mapToTechonologiesList(internshipEntity.getTechnologies()),
-                        mapToSummaryList(internshipEntity.getSummaries())
-                )
-        ));
-
-        return internshipList;
     }
 }
 

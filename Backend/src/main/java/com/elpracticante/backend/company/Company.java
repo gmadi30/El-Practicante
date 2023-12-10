@@ -1,27 +1,30 @@
 package com.elpracticante.backend.company;
 
 
+import com.elpracticante.backend.internship.Internship;
+
+import java.util.List;
+
 public record Company(
 
         Integer companyId,
         String companyName,
         Double rating,
         String city,
+        String email,
         String autonomousCommunity,
-        Integer intershipsAmount
+        Integer intershipsAmount,
+        String aboutUs,
+        String whyUs,
+        String website,
+        List<Internship> internships
 ) {
 
-
-    public Company(String companyName, Double rating, Integer intershipsAmount) {
-        this(null, companyName, rating, null, null, intershipsAmount);
+    public Company(String companyName, Double rating) {
+        this(null, companyName, rating, null, null, null, null, null, null, null, null);
     }
 
-    public Company(String name, Double rating) {
-        this(null, name, rating, null, null, null);
-    }
-
-    public Company(Integer id, String name, Double rating, int size) {
-        this(id, name, rating, null, null, size);
-
+    public Company(Integer companyId, String companyName, Double rating, Integer intershipsAmount) {
+        this(companyId, companyName, rating, null, null, null, intershipsAmount, null, null, null, null);
     }
 }

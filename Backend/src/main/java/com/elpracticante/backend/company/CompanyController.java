@@ -5,6 +5,7 @@ import com.elpracticante.backend.company.dto.CreateCompanyRequest;
 import com.elpracticante.backend.company.dto.CreateCompoanyResponse;
 import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.dto.GetCompanyResponse;
+import com.elpracticante.backend.student.dto.CompanySortBy;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,9 +24,8 @@ public class CompanyController {
     }
 
 
-
     @GetMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetAllCompaniesResponse> getAllCompanies(@RequestParam("sortBy") String sortBy) {
+    public ResponseEntity<GetAllCompaniesResponse> getAllCompanies(@RequestParam("sortBy") CompanySortBy sortBy) {
         GetAllCompaniesResponse getAllCompaniesResponse = companyService.getAllCompanies(sortBy);
         return new ResponseEntity<>(getAllCompaniesResponse, HttpStatus.OK);
     }

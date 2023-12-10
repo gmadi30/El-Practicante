@@ -44,6 +44,9 @@ public class CompanyEntity {
     @Column(name = "WHY_US")
     private String whyUs;
 
+    @Column(name = "WEBSITE")
+    private String website;
+
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<InternshipEntity> internships;
 

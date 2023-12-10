@@ -11,7 +11,9 @@ public record CreateCompanyRequest(
         String aboutUs,
         String whyUs,
         Double rating,
-        String nif
+        String nif,
+        String website
+
 
 ) {
 }
