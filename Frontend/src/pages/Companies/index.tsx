@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import SearchBar from "../../components/ui/SearchBar";
 import CompanyCards from "./components/CompanyCards";
-import { Company } from "../../types/types";
+import { Company, CompanySortBy } from "../../types/types";
 
 export default function Companies() {
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [filterBy, setFilterBy] = useState<string>("alphabetically");
+  const [filterBy, setFilterBy] = useState<CompanySortBy>(
+    CompanySortBy.ALPHABETICALLY
+  );
   const [companySearched, setCompanySearched] = useState("");
 
   useEffect(() => {

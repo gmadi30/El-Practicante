@@ -1,8 +1,9 @@
 import { ImSearch } from "react-icons/im";
+import { CompanySortBy } from "../../types/types";
 
 type SearchBarProps = {
-  filterBy: string;
-  setFilterBy: React.Dispatch<React.SetStateAction<string>>;
+  filterBy: CompanySortBy;
+  setFilterBy: React.Dispatch<React.SetStateAction<CompanySortBy>>;
   companySearched: string;
   setCompanySearched: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -10,6 +11,24 @@ type SearchBarProps = {
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const searchItems = (searchValue: string) => {
     props.setCompanySearched(searchValue);
+  };
+
+  const stringToCompanySortByEnum = (value: string): CompanySortBy => {
+    switch (value) {
+      case CompanySortBy.ALPHABETICALLY:
+        return CompanySortBy.ALPHABETICALLY;
+      case CompanySortBy.REVIEWS:
+        return CompanySortBy.REVIEWS;
+      case CompanySortBy.REVIEWSDESC:
+        return CompanySortBy.REVIEWSDESC;
+      case CompanySortBy.SCORING:
+        return CompanySortBy.SCORING;
+      case CompanySortBy.SCORINGDESC:
+        return CompanySortBy.SCORINGDESC;
+      default:
+        console.error(`Invalid CompanySortBy value: ${value}`);
+        return CompanySortBy.ALPHABETICALLY; // or any other default value
+    }
   };
 
   return (
@@ -55,13 +74,15 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
               className="border rounded w-full focus:border-secondary-100"
               name="lenguajes"
               id="lang"
-              onChange={(event) => props.setFilterBy(event.target.value)}
+              onChange={(event) =>
+                props.setFilterBy(stringToCompanySortByEnum(event.target.value))
+              }
             >
-              <option value="alphabetically">Alfabéticamente</option>
-              <option value="reviews">Más reviews</option>
-              <option value="reviewsDesc">Menos reviews</option>
-              <option value="scoring">Scoring ascendente</option>
-              <option value="scoringDesc">Scoring descendente</option>
+              <option value="ALPHABETICALLY">Alfabéticamente</option>
+              <option value="REVIEWS">Más reviews</option>
+              <option value="REVIEWSDESC">Menos reviews</option>
+              <option value="SCORING">Scoring ascendente</option>
+              <option value="SCORINGDESC">Scoring descendente</option>
             </select>
           </div>
         </label>
@@ -70,27 +91,33 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
       <section className="border-t border-b py-3 border-gray hidden lg:block">
         <ul className="flex space-x-5">
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button onClick={() => props.setFilterBy("alphabetically")}>
+            <button
+              onClick={() => props.setFilterBy(CompanySortBy.ALPHABETICALLY)}
+            >
               Alfabéticamente
             </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button onClick={() => props.setFilterBy("reviews")}>
+            <button onClick={() => props.setFilterBy(CompanySortBy.REVIEWS)}>
               Más reviews
             </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button onClick={() => props.setFilterBy("reviewsDesc")}>
+            <button
+              onClick={() => props.setFilterBy(CompanySortBy.REVIEWSDESC)}
+            >
               Menos reviews
             </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button onClick={() => props.setFilterBy("scoring")}>
+            <button onClick={() => props.setFilterBy(CompanySortBy.SCORING)}>
               Scoring ascendente
             </button>
           </li>
           <li className="border rounded p-2 border-secondary-300 hover:bg-primary font-semibold">
-            <button onClick={() => props.setFilterBy("scoringDesc")}>
+            <button
+              onClick={() => props.setFilterBy(CompanySortBy.SCORINGDESC)}
+            >
               Scoring descendente
             </button>
           </li>

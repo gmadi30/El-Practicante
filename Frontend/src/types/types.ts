@@ -112,3 +112,11 @@ export type Degree = {
   id: number;
   name: string;
 };
+
+export enum CompanySortBy {
+  ALPHABETICALLY = "ALPHABETICALLY",
+  REVIEWS = "REVIEWS",
+  SCORING = "SCORING",
+  REVIEWSDESC = "REVIEWSDESC",
+  SCORINGDESC = "SCORINGDESC",
+}
