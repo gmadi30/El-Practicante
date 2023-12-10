@@ -17,7 +17,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = (props) => {
   const impagesFolderPath = "../../../assets/img/";
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const imgUrl = new URL(
     `${impagesFolderPath}${props.companyName}.png`,

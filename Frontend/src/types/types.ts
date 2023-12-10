@@ -80,26 +80,18 @@ export type Company = {
   companyName: string;
   rating: number;
   city: string;
+  email: string;
   autonomousCommunity: string;
   intershipsAmount: number;
   aboutUs: string;
-  email: string;
-  interships: Internship[];
+  whyUs: string;
+  website: string;
+  internships: Internship[];
+  employeesAmount: string;
 };
 
 export type CompanyProfileType = {
-  aboutUs: string;
-  city: string;
-  autonomousCommunity: string;
-  email: string;
-  employeesAmount: number;
-  internships: Internship[];
-  companyId: number;
-  name: string;
-  rating: number;
-  whyUs: string;
-  website: string;
-  intershipsAmount: number;
+  company: Company;
 };
 
 export type FilterParams =

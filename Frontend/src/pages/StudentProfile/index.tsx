@@ -80,7 +80,7 @@ export default function Profile() {
         <div className="font-body md:container md:mx-auto">
           <Header student={student} />
 
-          <h1>Oooops... No puedes ver la review de este practicante</h1>
+          <h1>Oooops... No puedes ver las reviews de este practicante</h1>
           <h1>Inicia sesión para acceder a todo el contenido</h1>
           <Link to="/login">
             <button className=" rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 xl:text-2xl">
