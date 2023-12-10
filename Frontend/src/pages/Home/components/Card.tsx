@@ -1,5 +1,3 @@
-import profilePicture from "../../../assets/img/me.png";
-
 interface CardProps {
   //profilePicture ¿Como se hace?
   name: string;
@@ -20,7 +18,7 @@ const Card: React.FC<CardProps> = (props) => {
     <div
       className={`flex flex-col mx-auto items-center border-4 ${
         props.middle ? "border-primary" : "border-secondary-100"
-      } rounded-xl text-center w-[75%] h-fit p-3 mt-1`}
+      } rounded-xl text-center w-[75%]  p-3 mt-1`}
     >
       <header className="flex flex-col justify-center items-center">
         <img
@@ -38,7 +36,9 @@ const Card: React.FC<CardProps> = (props) => {
         </div>
       </header>
       <hr className="w-20 my-5 text-red"></hr>
-      <p className="">{props.websiteThoughts}</p>
+      <p className="xl:overflow-hidden xl:max-h-44 xl:text-sm">
+        {props.websiteThoughts}
+      </p>
     </div>
   );
 };

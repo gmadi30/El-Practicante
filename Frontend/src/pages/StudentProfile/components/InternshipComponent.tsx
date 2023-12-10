@@ -47,8 +47,8 @@ const InternshipComponent: React.FC<IntershipProps> = (props) => {
                 <h1 className="text-secondary-100 font-bold tracking-wider text-xl">
                   DESCRIPCIÓN
                 </h1>
-                <h2>{internship?.schoolName}</h2>
-                <h2>{internship?.degreeName}</h2>
+                <h2>{internship?.school.name}</h2>
+                <h2>{internship?.degree.name}</h2>
                 <h2>
                   Fecha de inicio{" "}
                   {internship?.startDate &&
@@ -59,6 +59,8 @@ const InternshipComponent: React.FC<IntershipProps> = (props) => {
                   {internship?.endDate &&
                     new Date(internship?.endDate).toLocaleDateString("en-GB")}
                 </h2>
+
+                <h3>{internship?.title}</h3>
                 <p className="text-justify pr-1 pt-2 text-xl">
                   {internship?.description}
                 </p>

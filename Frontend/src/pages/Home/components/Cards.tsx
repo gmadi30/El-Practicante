@@ -8,7 +8,8 @@ const Cards = () => {
         lastName="Madi"
         school="IES Francisco de Goya"
         grade="DAM"
-        websiteThoughts="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus tenetur aut, corrupti soluta quam deleniti sapiente voluptas facere repellat! Iste ea porro doloremque suscipit magni necessitatibus asperiores, non voluptas quia."
+        websiteThoughts="
+        Durante mis prácticas FCT, El Practicante fue esencial. La plataforma guió mi elección de empresa de manera efectiva, brindándome orientación valiosa para una decisión informada en mi trayectoria profesional."
         middle={false}
       ></Card>
       <Card
@@ -16,7 +17,7 @@ const Cards = () => {
         lastName="Ramiro"
         school="IES Francisco de Goya"
         grade="DAM"
-        websiteThoughts="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus tenetur aut, corrupti soluta quam deleniti sapiente voluptas facere repellat! Iste ea porro doloremque suscipit magni necessitatibus asperiores, non voluptas quia."
+        websiteThoughts="Mi experiencia en las prácticas FCT se enriqueció con El Practicante. Compartí mi vivencia en la web, aprovechando sus recursos para decisiones acertadas en la elección de la empresa. La plataforma fue esencial, guiándome efectivamente y contribuyendo a mi desarrollo profesional."
         middle={true}
       ></Card>
       <Card
@@ -24,7 +25,8 @@ const Cards = () => {
         lastName="Sánchez"
         school="IES Francisco de Goya"
         grade="DAM"
-        websiteThoughts="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus tenetur aut, corrupti soluta quam deleniti sapiente voluptas facere repellat! Iste ea porro doloremque suscipit magni necessitatibus asperiores, non voluptas quia."
+        websiteThoughts="
+        Compartir mi experiencia no solo me permitió reflexionar sobre mi crecimiento, sino también ofrecer orientación y apoyo a otros estudiantes en la elección de prácticas FCT. La satisfacción de ser útil a otros hizo que compartir en la plataforma fuera significativo, enriqueciendo la comunidad estudiantil y fomentando la colaboración entre compañeros."
         middle={false}
       ></Card>
     </section>

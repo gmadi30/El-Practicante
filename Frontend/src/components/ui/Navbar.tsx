@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/img/logo.png";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { isLoggedIn, updateLoginStatus, studentId } = useAuth(); // Use the useAuth hook
+  const handleLogout = () => {
+    updateLoginStatus(false);
+  };
   return (
     <nav className="flex justify-center items-center font-body bg-secondary-100 w-full py-2 text-white text-sm lg:text-xl">
       <div className="w-fit">
@@ -14,16 +19,23 @@ const Navbar = () => {
             <Link to="/">Inicio</Link>
           </li>
           <li className="hoverNavigation hidden md:block ">
-            <Link to="#">Sobre nosotros</Link>
+            <Link to="company/companies">Empresas</Link>
           </li>
-          <li className="hoverNavigation">
-            <Link to="#">Contacto</Link>
-          </li>
+          {isLoggedIn && (
+            <li className="hoverNavigation hidden md:block ">
+              <Link to={`student/${studentId}/profile`}>Mi Perfil</Link>
+            </li>
+          )}
         </div>
-
         <div>
           <li className="hoverNavigation ml-5">
-            <Link to="/login">Iniciar sesión</Link>
+            {isLoggedIn ? (
+              <Link onClick={() => handleLogout()} to="/">
+                Cerrar sesión
+              </Link>
+            ) : (
+              <Link to="/login">Iniciar sesión</Link>
+            )}
           </li>
         </div>
       </ul>

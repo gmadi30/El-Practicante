@@ -11,6 +11,7 @@ type FormValues = {
   degreeId: string;
   startDate: string;
   endDate: string;
+  title: string;
   description: string;
   rating: string;
   technology1: string;
@@ -35,6 +36,7 @@ export default function CreateReview() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [degrees, setDegrees] = useState<Degree[]>([]);
   const [isInternshipCreated, setIsInternshipCreated] = useState(false);
+  const [errorThrown, setErrorThrown] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +64,7 @@ export default function CreateReview() {
 
       try {
         const companyResponse = await fetch(
-          "http://localhost:8080/api/v1/companies?sortBy=alphabetically",
+          "http://localhost:8080/api/v1/companies?sortBy=ALPHABETICALLY",
           {
             method: "GET",
             headers: {
@@ -121,37 +123,53 @@ export default function CreateReview() {
         location.state.studentId
     );
     console.log("Valores a guardar en la Base de datos" + data);
-    await fetch(`http://localhost:8080/api/v1/internships`, {
-      method: "POST",
-      body: JSON.stringify({
-        schoolId: data.schoolId,
-        companyId: data.companyId,
-        degreeId: data.degreeId,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        description: data.description,
-        rating: data.rating,
-        technologies: [data.technology1, data.technology2, data.technology3],
-        summaryBest: [data.best1, data.best2, data.best3],
-        summaryWorst: [data.worst1, data.worst2, data.worst3],
-        studentId: params.studentId,
-      }),
-      headers: {
-        "Content-Type": "application/json;",
-      },
-    })
-      .then((response) => {
-        if (response.status == 201) {
-          setIsInternshipCreated(true);
-          setTimeout(() => {
-            navigate(`/student/${params.studentId}/profile`, {
-              state: { isAuthenticated: "true" },
-              replace: true,
-            });
-          }, 3000);
+
+    try {
+      const createInternship = await fetch(
+        `http://localhost:8080/api/v1/internships`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            schoolId: data.schoolId,
+            companyId: data.companyId,
+            degreeId: data.degreeId,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            title: data.title,
+            description: data.description,
+            rating: data.rating,
+            technologies: [
+              data.technology1,
+              data.technology2,
+              data.technology3,
+            ],
+            summaryBest: [data.best1, data.best2, data.best3],
+            summaryWorst: [data.worst1, data.worst2, data.worst3],
+            studentId: params.studentId,
+          }),
+          headers: {
+            "Content-Type": "application/json;",
+          },
         }
-      })
-      .catch((error: Error) => console.log("Este es el error: " + error));
+      );
+      if (!createInternship.ok) {
+        setErrorThrown(true);
+        throw new Error(`HTTP error! Status: ${createInternship.status}`);
+      }
+
+      const createInternshipResponse = await createInternship.json();
+      console.log("CreateInternship response:", createInternshipResponse);
+
+      setIsInternshipCreated(true);
+      setTimeout(() => {
+        navigate(`/student/${params.studentId}/profile`, {
+          state: { isAuthenticated: "true" },
+          replace: true,
+        });
+      }, 3000);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
@@ -333,7 +351,37 @@ export default function CreateReview() {
               <p className="my-2  xl:text-xl">
                 En esta sección comparte de forma general tús prácticas
               </p>
+              <label className="font-bold">
+                <h1 className="text-secondary-100 my-2">Titulo</h1>
+                <input
+                  {...register("title", {
+                    required: {
+                      value: true,
+                      message: "Este campo es obligatorio",
+                    },
+                  })}
+                  id="title"
+                  type="text"
+                  placeholder="Prácticas inolvidables"
+                  className="
+                          border
+                          focus:outline-none
+                          focus:border-secondary-100
+                          w-3/4
+                          py-2
+                          pl-2
+                          rounded
+                          font-normal
+                          my-1"
+                />
+                <p className="text-base font-light text-red">
+                  {errors.best1?.message}
+                </p>
+              </label>
               <label>
+                <h1 className="text-secondary-100 my-2 text-bold">
+                  Descripción
+                </h1>
                 <textarea
                   {...register("description", {
                     required: {
@@ -484,14 +532,14 @@ export default function CreateReview() {
                     type="text"
                     placeholder="El ambiente de trabajo"
                     className="
-          border
-          focus:outline-none
-          focus:border-secondary-100
-          w-3/4
-          py-2
-          pl-2
-          rounded
-          font-normal"
+                          border
+                          focus:outline-none
+                          focus:border-secondary-100
+                          w-3/4
+                          py-2
+                          pl-2
+                          rounded
+                          font-normal"
                   />
                   <p className="text-base font-light text-red">
                     {errors.best1?.message}
@@ -617,6 +665,12 @@ export default function CreateReview() {
                 ¡PRACTICANTE! Revisa antes de enviar el formulario...{" "}
               </h1>
             </section>
+            {errorThrown && (
+              <p className="font-bold text-red">
+                {" "}
+                ❌ ¡Ha ocurrido un error revisa el formulario!
+              </p>
+            )}
             <div className="xl:flex ">
               <button
                 type="submit"

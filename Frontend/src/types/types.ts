@@ -52,7 +52,8 @@ export type StudentProfile = {
 
 // Intership Type
 export type Internship = {
-  id: Number;
+  id: number;
+  title: string;
   description: string;
   startDate: string;
   endDate: Date;

@@ -8,13 +8,14 @@ import {
   RegisterFormValues as FormValues,
   LoginResponse as loginResponse,
 } from "../../types/types";
+import { useAuth } from "../../components/context/AuthContext";
 export default function Login() {
   let navigate = useNavigate();
   const form = useForm<FormValues>();
   const { control, register, handleSubmit, formState } = form;
   const { errors } = formState;
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isCredentialsWrong, setIsCredentialsWrong] = useState(false);
+  const { isLoggedIn, updateLoginStatus, getStudentId } = useAuth();
 
   const retrieveStudent = async (data: FormValues) => {
     await fetch("http://localhost:8080/api/v1/students/login", {
@@ -32,11 +33,11 @@ export default function Login() {
           console.log(response);
           response.json().then((response) => {
             console.log("Endpoint students/login body response", response);
-            setIsLoggedIn(true);
-
+            updateLoginStatus(true);
+            getStudentId(response.studentId);
             setTimeout(() => {
               navigateLoginResponse(response);
-            }, 2000);
+            }, 1000);
           });
         } else if (response.status === 404) {
           setIsCredentialsWrong(true);

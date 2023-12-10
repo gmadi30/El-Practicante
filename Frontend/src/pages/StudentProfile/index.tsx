@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { StudentProfile } from "../../types/types";
 import InternshipComponent from "./components/InternshipComponent";
+import { useAuth } from "../../components/context/AuthContext";
 
 export default function Profile() {
   const [student, setStudent] = useState<StudentProfile>({} as StudentProfile);
@@ -11,6 +12,7 @@ export default function Profile() {
   const params = useParams();
   const navigate = useNavigate();
   let isAuthenticated = false;
+  const { isLoggedIn } = useAuth(); // Use the useAuth hook
 
   console.log({
     path: location.pathname,
@@ -53,7 +55,7 @@ export default function Profile() {
     return <p>Loading...</p>;
   }
 
-  if (isAuthenticated) {
+  if (isLoggedIn) {
     return (
       <>
         <div className="font-body md:container md:mx-auto">

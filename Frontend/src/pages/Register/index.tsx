@@ -1,14 +1,97 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SuccesfulResponse from "../../components/ui/SuccesfulResponse";
-import { RegisterFormValues as FormValues } from "../../types/types";
+import {
+  Company,
+  Degree,
+  RegisterFormValues as FormValues,
+  School,
+} from "../../types/types";
 export default function Register() {
   let navigate = useNavigate();
   const { control, register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
   const [isStudentCreated, setIsStudentCreated] = useState(false);
+  const [errorThrown, setErrorThrown] = useState(false);
+
+  const [schools, setSchools] = useState<School[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [degrees, setDegrees] = useState<Degree[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const schoolsResponse = await fetch(
+          "http://localhost:8080/api/v1/schools",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!schoolsResponse.ok) {
+          throw new Error(`HTTP error! Status: ${schoolsResponse.status}`);
+        }
+
+        const data = await schoolsResponse.json();
+        console.log("Schools received:", data);
+        setSchools(data.schools);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+
+      try {
+        const companyResponse = await fetch(
+          "http://localhost:8080/api/v1/companies?sortBy=ALPHABETICALLY",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!companyResponse.ok) {
+          throw new Error(`HTTP error! Status: ${companyResponse.status}`);
+        }
+
+        const data = await companyResponse.json();
+        console.log("Companies received:", data);
+        setCompanies(data.companies);
+        console.log("Companies updated:", companies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+
+      try {
+        const degreeResponse = await fetch(
+          "http://localhost:8080/api/v1/degrees",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!degreeResponse.ok) {
+          throw new Error(`HTTP error! Status: ${degreeResponse.status}`);
+        }
+
+        const data = await degreeResponse.json();
+        console.log("Degrees received:", data);
+        setDegrees(data.degrees);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const addStudent = async (data: FormValues) => {
     let formData = new FormData();
@@ -30,19 +113,29 @@ export default function Register() {
       formData.append("profilePicture", data.profilePicture[0]);
     }
 
-    await fetch("http://localhost:8080/api/v1/students", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (response.status == 201) {
-          setIsStudentCreated(true);
-          setTimeout(() => {
-            navigate("/login", { replace: true });
-          }, 3000);
+    try {
+      const createStudentResponse = await fetch(
+        "http://localhost:8080/api/v1/students",
+        {
+          method: "POST",
+          body: formData,
         }
-      })
-      .catch((error: Error) => console.log("Este es el error: " + error));
+      );
+
+      if (!createStudentResponse.ok) {
+        setErrorThrown(true);
+        throw new Error(`HTTP error! Status: ${createStudentResponse.status}`);
+      }
+
+      const data = await createStudentResponse.json();
+      console.log("Student created:", data);
+      setIsStudentCreated(true);
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 3000);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
@@ -335,8 +428,11 @@ export default function Register() {
                   name="schoolId"
                 >
                   <option value="">Selecciona un Centro de Educación</option>
-                  <option value={0}> No aparece</option>
-                  <option value={1}>IES Francisco de Goya</option>
+                  {(schools ?? [])
+                    .filter((school: School) => school.id !== 0)
+                    .map((school: School) => {
+                      return <option value={school?.id}>{school?.name}</option>;
+                    })}
                 </select>
               </div>
 
@@ -371,10 +467,11 @@ export default function Register() {
                   <option value="" className="">
                     Selecciona un Grado
                   </option>
-                  <option value={0}> No aparece</option>
-                  <option value={1}> DAM</option>
-                  <option value={2}> DAW</option>
-                  <option value={3}> ASIR</option>
+                  {(degrees ?? [])
+                    .filter((degree: Degree) => degree.id !== 0)
+                    .map((degree: Degree) => {
+                      return <option value={degree?.id}>{degree?.name}</option>;
+                    })}
                 </select>
               </div>
               <div className="mt-1">
@@ -403,10 +500,15 @@ export default function Register() {
                   id="companyId"
                 >
                   <option value="">Selecciona una Empresa</option>
-                  <option value={0}> No aparece</option>
-                  <option value={1}>Accenture</option>
-                  <option value={2}>DXC Technology</option>
-                  <option value={3}>Indra</option>
+                  {(companies ?? [])
+                    .filter((company: Company) => company.companyId !== 0)
+                    .map((company: Company) => {
+                      return (
+                        <option value={company?.companyId}>
+                          {company?.companyName}
+                        </option>
+                      );
+                    })}
                 </select>
               </div>
 
@@ -422,7 +524,12 @@ export default function Register() {
                 {errors.companyId?.message}
               </p>
             </label>
-
+            {errorThrown && (
+              <p className="font-bold text-red">
+                {" "}
+                ❌ ¡Ha ocurrido un error revisa el formulario!
+              </p>
+            )}
             <button
               type="submit"
               className="md:text-xl rounded border-cyan-600 bg-secondary-100 text-white  py-2 font-bold uppercase tracking-[0.3rem] my-5 hover:bg-secondary-200"
