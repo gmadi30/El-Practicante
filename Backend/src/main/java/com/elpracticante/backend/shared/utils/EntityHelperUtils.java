@@ -180,6 +180,7 @@ public final class EntityHelperUtils {
         interships.forEach(internshipEntity -> internshipList.add(
                 new Internship(
                         internshipEntity.getId(),
+                        internshipEntity.getTitle(),
                         internshipEntity.getDescription(),
                         internshipEntity.getStartDate(),
                         internshipEntity.getEndDate(),

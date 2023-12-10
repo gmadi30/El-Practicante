@@ -12,6 +12,7 @@ import java.util.List;
 
 public record Internship(
         Integer id,
+        String title,
         String description,
         LocalDate startDate,
         LocalDate endDate,

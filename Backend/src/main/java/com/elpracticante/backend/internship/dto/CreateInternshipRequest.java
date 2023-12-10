@@ -16,6 +16,8 @@ public record CreateInternshipRequest(
 
         String endDate,
 
+        String title,
+
         String description,
 
         Integer rating,

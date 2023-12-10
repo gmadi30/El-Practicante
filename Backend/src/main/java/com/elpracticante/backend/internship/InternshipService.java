@@ -16,7 +16,6 @@ import com.elpracticante.backend.internship.repository.InternshipRepository;
 import com.elpracticante.backend.internship.repository.TechnologyRepository;
 import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.school.repository.SchoolRepository;
-import com.elpracticante.backend.shared.exceptions.EmptyInputFieldException;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
 import com.elpracticante.backend.student.repository.StudentRepository;
 import org.slf4j.Logger;
@@ -58,8 +57,7 @@ public class InternshipService implements InternshipServiceAPI {
     }
 
     @Override
-    public CreateInternshipResponse addIntership(CreateInternshipRequest createInternshipRequest) throws EmptyInputFieldException {
-
+    public CreateInternshipResponse addIntership(CreateInternshipRequest createInternshipRequest) {
         // Retrieve a company
         CompanyEntity companyEntity = EntityHelperUtils.getCompanyEntity(createInternshipRequest.companyId(), companyRepository);
         // Create the Intership entity
@@ -83,6 +81,7 @@ public class InternshipService implements InternshipServiceAPI {
 
         Internship internship = new Internship(
                 internshipEntity.getId(),
+                internshipEntity.getTitle(),
                 internshipEntity.getDescription(),
                 internshipEntity.getStartDate(),
                 internshipEntity.getEndDate(),
@@ -108,6 +107,7 @@ public class InternshipService implements InternshipServiceAPI {
 
     private InternshipEntity createIntership(CreateInternshipRequest createInternshipRequest, CompanyEntity companyEntity) {
         InternshipEntity internshipEntity = new InternshipEntity();
+        internshipEntity.setTitle(createInternshipRequest.title());
         internshipEntity.setDescription(createInternshipRequest.description());
         internshipEntity.setStartDate(getFormattedLocalDate(createInternshipRequest.startDate()));
         internshipEntity.setEndDate(getFormattedLocalDate(createInternshipRequest.endDate()));

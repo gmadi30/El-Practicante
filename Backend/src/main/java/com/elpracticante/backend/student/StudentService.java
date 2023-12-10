@@ -13,7 +13,7 @@ import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.school.repository.SchoolRepository;
 import com.elpracticante.backend.shared.dto.ProfilePicture;
-import com.elpracticante.backend.shared.exceptions.WrongLoginCredentialsException;
+import com.elpracticante.backend.shared.exceptions.UserNotFoundException;
 import com.elpracticante.backend.shared.repository.StudentProfilePictureRepository;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
 import com.elpracticante.backend.student.api.StudentServiceAPI;
@@ -21,7 +21,6 @@ import com.elpracticante.backend.student.dto.*;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
 import jakarta.persistence.EntityExistsException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -86,6 +85,7 @@ public class StudentService implements StudentServiceAPI {
         for(InternshipEntity internshipEntity : interships) {
            internshipList.add( new Internship(
                     internshipEntity.getId(),
+                    internshipEntity.getTitle(),
                     internshipEntity.getDescription(),
                     internshipEntity.getStartDate(),
                     internshipEntity.getEndDate(),
@@ -171,11 +171,11 @@ public class StudentService implements StudentServiceAPI {
         Optional<StudentEntity> studentEntity = studentRepository.findByEmail(loginStudentRequest.studentEmail());
 
         if (studentEntity.isEmpty()){
-            throw new WrongLoginCredentialsException("El usuario o la contraseña son incorrectas", HttpStatus.NOT_FOUND);
+            throw new UserNotFoundException("El usuario o la contraseña son incorrectas");
         }
 
         if (!studentEntity.get().getPassword().equals(loginStudentRequest.password())) {
-            throw new WrongLoginCredentialsException("El usuario o la contraseña son incorrectas", HttpStatus.NOT_FOUND);
+            throw new UserNotFoundException("El usuario o la contraseña son incorrectas");
         }
 
         return new LoginStudentResponse(studentEntity.get().getId());

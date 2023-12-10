@@ -24,6 +24,9 @@ public class InternshipEntity {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @Column(name = "TITLE")
+    private String title;
+
     @Column(name = "START_DATE")
     private LocalDate startDate;
 
@@ -32,7 +35,6 @@ public class InternshipEntity {
 
     @Column(name = "RATING")
     private Integer rating;
-
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "SCHOOL_ID")

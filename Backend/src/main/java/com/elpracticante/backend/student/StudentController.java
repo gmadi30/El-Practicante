@@ -34,7 +34,7 @@ public class StudentController {
         try {
             studentRequestOutput = service.addStudent(createStudentRequest);
         } catch (EntityExistsException exception) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, exception.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, exception.getMessage(), exception);
         }
         return new ResponseEntity<>(studentRequestOutput, HttpStatus.CREATED);
     }

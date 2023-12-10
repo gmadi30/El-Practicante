@@ -41,11 +41,11 @@ public class CompanyService implements CompanyServiceAPI {
         ArrayList<Company> companyList = new ArrayList<>();
         switch (sortBy) {
             case ALPHABETICALLY-> {
-                companyEntityList = companyRepository.findAll();
+                companyEntityList = companyRepository.findAll(Sort.by("name"));
                 mapToCompanyList(companyEntityList, companyList);
             }
             case REVIEWS -> {
-                companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.DESC, "internships"));
+                companyEntityList = companyRepository.findAllByOrderByInternshipsDesc();
                 mapToCompanyList(companyEntityList, companyList);
             }
             case SCORING -> {
@@ -53,7 +53,7 @@ public class CompanyService implements CompanyServiceAPI {
                 mapToCompanyList(companyEntityList, companyList);
             }
             case REVIEWSDESC -> {
-                companyEntityList = companyRepository.findAll(Sort.by(Sort.Direction.ASC, "internships"));
+                companyEntityList = companyRepository.findAllByOrderByInternshipsAsc();
                 mapToCompanyList(companyEntityList, companyList);
             }
             case SCORINGDESC -> {
