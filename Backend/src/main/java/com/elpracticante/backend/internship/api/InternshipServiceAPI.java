@@ -3,6 +3,7 @@ package com.elpracticante.backend.internship.api;
 import com.elpracticante.backend.internship.dto.CreateInternshipRequest;
 import com.elpracticante.backend.internship.dto.CreateInternshipResponse;
 import com.elpracticante.backend.internship.dto.GetInternshipResponse;
+import com.elpracticante.backend.internship.dto.GetTechnologies;
 
 
 public interface InternshipServiceAPI {
@@ -11,4 +12,6 @@ public interface InternshipServiceAPI {
 
 
     GetInternshipResponse getIntership(Integer intershipId);
+
+    GetTechnologies getTechnologies();
 }

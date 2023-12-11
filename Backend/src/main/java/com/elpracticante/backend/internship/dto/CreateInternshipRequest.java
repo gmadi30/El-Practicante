@@ -22,7 +22,7 @@ public record CreateInternshipRequest(
 
         Integer rating,
 
-        List<String> technologies,
+        List<Integer> technologies,
 
         List<String> summaryBest,
 

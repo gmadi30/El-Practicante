@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import SuccesfulResponse from "./ui/SuccesfulResponse";
 import { useEffect, useState } from "react";
-import { Company, Degree, School } from "../types/types";
+import { Company, Degree, School, Technology } from "../types/types";
 
 type FormValues = {
   schoolId: string;
@@ -35,6 +35,7 @@ export default function CreateReview() {
   const [schools, setSchools] = useState<School[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [degrees, setDegrees] = useState<Degree[]>([]);
+  const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [isInternshipCreated, setIsInternshipCreated] = useState(false);
   const [errorThrown, setErrorThrown] = useState(false);
 
@@ -103,6 +104,28 @@ export default function CreateReview() {
         const data = await degreeResponse.json();
         console.log("Degrees received:", data);
         setDegrees(data.degrees);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+
+      try {
+        const technologiesResponse = await fetch(
+          "http://localhost:8080/api/v1/internships/technologies",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!technologiesResponse.ok) {
+          throw new Error(`HTTP error! Status: ${technologiesResponse.status}`);
+        }
+
+        const data = await technologiesResponse.json();
+        console.log("Technologies received:", data);
+        setTechnologies(data.technologies);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -444,9 +467,15 @@ export default function CreateReview() {
                 Es obligatorio rellenar al menos 1 opción
               </h3>
               <div className="flex flex-col gap-4">
-                <label className="font-bold">
-                  <h1 className="text-secondary-100 my-2">Opción 1</h1>
-                  <input
+                <label className="">
+                  <h1 className="text-secondary-100 my-2 font-bold">
+                    Opción 1
+                  </h1>
+                  <select
+                    className=" 
+                    border rounded py-2
+                    pl-2  w-3/4 text-black
+                     focus:focus:border-secondary-100"
                     {...register("technology1", {
                       required: {
                         value: true,
@@ -454,57 +483,69 @@ export default function CreateReview() {
                       },
                     })}
                     id="technology1"
-                    type="text"
-                    placeholder="Spring Boot"
-                    className="
-          border
-          focus:outline-none
-          focus:border-secondary-100
-          w-3/4
-          py-2
-          pl-2
-          rounded
-          font-normal"
-                  />
+                  >
+                    <option value="">Selecciona una tecnología</option>
+                    {(technologies ?? []).map((technology: Technology) => {
+                      return (
+                        <option value={technology?.id}>
+                          {technology?.name}
+                        </option>
+                      );
+                    })}
+                  </select>
                   <p className="text-base font-light text-red">
                     {errors.technology1?.message}
                   </p>
                 </label>
-                <label className=" font-bold">
+                <label className="">
                   <h1 className="text-secondary-100 my-2">Opción 2</h1>
-                  <input
-                    {...register("technology2")}
+                  <select
+                    className=" 
+                    border rounded py-2
+                    pl-2  w-3/4 text-black
+                     focus:focus:border-secondary-100"
+                    {...register("technology2", {
+                      required: {
+                        value: true,
+                        message: "Este campo es obligatorio",
+                      },
+                    })}
                     id="technology2"
-                    type="text"
-                    placeholder="Postman"
-                    className="
-          border
-          focus:outline-none
-          focus:border-secondary-100
-          w-3/4
-          py-2
-          pl-2
-          rounded
-          font-normal"
-                  />
+                  >
+                    <option value="">Selecciona una tecnología</option>
+                    {(technologies ?? []).map((technology: Technology) => {
+                      return (
+                        <option value={technology?.id}>
+                          {technology?.name}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </label>
-                <label className="font-bold">
+                <label className="">
                   <h1 className="text-secondary-100 my-2">Opción 3</h1>
-                  <input
-                    {...register("technology3")}
+                  <select
+                    className=" 
+                    border rounded py-2
+                    pl-2  w-3/4 text-black
+                     focus:focus:border-secondary-100"
+                    {...register("technology3", {
+                      required: {
+                        value: true,
+                        message: "Este campo es obligatorio",
+                      },
+                    })}
                     id="technology3"
-                    type="text"
-                    placeholder="Java"
-                    className="
-          border
-          focus:outline-none
-          focus:border-secondary-100
-          w-3/4
-          py-2
-          pl-2
-          rounded
-          font-normal"
-                  />
+                  >
+                    <option value="">Selecciona una tecnología</option>
+                    {(technologies ?? []).map((technology: Technology) => {
+                      return (
+                        <option value={technology?.id}>
+                          {technology?.name}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </label>
               </div>
             </section>

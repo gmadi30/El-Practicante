@@ -5,10 +5,7 @@ import com.elpracticante.backend.company.repository.CompanyRepository;
 import com.elpracticante.backend.degree.Degree;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.internship.api.InternshipServiceAPI;
-import com.elpracticante.backend.internship.dto.CreateInternshipRequest;
-import com.elpracticante.backend.internship.dto.CreateInternshipResponse;
-import com.elpracticante.backend.internship.dto.GetInternshipResponse;
-import com.elpracticante.backend.internship.dto.SummarizeType;
+import com.elpracticante.backend.internship.dto.*;
 import com.elpracticante.backend.internship.entity.InternshipEntity;
 import com.elpracticante.backend.internship.entity.SummarizeEntity;
 import com.elpracticante.backend.internship.entity.TechnologyEntity;
@@ -98,6 +95,11 @@ public class InternshipService implements InternshipServiceAPI {
         return getInternshipResponse;
     }
 
+    @Override
+    public GetTechnologies getTechnologies() {
+        List<TechnologyEntity> technologyEntityList = technologyRepository.findAll();
+        return new GetTechnologies(mapToTechonologiesList(technologyEntityList));
+    }
 
 
     private void updateRatingCompanyEntity(CompanyEntity companyEntity) {
@@ -141,12 +143,11 @@ public class InternshipService implements InternshipServiceAPI {
         return summarizeEntityList;
     }
 
-    private List<TechnologyEntity> getTechnologiesList(List<String> technologies) {
+    private List<TechnologyEntity> getTechnologiesList(List<Integer> technologies) {
         List<TechnologyEntity> technologyEntityList = new ArrayList<>();
 
-        for(String technology: technologies) {
-            Optional<TechnologyEntity> technologyEntity = technologyRepository.findByName(technology);
-
+        for(Integer technology: technologies) {
+            Optional<TechnologyEntity> technologyEntity = technologyRepository.findById(technology);
             technologyEntity.ifPresent(technologyEntityList::add);
         }
 

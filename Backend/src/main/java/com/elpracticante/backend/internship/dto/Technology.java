@@ -1,5 +1,5 @@
 package com.elpracticante.backend.internship.dto;
 
-public record Technology(String name) {
+public record Technology(Integer id, String name) {
 
 }

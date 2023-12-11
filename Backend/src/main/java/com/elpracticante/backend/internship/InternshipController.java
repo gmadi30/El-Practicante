@@ -3,6 +3,7 @@ package com.elpracticante.backend.internship;
 import com.elpracticante.backend.internship.dto.CreateInternshipRequest;
 import com.elpracticante.backend.internship.dto.CreateInternshipResponse;
 import com.elpracticante.backend.internship.dto.GetInternshipResponse;
+import com.elpracticante.backend.internship.dto.GetTechnologies;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +31,12 @@ public class InternshipController {
     public ResponseEntity<GetInternshipResponse> getIntership(@PathVariable Integer intershipId) {
         GetInternshipResponse getInternshipResponse = service.getIntership(intershipId);
         return new ResponseEntity<>(getInternshipResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/technologies")
+    public ResponseEntity<GetTechnologies> getTechnologies() {
+        GetTechnologies getTechnologies = service.getTechnologies();
+        return new ResponseEntity<>(getTechnologies, HttpStatus.OK);
     }
 }
 

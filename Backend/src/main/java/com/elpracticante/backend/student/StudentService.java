@@ -118,7 +118,7 @@ public class StudentService implements StudentServiceAPI {
         for (TechnologyEntity technologyEntity: technologies) {
 
             technologyList.add(
-                    new Technology(technologyEntity.getName())
+                    new Technology(technologyEntity.getId(), technologyEntity.getName())
             );
         }
         return technologyList;

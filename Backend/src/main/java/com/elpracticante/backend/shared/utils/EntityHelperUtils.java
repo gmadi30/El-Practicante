@@ -106,6 +106,7 @@ public final class EntityHelperUtils {
         List<Technology> technologyList = new ArrayList<>();
 
         technologies.forEach((technologyEntity) -> technologyList.add(new Technology(
+                technologyEntity.getId(),
                 technologyEntity.getName()
         )));
 

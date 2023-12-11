@@ -72,6 +72,7 @@ export type Summary = {
 };
 
 export type Technology = {
+  id: number;
   name: string;
 };
 
