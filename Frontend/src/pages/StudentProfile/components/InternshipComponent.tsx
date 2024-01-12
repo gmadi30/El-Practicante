@@ -1,6 +1,6 @@
 import { ImCheckmark, ImCross, ImFloppyDisk } from "react-icons/im";
 import { Internship } from "../../../types/types";
-import Rating from "../../../components/ui/Rating";
+import Rating from "../../../components/ui/shared/Rating";
 
 interface IntershipProps {
   internship: Internship;

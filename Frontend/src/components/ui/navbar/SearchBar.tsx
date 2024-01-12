@@ -1,5 +1,5 @@
 import { ImSearch } from "react-icons/im";
-import { CompanySortBy } from "../../types/types";
+import { CompanySortBy } from "../../../types/types";
 
 type SearchBarProps = {
   filterBy: CompanySortBy;
@@ -14,7 +14,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   };
 
   const stringToCompanySortByEnum = (value: string): CompanySortBy => {
-    console.log("Valor por el cual filtrar ", value);
     switch (value) {
       case CompanySortBy.ALPHABETICALLY:
         return CompanySortBy.ALPHABETICALLY;

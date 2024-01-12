@@ -3,12 +3,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import SuccesfulResponse from "../../components/ui/SuccesfulResponse";
+import SuccesfulResponse from "../../components/ui/shared/SuccesfulResponse";
 import {
   RegisterFormValues as FormValues,
-  LoginResponse as loginResponse,
+  LoginFormValues,
 } from "../../types/types";
 import { useAuth } from "../../components/context/AuthContext";
+import { login } from "../../api/api";
 export default function Login() {
   let navigate = useNavigate();
   const form = useForm<FormValues>();
@@ -18,32 +19,28 @@ export default function Login() {
   const { isLoggedIn, updateLoginStatus, getStudentId } = useAuth();
 
   const retrieveStudent = async (data: FormValues) => {
-    await fetch("http://localhost:8080/api/v1/students/login", {
-      method: "POST",
-      body: JSON.stringify({
+    try {
+      const bodyValues: LoginFormValues = {
         studentEmail: data.email,
         password: data.password,
-      }),
-      headers: {
-        "Content-Type": "application/json;",
-      },
-    })
-      .then((response) => {
-        if (response.status === 302) {
-          console.log(response);
-          response.json().then((response) => {
-            console.log("Endpoint students/login body response", response);
-            updateLoginStatus(true);
-            getStudentId(response.studentId);
-            setTimeout(() => {
-              navigateLoginResponse(response);
-            }, 1000);
-          });
-        } else if (response.status === 404) {
-          setIsCredentialsWrong(true);
-        }
-      })
-      .catch();
+      };
+      const loginResponse = await login(bodyValues);
+
+      if (loginResponse.status === 302) {
+        console.log(loginResponse);
+        const data = await loginResponse.json();
+        console.log("302 Response", data);
+        updateLoginStatus(true);
+        getStudentId(data?.studentId);
+        setTimeout(() => {
+          navigateLoginResponse(data?.studentId);
+        }, 1000);
+      } else if (loginResponse.status === 404) {
+        setIsCredentialsWrong(true);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
@@ -51,9 +48,9 @@ export default function Login() {
     retrieveStudent(data);
   };
 
-  const navigateLoginResponse = (queryResponse: loginResponse) => {
-    navigate(`/student/${queryResponse.studentId}/profile`, {
-      state: { response: queryResponse, isAuthenticated: "true" },
+  const navigateLoginResponse = (studentId: string) => {
+    navigate(`/student/${studentId}/profile`, {
+      state: { response: studentId, isAuthenticated: "true" },
       replace: true,
       relative: "path",
     });

@@ -19,7 +19,7 @@ export type RegisterFormValues = {
 
 // Login types
 export type LoginFormValues = {
-  email: string;
+  studentEmail: string;
   password: string;
 };
 
@@ -92,7 +92,7 @@ export type Company = {
   employeesAmount: string;
 };
 
-export type CompanyProfileType = {
+export type CompanyResponse = {
   company: Company;
 };
 

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import logo from "../../assets/img/logo.png";
-import { useAuth } from "../context/AuthContext";
+import logo from "../../../assets/img/logo.png";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
   const { isLoggedIn, updateLoginStatus, studentId } = useAuth(); // Use the useAuth hook

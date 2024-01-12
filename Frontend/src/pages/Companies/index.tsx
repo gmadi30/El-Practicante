@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SearchBar from "../../components/ui/SearchBar";
+import SearchBar from "../../components/ui/navbar/SearchBar";
 import CompanyCards from "./components/CompanyCards";
 import { Company, CompanySortBy } from "../../types/types";
 
@@ -11,20 +11,31 @@ export default function Companies() {
   const [companySearched, setCompanySearched] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/v1/companies?sortBy=${filterBy}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json;",
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        response.json().then((data) => {
-          console.log(data.companies);
-          setCompanies(data.companies);
-        });
-      })
-      .catch();
+    const fetchData = async () => {
+      try {
+        const companiesResponse = await fetch(
+          `http://localhost:8080/api/v1/companies?sortBy=${filterBy}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json;",
+            },
+          }
+        );
+
+        if (!companiesResponse.ok) {
+          throw new Error(`HTTP error! Status: ${companiesResponse.status}`);
+        }
+
+        const data = await companiesResponse.json();
+        console.log("Companies sorted received:", data);
+        setCompanies(data.companies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, [filterBy]);
 
   return (

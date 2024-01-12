@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Rating from "../../../components/ui/Rating";
+import Rating from "../../../components/ui/shared/Rating";
 
 interface CardProps {
   profilePicture: string;

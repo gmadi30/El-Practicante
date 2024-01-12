@@ -1,9 +1,9 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import SuccesfulResponse from "./ui/SuccesfulResponse";
+import SuccesfulResponse from "../../components/ui/shared/SuccesfulResponse";
 import { useEffect, useState } from "react";
-import { Company, Degree, School, Technology } from "../types/types";
+import { Company, Degree, School, Technology } from "../../types/types";
 
 type FormValues = {
   schoolId: string;

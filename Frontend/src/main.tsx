@@ -1,17 +1,17 @@
-import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home/index.tsx";
-import ErrorPage from "./routes/error-page.tsx";
+import ErrorPage from "./components/ui/shared/error-page.tsx";
 import Companies from "./pages/Companies/index.tsx";
 import Profile from "./pages/StudentProfile/index.tsx";
 import Login from "./pages/Login/index.tsx";
 import CompaniesProfile from "./pages/CompanyProfile/index.tsx";
 import Register from "./pages/Register/index.tsx";
-import NavbarLayout from "./components/ui/NavbarLayout.tsx";
-import CreateReview from "./components/CreateReview.tsx";
+import NavbarLayout from "./components/ui/navbar/NavbarLayout.tsx";
 import { AuthProvider } from "./components/context/AuthContext.tsx";
+import CreateReview from "./pages/CreateReview/index.tsx";
+import React from "react";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +48,11 @@ const router = createBrowserRouter([
         // /student/id/createReview
         path: "student/:studentId/create-review",
         element: <CreateReview />,
+      },
+      {
+        // /student/id/createReview
+        path: "/*",
+        element: <ErrorPage />,
       },
     ],
   },

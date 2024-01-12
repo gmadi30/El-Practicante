@@ -2,9 +2,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import SuccesfulResponse from "../../components/ui/SuccesfulResponse";
+import SuccesfulResponse from "../../components/ui/shared/SuccesfulResponse";
 import {
   Company,
+  CompanySortBy,
   Degree,
   RegisterFormValues as FormValues,
   School,
@@ -46,7 +47,7 @@ export default function Register() {
 
       try {
         const companyResponse = await fetch(
-          "http://localhost:8080/api/v1/companies?sortBy=ALPHABETICALLY",
+          `http://localhost:8080/api/v1/companies?sortBy=${CompanySortBy.ALPHABETICALLY}`,
           {
             method: "GET",
             headers: {
