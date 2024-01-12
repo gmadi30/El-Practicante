@@ -1,5 +1,6 @@
 package com.elpracticante.backend.student;
 
+import com.elpracticante.backend.auth.TokenService;
 import com.elpracticante.backend.company.Company;
 import com.elpracticante.backend.company.repository.CompanyRepository;
 import com.elpracticante.backend.degree.Degree;
@@ -21,6 +22,8 @@ import com.elpracticante.backend.student.dto.*;
 import com.elpracticante.backend.student.entity.StudentEntity;
 import com.elpracticante.backend.student.repository.StudentRepository;
 import jakarta.persistence.EntityExistsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -41,14 +44,18 @@ public class StudentService implements StudentServiceAPI {
     private final CompanyRepository companyRepository;
     private final DegreeRepository degreeRepository;
     private final StudentProfilePictureRepository profiePictureReposiroty;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
 
 
-    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, CompanyRepository companyRepository, DegreeRepository degreeRepository, StudentProfilePictureRepository profiePictureReposiroty) {
+    public StudentService(StudentRepository studentRepository, SchoolRepository schoolRepository, CompanyRepository companyRepository, DegreeRepository degreeRepository, StudentProfilePictureRepository TelepicturesRepository, PasswordEncoder passwordEncoder, TokenService tokenService) {
         this.studentRepository = studentRepository;
         this.schoolRepository = schoolRepository;
         this.companyRepository = companyRepository;
         this.degreeRepository = degreeRepository;
-        this.profiePictureReposiroty = profiePictureReposiroty;
+        this.profiePictureReposiroty = TelepicturesRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -167,18 +174,29 @@ public class StudentService implements StudentServiceAPI {
     }
 
     @Override
-    public LoginStudentResponse postLogin(LoginStudentRequest loginStudentRequest) {
+    public LoginStudent postLogin(LoginStudentRequest loginStudentRequest) {
         Optional<StudentEntity> studentEntity = studentRepository.findByEmail(loginStudentRequest.studentEmail());
 
-        if (studentEntity.isEmpty()){
+        if (studentEntity.isEmpty()) {
             throw new UserNotFoundException("El usuario o la contraseña son incorrectas");
         }
 
-        if (!studentEntity.get().getPassword().equals(loginStudentRequest.password())) {
+        if (!passwordEncoder.matches(loginStudentRequest.password(), studentEntity.get().getPassword())) {
             throw new UserNotFoundException("El usuario o la contraseña son incorrectas");
         }
 
-        return new LoginStudentResponse(studentEntity.get().getId());
+        System.out.println("Login password: " + loginStudentRequest.password());
+        System.out.println("Database Stored password: " + studentEntity.get().getPassword());
+
+        String token = tokenService.generateToken(new UsernamePasswordAuthenticationToken(
+                studentEntity.get().getEmail(),
+                studentEntity.get().getPassword()
+        ) );
+
+        System.out.println("Token generated: " + token);
+
+
+        return new LoginStudent(studentEntity.get().getId(), token);
     }
 
 
@@ -192,7 +210,9 @@ public class StudentService implements StudentServiceAPI {
         studentEntity.setLastName(createStudentRequest.lastName());
         studentEntity.setDni(StringUtils.hasLength(createStudentRequest.dni()) ? createStudentRequest.dni() : null);
         studentEntity.setEmail(createStudentRequest.email());
-        studentEntity.setPassword(createStudentRequest.password());
+        String hashedPassword = passwordEncoder.encode(createStudentRequest.password());
+        System.out.println("Hashed Password: " + hashedPassword);
+        studentEntity.setPassword(hashedPassword);
         studentEntity.setBirthday(getFormattedLocalDate(createStudentRequest.birthday()));
         studentEntity.setCity(createStudentRequest.city());
         studentEntity.setAutonomousCommunity(createStudentRequest.autonomousCommunity());

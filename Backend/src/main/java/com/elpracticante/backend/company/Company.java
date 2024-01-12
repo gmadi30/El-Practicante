@@ -13,6 +13,7 @@ public record Company(
         String city,
         String email,
         String autonomousCommunity,
+        Integer employeesAmount,
         Integer intershipsAmount,
         String aboutUs,
         String whyUs,
@@ -21,10 +22,10 @@ public record Company(
 ) {
 
     public Company(String companyName, Double rating) {
-        this(null, companyName, rating, null, null, null, null, null, null, null, null);
+        this(null, companyName, rating, null, null, null, null, null, null, null, null, null);
     }
 
     public Company(Integer companyId, String companyName, Double rating, Integer intershipsAmount) {
-        this(companyId, companyName, rating, null, null, null, intershipsAmount, null, null, null, null);
+        this(companyId, companyName, rating, null, null, null, null, intershipsAmount, null, null, null, null);
     }
 }

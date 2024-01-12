@@ -4,9 +4,12 @@ import com.elpracticante.backend.student.dto.*;
 import jakarta.persistence.EntityExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,7 +18,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("api/v1/students")
-@CrossOrigin()
 public class StudentController {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
@@ -91,11 +93,13 @@ public class StudentController {
         return new ResponseEntity<>(getAllStudentsResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/login", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+
+
+//    @PostMapping(path = "/login", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginStudentResponse> postLogin(@RequestBody LoginStudentRequest body) {
-        LoginStudentResponse loginStudentResponse = service.postLogin(body);
-        return new ResponseEntity<>(loginStudentResponse, HttpStatus.FOUND);
+        LoginStudent loginStudent = service.postLogin(body);
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add(HttpHeaders.AUTHORIZATION, loginStudent.token());
+        return new ResponseEntity<>(new LoginStudentResponse(loginStudent.studentId()), headers, HttpStatus.FOUND);
     }
-
-
 }

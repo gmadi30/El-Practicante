@@ -18,5 +18,5 @@ public interface StudentServiceAPI {
 
     GetAllStudentsResponse getAllStudents();
 
-    LoginStudentResponse postLogin(LoginStudentRequest loginStudentRequest);
+    LoginStudent postLogin(LoginStudentRequest loginStudentRequest);
 }

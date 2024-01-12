@@ -69,7 +69,7 @@ public class CompanyService implements CompanyServiceAPI {
 
     @Override
     public GetCompanyResponse getCompany(int companyId) {
-        Optional<CompanyEntity> companyEntity = companyRepository.findById(companyId);
+    Optional<CompanyEntity> companyEntity = companyRepository.findById(companyId);
 
         if (companyEntity.isEmpty()) {
             throw new EntityNotFoundException("La empresa con ID: " + companyId + " no existe.");

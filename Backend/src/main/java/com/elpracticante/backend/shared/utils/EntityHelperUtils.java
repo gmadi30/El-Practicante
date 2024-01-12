@@ -136,6 +136,7 @@ public final class EntityHelperUtils {
                 companyEntity.getCity(),
                 companyEntity.getEmail(),
                 companyEntity.getAutonomousCommunity(),
+                companyEntity.getEmployeesAmount(),
                 companyEntity.getInternships().size(),
                 companyEntity.getAboutUs(),
                 companyEntity.getWhyUs(),
