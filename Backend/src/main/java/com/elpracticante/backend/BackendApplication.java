@@ -1,6 +1,6 @@
 package com.elpracticante.backend;
 
-import com.elpracticante.backend.config.RsaKeyProperties;
+import com.elpracticante.backend.auth.RsaKeyProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

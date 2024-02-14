@@ -10,9 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("api/v1/internships")
-@CrossOrigin()
 public class InternshipController {
 
     @NonNull
@@ -39,5 +39,4 @@ public class InternshipController {
         return new ResponseEntity<>(getTechnologies, HttpStatus.OK);
     }
 }
-
 

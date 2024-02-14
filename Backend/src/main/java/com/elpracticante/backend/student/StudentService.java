@@ -195,6 +195,7 @@ public class StudentService implements StudentServiceAPI {
 
         System.out.println("Token generated: " + token);
 
+        tokenService.tokenDecoder(token);
 
         return new LoginStudent(studentEntity.get().getId(), token);
     }

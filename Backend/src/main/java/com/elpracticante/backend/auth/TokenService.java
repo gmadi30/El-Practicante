@@ -2,9 +2,7 @@ package com.elpracticante.backend.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -16,8 +14,11 @@ public class TokenService {
 
     private final JwtEncoder encoder;
 
-    public TokenService(JwtEncoder encoder) {
+    private final JwtDecoder jwtDecoder;
+
+    public TokenService(JwtEncoder encoder, JwtDecoder jwtDecoder) {
         this.encoder = encoder;
+        this.jwtDecoder = jwtDecoder;
     }
 
     public String generateToken(Authentication authentication) {
@@ -28,11 +29,16 @@ public class TokenService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .expiresAt(now.plus(30, ChronoUnit.MINUTES))
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .build();
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
+    public void tokenDecoder(String token) {
+        Jwt decodedToken = jwtDecoder.decode(token);
+
+        Boolean expired = decodedToken.getExpiresAt().isBefore(Instant.now());
+    }
 }

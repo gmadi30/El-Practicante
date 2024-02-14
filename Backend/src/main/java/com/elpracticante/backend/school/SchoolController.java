@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("api/v1/schools")
-@CrossOrigin()
 public class SchoolController {
 
     private final SchoolService schoolService;

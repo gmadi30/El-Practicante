@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("api/v1/degrees")
-@CrossOrigin()
 public class DegreeController {
 
     private final DegreeService degreeService;

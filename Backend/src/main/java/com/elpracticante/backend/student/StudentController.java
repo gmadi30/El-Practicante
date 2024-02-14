@@ -17,7 +17,7 @@ import java.io.IOException;
 
 
 @RestController
-@RequestMapping("api/v1/students")
+@RequestMapping("/api/v1/students")
 public class StudentController {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
@@ -95,11 +95,11 @@ public class StudentController {
 
 
 
-//    @PostMapping(path = "/login", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/login", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginStudentResponse> postLogin(@RequestBody LoginStudentRequest body) {
         LoginStudent loginStudent = service.postLogin(body);
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add(HttpHeaders.AUTHORIZATION, loginStudent.token());
-        return new ResponseEntity<>(new LoginStudentResponse(loginStudent.studentId()), headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(new LoginStudentResponse(loginStudent.studentId()), headers, HttpStatus.OK);
     }
 }
