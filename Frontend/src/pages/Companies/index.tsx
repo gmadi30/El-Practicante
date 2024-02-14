@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "../../components/ui/navbar/SearchBar";
 import CompanyCards from "./components/CompanyCards";
 import { Company, CompanySortBy } from "../../types/types";
+import { getAllCompaniesSortedByFilter } from "../../api/api";
 
 export default function Companies() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -13,23 +14,10 @@ export default function Companies() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const companiesResponse = await fetch(
-          `http://localhost:8080/api/v1/companies?sortBy=${filterBy}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json;",
-            },
-          }
-        );
+        const companiesResponse = await getAllCompaniesSortedByFilter(filterBy);
 
-        if (!companiesResponse.ok) {
-          throw new Error(`HTTP error! Status: ${companiesResponse.status}`);
-        }
-
-        const data = await companiesResponse.json();
-        console.log("Companies sorted received:", data);
-        setCompanies(data.companies);
+        console.log("Companies sorted received:", companiesResponse);
+        setCompanies(companiesResponse.companies);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

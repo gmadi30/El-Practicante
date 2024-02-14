@@ -1,10 +1,11 @@
 import { createContext, useContext, FC, ReactNode, useState } from "react";
+import { getAuthToken } from "../../api/api";
 
 type AuthContextType = {
+  authenticated: boolean;
   studentId: number;
-  getStudentId: (studentId: number) => void;
-  isLoggedIn: boolean;
-  updateLoginStatus: (status: boolean) => void;
+  updateAuthenticatedUserID: (studentId: number) => void;
+  updateUserAuthentication: (status: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -14,20 +15,25 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authenticated, setAuthenticated] = useState(getAuthToken() !== null);
   const [studentId, setStudentId] = useState(0);
 
-  const updateLoginStatus = (status: boolean) => {
-    setIsLoggedIn(status);
+  const updateUserAuthentication = (status: boolean) => {
+    setAuthenticated(status);
   };
 
-  const getStudentId = (studentId: number) => {
+  const updateAuthenticatedUserID = (studentId: number) => {
     setStudentId(studentId);
   };
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, updateLoginStatus, studentId, getStudentId }}
+      value={{
+        authenticated,
+        updateUserAuthentication,
+        studentId,
+        updateAuthenticatedUserID,
+      }}
     >
       {children}
     </AuthContext.Provider>

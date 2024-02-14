@@ -10,13 +10,20 @@ import {
   RegisterFormValues as FormValues,
   School,
 } from "../../types/types";
+import Loading from "../../components/ui/shared/Loading";
+import {
+  getAllCompaniesSortedByFilter,
+  getAllDegrees,
+  getAllSchools,
+  postStudent,
+} from "../../api/api";
 export default function Register() {
   let navigate = useNavigate();
   const { control, register, handleSubmit, formState } = useForm<FormValues>();
   const { errors } = formState;
   const [isStudentCreated, setIsStudentCreated] = useState(false);
   const [errorThrown, setErrorThrown] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [schools, setSchools] = useState<School[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [degrees, setDegrees] = useState<Degree[]>([]);
@@ -24,68 +31,19 @@ export default function Register() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const schoolsResponse = await fetch(
-          "http://localhost:8080/api/v1/schools",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+        const schoolsData = await getAllSchools();
+        setSchools(schoolsData.schools);
+        console.log("Schools updated:", companies);
+
+        const companiesData = await getAllCompaniesSortedByFilter(
+          CompanySortBy.ALPHABETICALLY
         );
-
-        if (!schoolsResponse.ok) {
-          throw new Error(`HTTP error! Status: ${schoolsResponse.status}`);
-        }
-
-        const data = await schoolsResponse.json();
-        console.log("Schools received:", data);
-        setSchools(data.schools);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-
-      try {
-        const companyResponse = await fetch(
-          `http://localhost:8080/api/v1/companies?sortBy=${CompanySortBy.ALPHABETICALLY}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!companyResponse.ok) {
-          throw new Error(`HTTP error! Status: ${companyResponse.status}`);
-        }
-
-        const data = await companyResponse.json();
-        console.log("Companies received:", data);
-        setCompanies(data.companies);
+        setCompanies(companiesData.companies);
         console.log("Companies updated:", companies);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
 
-      try {
-        const degreeResponse = await fetch(
-          "http://localhost:8080/api/v1/degrees",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!degreeResponse.ok) {
-          throw new Error(`HTTP error! Status: ${degreeResponse.status}`);
-        }
-
-        const data = await degreeResponse.json();
-        console.log("Degrees received:", data);
-        setDegrees(data.degrees);
+        const degreesData = await getAllDegrees();
+        setDegrees(degreesData.degrees);
+        console.log("Degrees updated:", companies);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -94,7 +52,7 @@ export default function Register() {
     fetchData();
   }, []);
 
-  const addStudent = async (data: FormValues) => {
+  const addStudent = (data: FormValues) => {
     let formData = new FormData();
 
     formData.append("name", data.name);
@@ -115,26 +73,15 @@ export default function Register() {
     }
 
     try {
-      const createStudentResponse = await fetch(
-        "http://localhost:8080/api/v1/students",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (!createStudentResponse.ok) {
-        setErrorThrown(true);
-        throw new Error(`HTTP error! Status: ${createStudentResponse.status}`);
-      }
-
-      const data = await createStudentResponse.json();
+      const data = postStudent(formData);
       console.log("Student created:", data);
       setIsStudentCreated(true);
+      setLoading(false);
       setTimeout(() => {
         navigate("/login", { replace: true });
       }, 3000);
     } catch (error) {
+      setErrorThrown(true);
       console.error("Error fetching data:", error);
     }
   };
@@ -142,7 +89,13 @@ export default function Register() {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("Form", data.profilePicture[0]);
     addStudent(data);
+    setLoading(true);
   };
+
+  if (loading) {
+    return <Loading></Loading>;
+  }
+
   if (!isStudentCreated) {
     return (
       <>

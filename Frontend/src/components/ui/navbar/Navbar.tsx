@@ -1,12 +1,31 @@
 import { Link } from "react-router-dom";
 import logo from "../../../assets/img/logo.png";
 import { useAuth } from "../../context/AuthContext";
+import { authToken, getAuthToken } from "../../../api/api";
 
 const Navbar = () => {
-  const { isLoggedIn, updateLoginStatus, studentId } = useAuth(); // Use the useAuth hook
+  const {
+    studentId,
+    authenticated,
+    updateUserAuthentication,
+    updateAuthenticatedUserID,
+  } = useAuth(); // Use the useAuth hook
+
+  console.log(authenticated);
+
+  console.log(getAuthToken());
   const handleLogout = () => {
-    updateLoginStatus(false);
+    if (getAuthToken()) {
+      console.log("Token dentro del if: ", authToken);
+      localStorage.removeItem("authToken");
+      updateUserAuthentication(false); // Update state to trigger re-render
+      updateAuthenticatedUserID(0);
+    }
+    console.log("Token fuera del if: ", getAuthToken());
   };
+
+  console.log("Valor del studentID: ", studentId);
+
   return (
     <nav className="flex justify-center items-center font-body bg-secondary-100 w-full py-2 text-white text-sm lg:text-xl">
       <div className="w-fit">
@@ -21,7 +40,7 @@ const Navbar = () => {
           <li className="hoverNavigation hidden md:block ">
             <Link to="company/companies">Empresas</Link>
           </li>
-          {isLoggedIn && (
+          {authenticated && (
             <li className="hoverNavigation hidden md:block ">
               <Link to={`student/${studentId}/profile`}>Mi Perfil</Link>
             </li>
@@ -29,7 +48,7 @@ const Navbar = () => {
         </div>
         <div>
           <li className="hoverNavigation ml-5">
-            {isLoggedIn ? (
+            {authenticated ? (
               <Link onClick={() => handleLogout()} to="/">
                 Cerrar sesión
               </Link>

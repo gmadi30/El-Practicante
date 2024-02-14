@@ -13,7 +13,6 @@ const imgCompanyProfile = (name: string) => {
 
 const InternshipComponent: React.FC<IntershipProps> = (props) => {
   const { internship } = props;
-  console.log("Intership prop", internship);
   return (
     <>
       <div className="lg:flex lg:justify-between">

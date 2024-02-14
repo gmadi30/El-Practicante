@@ -1,36 +1,31 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import SuccesfulResponse from "../../components/ui/shared/SuccesfulResponse";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Company, Degree, School, Technology } from "../../types/types";
-
-type FormValues = {
-  schoolId: string;
-  companyId: string;
-  degreeId: string;
-  startDate: string;
-  endDate: string;
-  title: string;
-  description: string;
-  rating: string;
-  technology1: string;
-  technology2: string;
-  technology3: string;
-  best1: string;
-  best2: string;
-  best3: string;
-  worst1: string;
-  worst2: string;
-  worst3: string;
-};
+import {
+  Company,
+  CompanySortBy,
+  CreateIntershipFromValues,
+  Degree,
+  School,
+  Technology,
+} from "../../types/types";
+import { useAuth } from "../../components/context/AuthContext";
+import {
+  getAllCompaniesSortedByFilter,
+  getAllDegrees,
+  getAllSchools,
+  getAllTechnologies,
+  postIntership,
+} from "../../api/api";
 
 export default function CreateReview() {
   let navigate = useNavigate();
-  const { control, register, handleSubmit, formState } = useForm<FormValues>();
+  const { control, register, handleSubmit, formState } =
+    useForm<CreateIntershipFromValues>();
   const { errors } = formState;
-  const params = useParams();
-  let location = useLocation();
+  const { studentId } = useParams();
+  const { authenticated } = useAuth();
 
   const [schools, setSchools] = useState<School[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -42,90 +37,23 @@ export default function CreateReview() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const schoolsResponse = await fetch(
-          "http://localhost:8080/api/v1/schools",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+        const schoolsData = await getAllSchools();
+        setSchools(schoolsData.schools);
+        console.log("Schools updated:", companies);
+
+        const companiesData = await getAllCompaniesSortedByFilter(
+          CompanySortBy.ALPHABETICALLY
         );
-
-        if (!schoolsResponse.ok) {
-          throw new Error(`HTTP error! Status: ${schoolsResponse.status}`);
-        }
-
-        const data = await schoolsResponse.json();
-        console.log("Schools received:", data);
-        setSchools(data.schools);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-
-      try {
-        const companyResponse = await fetch(
-          "http://localhost:8080/api/v1/companies?sortBy=ALPHABETICALLY",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!companyResponse.ok) {
-          throw new Error(`HTTP error! Status: ${companyResponse.status}`);
-        }
-
-        const data = await companyResponse.json();
-        console.log("Companies received:", data);
-        setCompanies(data.companies);
+        setCompanies(companiesData.companies);
         console.log("Companies updated:", companies);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
 
-      try {
-        const degreeResponse = await fetch(
-          "http://localhost:8080/api/v1/degrees",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const degreesData = await getAllDegrees();
+        setDegrees(degreesData.degrees);
+        console.log("Degrees updated:", companies);
 
-        if (!degreeResponse.ok) {
-          throw new Error(`HTTP error! Status: ${degreeResponse.status}`);
-        }
-
-        const data = await degreeResponse.json();
-        console.log("Degrees received:", data);
-        setDegrees(data.degrees);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-
-      try {
-        const technologiesResponse = await fetch(
-          "http://localhost:8080/api/v1/internships/technologies",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!technologiesResponse.ok) {
-          throw new Error(`HTTP error! Status: ${technologiesResponse.status}`);
-        }
-
-        const data = await technologiesResponse.json();
-        console.log("Technologies received:", data);
+        const data = await getAllTechnologies();
         setTechnologies(data.technologies);
+        console.log("Technologies updated:", companies);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -134,73 +62,39 @@ export default function CreateReview() {
     fetchData();
   }, []);
 
-  console.log({
-    param: params,
-    path: location.pathname,
-    state: location.state,
-  });
-
-  const addInternship = async (data: FormValues) => {
-    console.log(
-      "Este es el valor del studentId en el create rewview " +
-        location.state.studentId
-    );
-    console.log("Valores a guardar en la Base de datos" + data);
+  const addInternship = async (data: CreateIntershipFromValues) => {
+    console.log("Data collected to save in the DB" + data);
 
     try {
-      const createInternship = await fetch(
-        `http://localhost:8080/api/v1/internships`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            schoolId: data.schoolId,
-            companyId: data.companyId,
-            degreeId: data.degreeId,
-            startDate: data.startDate,
-            endDate: data.endDate,
-            title: data.title,
-            description: data.description,
-            rating: data.rating,
-            technologies: [
-              data.technology1,
-              data.technology2,
-              data.technology3,
-            ],
-            summaryBest: [data.best1, data.best2, data.best3],
-            summaryWorst: [data.worst1, data.worst2, data.worst3],
-            studentId: params.studentId,
-          }),
-          headers: {
-            "Content-Type": "application/json;",
-          },
-        }
-      );
-      if (!createInternship.ok) {
-        setErrorThrown(true);
-        throw new Error(`HTTP error! Status: ${createInternship.status}`);
+      if (!studentId) {
+        throw new Error(`StudentID is null or undefined: ${studentId}`);
       }
 
-      const createInternshipResponse = await createInternship.json();
+      const createInternshipResponse = await postIntership(data, studentId);
       console.log("CreateInternship response:", createInternshipResponse);
 
       setIsInternshipCreated(true);
       setTimeout(() => {
-        navigate(`/student/${params.studentId}/profile`, {
+        navigate(`/student/${studentId}/profile`, {
           state: { isAuthenticated: "true" },
           replace: true,
         });
       }, 3000);
     } catch (error) {
+      setErrorThrown(true);
       console.error("Error fetching data:", error);
     }
   };
 
-  const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
+  const onSubmit: SubmitHandler<CreateIntershipFromValues> = (
+    data: CreateIntershipFromValues
+  ) => {
     console.log("Formulario", data);
     addInternship(data);
   };
 
-  if (!isInternshipCreated) {
+  if (authenticated) {
+    console.log(authenticated);
     return (
       <div className="font-body mx-auto container  xl:w-[60%]">
         <header className="bg-primary mx-3 my-24 tracking-[0.5rem]">
@@ -464,7 +358,7 @@ export default function CreateReview() {
               </h1>
               <h2 className="xl:text-xl">¿Qué tecnologías utilizastes?</h2>
               <h3 className="text-gray xl:text-xl my-1">
-                Es obligatorio rellenar al menos 1 opción
+                Es obligatorio completar al menos 1 opción
               </h3>
               <div className="flex flex-col gap-4">
                 <label className="">
@@ -498,7 +392,9 @@ export default function CreateReview() {
                   </p>
                 </label>
                 <label className="">
-                  <h1 className="text-secondary-100 my-2">Opción 2</h1>
+                  <h1 className="text-secondary-100 my-2 font-bold">
+                    Opción 2
+                  </h1>
                   <select
                     className=" 
                     border rounded py-2
@@ -523,7 +419,9 @@ export default function CreateReview() {
                   </select>
                 </label>
                 <label className="">
-                  <h1 className="text-secondary-100 my-2">Opción 3</h1>
+                  <h1 className="text-secondary-100 my-2 font-bold">
+                    Opción 3
+                  </h1>
                   <select
                     className=" 
                     border rounded py-2
@@ -557,7 +455,7 @@ export default function CreateReview() {
                 ¿Qué ha sido lo mejor de tus prácticas?
               </h2>
               <h3 className="text-gray  xl:text-xl text-sm my-1">
-                Es obligatorio rellenar al menos 1 opción
+                Es obligatorio completar al menos 1 opción
               </h3>
               <div className="flex flex-col gap-4">
                 <label className="font-bold">
@@ -633,7 +531,7 @@ export default function CreateReview() {
                 ¿Qué ha sido lo peor de tus prácticas?
               </h2>
               <h3 className="text-gray  xl:text-xl text-sm my-1">
-                Es obligatorio rellenar al menos 1 opción
+                Es obligatorio completar al menos 1 opción
               </h3>
               <div className="flex flex-col gap-4">
                 <label className="font-bold">
@@ -727,7 +625,31 @@ export default function CreateReview() {
     );
   } else {
     return (
-      <SuccesfulResponse message="¡Práctica creada con éxito!"></SuccesfulResponse>
+      <div className="flex flex-col items-center mt-20 text-center">
+        <h1 className="text-xl font-semibold border-8 p-10 rounded-3xl  border-red mx-10">
+          No puedes acceder a esta URL
+        </h1>
+        <h1 className="mt-10 text-xl">
+          Inicia sesión para acceder a todo el contenido
+        </h1>
+        <div>
+          <div>
+            <Link to="/login">
+              <button className="rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 xl:text-2xl w-full ">
+                <p>Iniciar sesión</p>
+              </button>
+            </Link>
+          </div>
+          <p className="">
+            ¿Todavía no tienes una cuenta?{" "}
+            <Link to="/register">
+              <span className="font-bold text-secondary-100 hover:underline">
+                Createla aquí{" "}
+              </span>
+            </Link>
+          </p>
+        </div>
+      </div>
     );
   }
 }

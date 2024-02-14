@@ -115,6 +115,7 @@ export type Degree = {
   name: string;
 };
 
+// Enum to sort a list of companies
 export enum CompanySortBy {
   ALPHABETICALLY = "ALPHABETICALLY",
   REVIEWS = "REVIEWS",
@@ -122,3 +123,24 @@ export enum CompanySortBy {
   REVIEWSDESC = "REVIEWSDESC",
   SCORINGDESC = "SCORINGDESC",
 }
+
+// FormValues to create an intership
+export type CreateIntershipFromValues = {
+  schoolId: string;
+  companyId: string;
+  degreeId: string;
+  startDate: string;
+  endDate: string;
+  title: string;
+  description: string;
+  rating: string;
+  technology1: string;
+  technology2: string;
+  technology3: string;
+  best1: string;
+  best2: string;
+  best3: string;
+  worst1: string;
+  worst2: string;
+  worst3: string;
+};

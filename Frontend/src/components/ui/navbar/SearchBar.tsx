@@ -27,7 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         return CompanySortBy.SCORINGDESC;
       default:
         console.error(`Invalid CompanySortBy value: ${value}`);
-        return CompanySortBy.ALPHABETICALLY; // or any other default value
+        return CompanySortBy.ALPHABETICALLY;
     }
   };
 

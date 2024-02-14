@@ -9,42 +9,35 @@ import {
   LoginFormValues,
 } from "../../types/types";
 import { useAuth } from "../../components/context/AuthContext";
-import { login } from "../../api/api";
+import { getAuthToken, login } from "../../api/api";
 export default function Login() {
   let navigate = useNavigate();
   const form = useForm<FormValues>();
   const { control, register, handleSubmit, formState } = form;
   const { errors } = formState;
   const [isCredentialsWrong, setIsCredentialsWrong] = useState(false);
-  const { isLoggedIn, updateLoginStatus, getStudentId } = useAuth();
+  const { updateAuthenticatedUserID, authenticated, updateUserAuthentication } =
+    useAuth();
 
   const retrieveStudent = async (data: FormValues) => {
+    const bodyValues: LoginFormValues = {
+      studentEmail: data.email,
+      password: data.password,
+    };
     try {
-      const bodyValues: LoginFormValues = {
-        studentEmail: data.email,
-        password: data.password,
-      };
       const loginResponse = await login(bodyValues);
-
-      if (loginResponse.status === 302) {
-        console.log(loginResponse);
-        const data = await loginResponse.json();
-        console.log("302 Response", data);
-        updateLoginStatus(true);
-        getStudentId(data?.studentId);
-        setTimeout(() => {
-          navigateLoginResponse(data?.studentId);
-        }, 1000);
-      } else if (loginResponse.status === 404) {
-        setIsCredentialsWrong(true);
-      }
+      updateAuthenticatedUserID(loginResponse?.studentId);
+      updateUserAuthentication(true);
+      setTimeout(() => {
+        navigateLoginResponse(loginResponse?.studentId);
+      }, 1000);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setIsCredentialsWrong(true);
     }
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
-    console.log("Form collected data", data);
     retrieveStudent(data);
   };
 
@@ -56,7 +49,7 @@ export default function Login() {
     });
   };
 
-  if (!isLoggedIn) {
+  if (!getAuthToken()) {
     return (
       <>
         <div className="container px-20 mx-auto max-w-screen-sm md:mx-auto lg:text-xl sm:w-[75%]">
