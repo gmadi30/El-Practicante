@@ -16,7 +16,9 @@ type AuthProviderProps = {
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(getAuthToken() !== null);
-  const [studentId, setStudentId] = useState(0);
+  const [studentId, setStudentId] = useState(() => {
+    return parseInt(localStorage.getItem("studentId") || "0");
+  });
 
   const updateUserAuthentication = (status: boolean) => {
     setAuthenticated(status);
@@ -24,6 +26,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const updateAuthenticatedUserID = (studentId: number) => {
     setStudentId(studentId);
+    localStorage.setItem("studentId", studentId.toString());
   };
 
   return (

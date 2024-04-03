@@ -21,7 +21,7 @@ import {
 
 export default function CreateReview() {
   let navigate = useNavigate();
-  const { control, register, handleSubmit, formState } =
+  const { watch, control, register, handleSubmit, formState, setError } =
     useForm<CreateIntershipFromValues>();
   const { errors } = formState;
   const { studentId } = useParams();
@@ -33,6 +33,42 @@ export default function CreateReview() {
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [isInternshipCreated, setIsInternshipCreated] = useState(false);
   const [errorThrown, setErrorThrown] = useState(false);
+  const [validateDateDifferenceMessage, setValidateDateDifferenceMessage] =
+    useState(false);
+
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
+  const selectedTechnologies = watch([
+    "technology1",
+    "technology2",
+    "technology3",
+  ]);
+
+  const isUnique = (arr: string[]) => {
+    console.log("array de tecnologías", arr);
+    if (arr[1] === "" && arr[2] === "") {
+      return true;
+    }
+    return new Set(arr).size === arr.length;
+  };
+
+  useEffect(() => {
+    const validateDateDifference = () => {
+      if (startDate && endDate) {
+        const differenceInTime =
+          new Date(endDate).getTime() - new Date(startDate).getTime();
+        const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+        if (differenceInDays <= 50) {
+          setValidateDateDifferenceMessage(true);
+        } else {
+          setValidateDateDifferenceMessage(false);
+        }
+      }
+    };
+
+    validateDateDifference(); // Call the function when the component mounts and whenever startDate or endDate changes
+  }, [startDate, endDate]); // Add dependencies to the useEffect hook
 
   useEffect(() => {
     const fetchData = async () => {
@@ -178,8 +214,9 @@ export default function CreateReview() {
                       {errors.companyId?.message}
                     </p>
                   </label>
-
-                  <label className="md:ml-10 flex-shrink">
+                </div>
+                <div className="flex flex-col ">
+                  <label className="md:w-1/2">
                     <div className="">
                       <h1 className="text-secondary-100 my-2 font-bold">
                         Grado profesional
@@ -217,7 +254,12 @@ export default function CreateReview() {
                   <label className="font-bold">
                     <h1 className="text-secondary-100 my-2">Fecha inicio</h1>
                     <input
-                      {...register("startDate")}
+                      {...register("startDate", {
+                        required: {
+                          value: true,
+                          message: "Este campo es obligatorio",
+                        },
+                      })}
                       id="startDate"
                       type="date"
                       className="
@@ -239,7 +281,12 @@ export default function CreateReview() {
                   <label className="md:ml-10 font-bold">
                     <h1 className="text-secondary-100 my-2">Fecha fin</h1>
                     <input
-                      {...register("endDate")}
+                      {...register("endDate", {
+                        required: {
+                          value: true,
+                          message: "Este campo es obligatorio",
+                        },
+                      })}
                       id="endDate"
                       type="date"
                       className="
@@ -252,6 +299,7 @@ export default function CreateReview() {
           pl-2
           rounded
           font-normal"
+                      disabled={startDate ? false : true}
                     />
                     <p className="text-base font-light text-red">
                       {errors.endDate?.message}
@@ -259,6 +307,10 @@ export default function CreateReview() {
                   </label>
                 </div>
               </div>
+              <p className="text-base font-light text-red">
+                {validateDateDifferenceMessage &&
+                  "La fecha de fin no puede ser inferior a la fecha de inicio. Mínimo 50 días."}
+              </p>
             </section>
             <section className="my-10">
               <h1 className="text-xl xl:text-2xl text-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
@@ -360,6 +412,12 @@ export default function CreateReview() {
               <h3 className="text-gray xl:text-xl my-1">
                 Es obligatorio completar al menos 1 opción
               </h3>
+              {!isUnique(selectedTechnologies) && (
+                <p className="text-base font-light text-red">
+                  Las tecnologías no se pueden repetir.
+                </p>
+              )}
+
               <div className="flex flex-col gap-4">
                 <label className="">
                   <h1 className="text-secondary-100 my-2 font-bold">
@@ -401,9 +459,10 @@ export default function CreateReview() {
                     pl-2  w-3/4 text-black
                      focus:focus:border-secondary-100"
                     {...register("technology2", {
-                      required: {
-                        value: true,
-                        message: "Este campo es obligatorio",
+                      validate: () => {
+                        if (!isUnique(selectedTechnologies)) {
+                          return "Hay una tecnología repetida.";
+                        }
                       },
                     })}
                     id="technology2"
@@ -428,9 +487,10 @@ export default function CreateReview() {
                     pl-2  w-3/4 text-black
                      focus:focus:border-secondary-100"
                     {...register("technology3", {
-                      required: {
-                        value: true,
-                        message: "Este campo es obligatorio",
+                      validate: () => {
+                        if (!isUnique(selectedTechnologies)) {
+                          return "Hay una tecnología repetida.";
+                        }
                       },
                     })}
                     id="technology3"

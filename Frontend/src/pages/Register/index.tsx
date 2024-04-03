@@ -3,6 +3,9 @@ import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SuccesfulResponse from "../../components/ui/shared/SuccesfulResponse";
+import { FaEye } from "react-icons/fa6";
+import { FaEyeSlash } from "react-icons/fa6";
+
 import {
   Company,
   CompanySortBy,
@@ -17,16 +20,23 @@ import {
   getAllSchools,
   postStudent,
 } from "../../api/api";
+import validatePassword, { FetchError } from "../../utils/errorUtils/errors";
+
 export default function Register() {
   let navigate = useNavigate();
-  const { control, register, handleSubmit, formState } = useForm<FormValues>();
+  const { watch, control, register, handleSubmit, formState, setError } =
+    useForm<FormValues>();
   const { errors } = formState;
   const [isStudentCreated, setIsStudentCreated] = useState(false);
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
+
   const [errorThrown, setErrorThrown] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [schools, setSchools] = useState<School[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [degrees, setDegrees] = useState<Degree[]>([]);
+  const password = watch("password");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +62,10 @@ export default function Register() {
     fetchData();
   }, []);
 
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const addStudent = (data: FormValues) => {
     let formData = new FormData();
 
@@ -63,7 +77,7 @@ export default function Register() {
     formData.append("city", "Madrid");
     formData.append("autonomousCommunity", "Comunidad de Madrid");
     formData.append("zipcode", "28033");
-    formData.append("dni", data.dni);
+    // formData.append("dni", data.dni);
     formData.append("mobile", data.mobile);
     formData.append("schoolId", data.schoolId);
     formData.append("companyId", data.companyId);
@@ -72,22 +86,42 @@ export default function Register() {
       formData.append("profilePicture", data.profilePicture[0]);
     }
 
-    try {
-      const data = postStudent(formData);
-      console.log("Student created:", data);
-      setIsStudentCreated(true);
-      setLoading(false);
-      setTimeout(() => {
-        navigate("/login", { replace: true });
-      }, 3000);
-    } catch (error) {
-      setErrorThrown(true);
-      console.error("Error fetching data:", error);
-    }
+    postStudent(formData)
+      .then((data) => {
+        console.log("Student created:", data);
+        if (data) {
+          console.log("Student created:", data);
+          setIsStudentCreated(true);
+          setLoading(false);
+          setTimeout(() => {
+            navigate("/login", { replace: true });
+          }, 3000);
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setLoading(false);
+        if (error instanceof FetchError) {
+          if (error.status === 409) {
+            console.log("Error de DNI con el 409");
+            /*
+            if (error.errorResponseCode === 101) {
+              setError("dni", { type: "custom", message: error.message });
+            }
+            */
+            if (error.errorResponseCode === 102) {
+              setError("email", { type: "custom", message: error.message });
+            }
+            if (error.errorResponseCode === 103) {
+              setError("mobile", { type: "custom", message: error.message });
+            }
+          }
+        }
+      });
   };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log("Form", data.profilePicture[0]);
+    console.log("Form", data);
     addStudent(data);
     setLoading(true);
   };
@@ -117,8 +151,14 @@ export default function Register() {
                       value: true,
                       message: "Este campo es obligatorio",
                     },
-                    minLength: 3,
-                    maxLength: 20,
+                    minLength: {
+                      value: 3,
+                      message: "El nombre debe tener al menos 3 caracteres",
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "El nombre no puede exceder los 20 caracteres",
+                    },
                   })}
                   id="name"
                   type="text"
@@ -149,6 +189,14 @@ export default function Register() {
                       value: true,
                       message: "Este campo es obligatorio",
                     },
+                    minLength: {
+                      value: 3,
+                      message: "El nombre debe tener al menos 3 caracteres",
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "El nombre no puede exceder los 20 caracteres",
+                    },
                   })}
                   id="lastName"
                   type="text"
@@ -178,7 +226,7 @@ export default function Register() {
                     message: "Este campo es obligatorio",
                   },
                   pattern: {
-                    value: /^\S+@\S+$/i,
+                    value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                     message: "Introduce un email valido",
                   },
                 })}
@@ -200,19 +248,25 @@ export default function Register() {
                 {errors.email?.message}
               </p>
             </label>
-            <label htmlFor="password" className="text-sm font-bold md:text-xl">
-              <h1 className="text-secondary-100">Contraseña</h1>
-              <input
-                {...register("password", {
-                  required: {
-                    value: true,
-                    message: "Este campo es obligatorio",
-                  },
-                })}
-                id="password"
-                type="password"
-                placeholder="Contraseña"
-                className="border
+            <div className="flex">
+              <label
+                htmlFor="password"
+                className="text-sm font-bold md:text-xl flex-grow"
+              >
+                <h1 className="text-secondary-100">Contraseña</h1>
+                <input
+                  {...register("password", {
+                    required: {
+                      value: true,
+                      message: "Este campo es obligatorio",
+                    },
+                    validate: (value) =>
+                      validatePassword(value, setPasswordIsValid),
+                  })}
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Contraseña"
+                  className="border
                       focus:outline-none
                       focus:bg-primary
                       w-full
@@ -222,41 +276,67 @@ export default function Register() {
                       font-normal
                       placeholder:opacity-60
                       "
-              />
-              <p className="text-base font-light text-red">
-                {errors.password?.message}
-              </p>
-            </label>
-            <label
-              htmlFor="confirmPassword"
-              className="text-sm font-bold md:text-xl"
-            >
-              <h1 className="text-secondary-100">Confirmar contraseña</h1>
-              <input
-                {...register("confirmPassword", {
-                  required: {
-                    value: true,
-                    message: "Este campo es obligatorio",
-                  },
-                })}
-                id="confirmPassword"
-                type="password"
-                placeholder="Confirmar contraseña"
-                className="border
-                      focus:outline-none
-                      focus:bg-primary
-                      w-full
-                      py-2
-                      pl-2
-                      rounded
-                      font-normal
-                      placeholder:opacity-60
-                      "
-              />
-              <p className="text-base font-light text-red">
-                {errors.confirmPassword?.message}
-              </p>
-            </label>
+                />
+
+                <p className="text-base font-light text-red">
+                  {errors.password?.message}
+                </p>
+              </label>
+              <button
+                className="h-20 md:h-24"
+                onClick={() => setShowPassword(!showPassword)}
+                type="button"
+              >
+                <div className="bg-primary border p-2 rounded ml-1">
+                  {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
+                </div>
+              </button>
+            </div>
+
+            <div className="flex">
+              <label
+                htmlFor="confirmPassword"
+                className="text-sm font-bold md:text-xl flex-grow"
+              >
+                <h1 className="text-secondary-100">Confirmar contraseña</h1>
+                <input
+                  {...register("confirmPassword", {
+                    required: {
+                      value: true,
+                      message: "Este campo es obligatorio",
+                    },
+                    validate: (value) =>
+                      value === password || "Las contraseñas no coinciden",
+                  })}
+                  id="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Confirmar contraseña"
+                  className={`border
+                  focus:outline-none
+                  focus:bg-primary
+                  w-full
+                  py-2
+                  pl-2
+                  rounded
+                  font-normal
+                  placeholder:opacity-60
+                  ${password ? "" : "bg-gray placeholder:text-black"}`}
+                  disabled={password ? false : true}
+                />
+                <p className="text-base font-light text-red">
+                  {errors.confirmPassword?.message}
+                </p>
+              </label>
+              <button
+                type="button"
+                className="h-20 md:h-24"
+                onClick={togglePassword}
+              >
+                <div className="bg-primary border p-2 rounded ml-1">
+                  {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}{" "}
+                </div>
+              </button>
+            </div>
             <label htmlFor="birthday" className="text-sm font-bold md:text-xl">
               <h1 className="text-secondary-100">Fecha de nacimiento</h1>
               <input
@@ -264,6 +344,21 @@ export default function Register() {
                   required: {
                     value: true,
                     message: "Este campo es obligatorio",
+                  },
+                  validate: (value) => {
+                    // Custom validation logic to check if the birthday is in the past
+                    console.log("validando");
+                    const birthdayDate = new Date(value);
+                    const currentDate = new Date();
+                    const minimumAgeDate = new Date(
+                      currentDate.getFullYear() - 18,
+                      currentDate.getMonth(),
+                      currentDate.getDate()
+                    );
+
+                    if (birthdayDate >= minimumAgeDate) {
+                      return "Debes tener al menos 18 años para registrarte";
+                    }
                   },
                 })}
                 id="birthday"
@@ -309,8 +404,13 @@ export default function Register() {
                       placeholder:opacity-60
                       "
               />
+              <p className="text-base font-light text-red">
+                {errors.profilePicture?.message}
+              </p>
             </label>
-
+            {/*
+              Hay que revisar si el DNI es un dato que necesitamos en la aplicación
+              
             <label htmlFor="DNI" className="text-sm font-bold md:text-xl">
               <h1 className="text-secondary-100">DNI</h1>
               <input
@@ -318,6 +418,10 @@ export default function Register() {
                   required: {
                     value: true,
                     message: "Este campo es obligatorio",
+                  },
+                  pattern: {
+                    value: /^(?:\d{8}[-]?[A-Z]|[XYZ]\d{7}[-]?[A-Z0-9])$/,
+                    message: "Introduce un DNI, NIE o PASAPORTE válido",
                   },
                 })}
                 id="DNI"
@@ -334,10 +438,12 @@ export default function Register() {
                       placeholder:opacity-60
                       "
               />
+                
               <p className="text-base font-light text-red">
                 {errors.dni?.message}
               </p>
             </label>
+             */}
 
             <label htmlFor="mobile" className="text-sm font-bold md:text-xl">
               <h1 className="text-secondary-100">Móvil</h1>
@@ -347,10 +453,15 @@ export default function Register() {
                     value: true,
                     message: "Este campo es obligatorio",
                   },
+                  pattern: {
+                    value: /^(\+\d{1,3})?\d{9,13}$/,
+                    message:
+                      "Por favor, introduce un número de teléfono válido",
+                  },
                 })}
                 id="mobile"
                 type="tel"
-                placeholder="123-45-50-41"
+                placeholder="(+34 opcional)123456789"
                 className="border
                       focus:outline-none
                       focus:bg-primary
@@ -366,6 +477,7 @@ export default function Register() {
                 {errors.mobile?.message}
               </p>
             </label>
+
             <label className="md:text-xl">
               <div className="text-sm">
                 <h1 className="font-bold text-secondary-100 md:text-xl">

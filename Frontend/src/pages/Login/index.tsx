@@ -16,8 +16,12 @@ export default function Login() {
   const { control, register, handleSubmit, formState } = form;
   const { errors } = formState;
   const [isCredentialsWrong, setIsCredentialsWrong] = useState(false);
-  const { updateAuthenticatedUserID, authenticated, updateUserAuthentication } =
-    useAuth();
+  const {
+    updateAuthenticatedUserID,
+    authenticated,
+    updateUserAuthentication,
+    studentId,
+  } = useAuth();
 
   const retrieveStudent = async (data: FormValues) => {
     const bodyValues: LoginFormValues = {
@@ -26,13 +30,22 @@ export default function Login() {
     };
     try {
       const loginResponse = await login(bodyValues);
-      updateAuthenticatedUserID(loginResponse?.studentId);
-      updateUserAuthentication(true);
-      setTimeout(() => {
-        navigateLoginResponse(loginResponse?.studentId);
-      }, 1000);
+      console.error("[Login][retrieveStudent]: Fetched Data: ", loginResponse);
+
+      if (loginResponse !== undefined) {
+        console.log(
+          "Valor del loginResponse.studentId",
+          loginResponse.studentId
+        );
+        updateAuthenticatedUserID(loginResponse.studentId);
+        console.log("Valor del studentId luego de iniciar sesión", studentId);
+        updateUserAuthentication(true);
+        setTimeout(() => {
+          navigateLoginResponse(loginResponse?.studentId);
+        }, 1000);
+      }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("[Login][retrieveStudent] Error fetching data:", error);
       setIsCredentialsWrong(true);
     }
   };
@@ -66,6 +79,10 @@ export default function Login() {
                   required: {
                     value: true,
                     message: "Este campo es obligatorio",
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                    message: "Introduce un email valido",
                   },
                 })}
                 id="email"
