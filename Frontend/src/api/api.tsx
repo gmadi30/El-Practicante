@@ -1,8 +1,10 @@
 import {
   CompanySortBy,
   CreateIntershipFromValues,
+  DeleteStudentFormValues,
   LoginFormValues,
 } from "../types/types";
+import { FetchError } from "../utils/errorUtils/errors";
 
 const API_BASE_URL = "http://localhost:8080/api/v1";
 export const getAuthToken = () => localStorage.getItem("authToken");
@@ -24,7 +26,7 @@ const fetchJson = async (url: string, options: {}) => {
 // Login request
 export const login = async (data: LoginFormValues) => {
   console.log("[API][login] - Input: ");
-  const response = await fetchJson(`${API_BASE_URL}/students/login`, {
+  const loginResponse = await fetchJson(`${API_BASE_URL}/students/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -32,22 +34,27 @@ export const login = async (data: LoginFormValues) => {
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
+  if (!loginResponse.ok) {
+    throw new FetchError({
+      name: "FETCHING_DATA_ERROR",
+      message: loginResponse.statusText,
+      errorResponseCode: 0o0,
+      status: loginResponse.status,
+    });
   }
 
-  const bearerToken = response.headers.get("Authorization");
+  const bearerToken = loginResponse.headers.get("Authorization");
 
   if (null != bearerToken) {
     localStorage.setItem("authToken", bearerToken);
   } else {
     throw new Error(
-      `EmptyToken error! Status: ${response.status}, Message: ${response.statusText}`
+      `EmptyToken error! Status: ${loginResponse.status}, Message: ${loginResponse.statusText}`
     );
   }
   console.log("[API][login] - Token: ", getAuthToken());
-  console.log("[API][login] - Output: ", response);
-  return response.json();
+  console.log("[API][login] - Output: ", loginResponse);
+  return loginResponse.json();
 };
 
 // Student data request
@@ -59,6 +66,7 @@ export const getStudentById = async (studentId: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json;",
+        // Authorization: `Bearer ${getAuthToken()}`,
       },
     }
   );
@@ -176,6 +184,7 @@ export const postIntership = async (
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
     },
   });
   if (!createInternship.ok) {
@@ -198,8 +207,77 @@ export const postStudent = async (data: FormData) => {
   });
 
   if (!createStudentResponse.ok) {
-    throw new Error(`HTTP error! Status: ${createStudentResponse.status}`);
+    const responseJson = await createStudentResponse.json();
+    console.log(`HTTP error! Status: `, responseJson);
+    throw new FetchError({
+      name: "FETCHING_DATA_ERROR",
+      message: responseJson.message,
+      errorResponseCode: responseJson.errorResponseCode,
+      status: responseJson.status,
+    });
   }
-  console.log("[API][postInterships] - Output:", createStudentResponse);
+  console.log("[API][postStudent] - Output:", createStudentResponse);
   return createStudentResponse.json();
+};
+
+// Update a student
+export const updateStudent = async (data: FormData) => {
+  console.log("[API][updateStudent] - Input:", {
+    studentBody: data,
+  });
+
+  const updateStudentResponse = await fetch(`${API_BASE_URL}/students`, {
+    method: "PUT",
+    body: data,
+    headers: {
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+  });
+
+  if (!updateStudentResponse.ok) {
+    const responseJson = await updateStudentResponse.json();
+    console.log(`HTTP error! Status: `, responseJson);
+    throw new FetchError({
+      name: "FETCHING_DATA_ERROR",
+      message: responseJson.message,
+      errorResponseCode: responseJson.errorResponseCode,
+      status: responseJson.status,
+    });
+  }
+  console.log("[API][updateStudent] - Output:", updateStudentResponse);
+  return updateStudentResponse.json();
+};
+
+// Update a student
+export const deleteStudent = async (
+  studentId: string,
+  data: DeleteStudentFormValues
+) => {
+  console.log("[API][deleteStudent] - Input:", {
+    deleteBody: data,
+  });
+
+  const deleteStudent = await fetch(`${API_BASE_URL}/students/${studentId}`, {
+    method: "DELETE",
+    body: JSON.stringify({
+      feedback: data.feedback,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+  });
+
+  if (!deleteStudent.ok) {
+    const responseJson = await deleteStudent.json();
+    console.log(`HTTP error! Status: `, responseJson);
+    throw new FetchError({
+      name: "FETCHING_DATA_ERROR",
+      message: responseJson.message,
+      errorResponseCode: responseJson.errorResponseCode,
+      status: responseJson.status,
+    });
+  }
+  console.log("[API][deleteStudent] - Output:", deleteStudent);
+  return deleteStudent;
 };

@@ -17,6 +17,32 @@ export type RegisterFormValues = {
   profilePicture: string;
 };
 
+// UpdateStudentFromValues
+export type UpdateStudentFromValues = {
+  studentId: number;
+  name: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  birthday: string;
+  dni: string;
+  mobile: string;
+  schoolId: string;
+  degreeId: string;
+  companyId: string;
+  city: string;
+  autonomousCommunity: string;
+  zipCode: string;
+  profilePicture: string;
+};
+
+// DeleteStudentAccount
+export type DeleteStudentFormValues = {
+  removeAccountAgreement: Boolean;
+  feedback: string;
+};
+
 // Login types
 export type LoginFormValues = {
   studentEmail: string;
@@ -36,8 +62,9 @@ export type Student = {
   city: string;
   autonomousCommunity: string;
   mobile: string;
-  companyName: string;
+  company: Company;
   profilePictureName: string;
+  birthday: string;
 };
 
 export type StudentProfile = {
@@ -124,6 +151,8 @@ export enum CompanySortBy {
   SCORINGDESC = "SCORINGDESC",
 }
 
+export type ErrorName = "FETCHING_DATA_ERROR";
+
 // FormValues to create an intership
 export type CreateIntershipFromValues = {
   schoolId: string;
@@ -143,4 +172,10 @@ export type CreateIntershipFromValues = {
   worst1: string;
   worst2: string;
   worst3: string;
+};
+
+export type ErrorResponseType = {
+  status: string;
+  message: string;
+  errorResponseCode: number;
 };

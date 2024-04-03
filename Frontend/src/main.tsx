@@ -12,6 +12,8 @@ import NavbarLayout from "./components/ui/navbar/NavbarLayout.tsx";
 import { AuthProvider } from "./components/context/AuthContext.tsx";
 import CreateReview from "./pages/CreateReview/index.tsx";
 import React from "react";
+import EditStudentProfile from "./pages/EditStudentProfile/index.tsx";
+import DeleteStudentAccount from "./pages/DeleteStudentAccount/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -36,12 +38,22 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
+        //student/id/profile
+        path: "student/:studentId/edit-profile",
+        element: <EditStudentProfile />,
+      },
+      {
+        //student/id/delete-account
+        path: "student/:studentId/delete-account",
+        element: <DeleteStudentAccount />,
+      },
+      {
         path: "login",
         element: <Login />,
       },
       {
         // /companies/id
-        path: "companies/:companyId/profile",
+        path: "company/:companyId/profile",
         element: <CompaniesProfile />,
       },
       {
@@ -50,7 +62,11 @@ const router = createBrowserRouter([
         element: <CreateReview />,
       },
       {
-        // /student/id/createReview
+        // /student/studentId/editReview/reviewId
+        path: "student/:studentId/edit-review/:reviewId",
+        element: <CreateReview />,
+      },
+      {
         path: "/*",
         element: <ErrorPage />,
       },
