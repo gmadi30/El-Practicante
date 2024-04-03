@@ -58,7 +58,7 @@ export default function CompanyProfile() {
         <main className="xl:mx-64 px-10 space-y-5">
           <div className="lg:flex lg:space-x-10 justify-between  ">
             <section className="flex flex-col lg:w-[75%]">
-              <h1 className="text-xl text-bold w-full py-1 mb-4 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="text-xl font-bold w-full py-1 mb-4 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 DESCRIPCIÓN PRINCIPAL
               </h1>
               <p className="">{companyResponse?.company?.aboutUs}</p>
@@ -87,7 +87,7 @@ export default function CompanyProfile() {
             </section>
             <section className="flex">
               <aside className="w-full">
-                <h1 className="text-xl text-bold w-full pb-1 py-1 mb-4 mt-5 lg:mt-0 rounded indent-4 text-secondary-100 bg-primary uppercase">
+                <h1 className="text-xl font-bold w-full pb-1 py-1 mb-4 mt-5 lg:mt-0 rounded indent-4 text-secondary-100 bg-primary uppercase">
                   CONTACTO
                 </h1>
                 <ul className=" ">
@@ -135,14 +135,14 @@ export default function CompanyProfile() {
           <div className="flex flex-col ">
             <section className="">
               {" "}
-              <h1 className="text-xl text-bold w-full pb-1 my-3 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="text-xl font-bold w-full pb-1 my-3 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 PORQUÉ ELEGIRNOS
               </h1>
               <p className="">{companyResponse?.company?.whyUs}</p>
             </section>
 
             <section className="">
-              <h1 className="w-full text-xl text-bold  pb-1 my-3 py-1rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="w-full text-xl font-bold  pb-1 my-3 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 OPINIONES
               </h1>
 
@@ -158,13 +158,11 @@ export default function CompanyProfile() {
                           className="flex flex-col items-center justify-center text-center p-2 min-w-fit  cursor-pointer"
                         >
                           <img
-                            className="max-h-25 rounded-full"
+                            className="float-left w-[100px] h-[100px] object-cover rounded-full mb-3"
                             src={imgStudentProfile(
                               internship?.student?.profilePictureName
                             )}
                             alt=""
-                            height={0}
-                            width={120}
                           />
                           <div className="flex flex-col justify-center items-center text-sm my-3">
                             <h1 className="font-bold">
@@ -172,10 +170,10 @@ export default function CompanyProfile() {
                               {internship?.student?.lastName}
                             </h1>
                             <h2>{internship?.school.name}</h2>
-                            <h2>Estudiante de {internship?.degree?.name}</h2>
+                            <h2>{internship?.degree?.name}</h2>
                           </div>
                         </div>
-                        <div className="flex flex-col w-full pb-1 bg-primary py-3 px-2 justify-between">
+                        <div className="flex flex-col w-full h-fit pb-1 bg-primary py-3 px-2 ">
                           <div className="text-sm">
                             <div className="flex">
                               <Rating rating={internship?.rating}></Rating>
@@ -184,7 +182,7 @@ export default function CompanyProfile() {
                               </h1>
                             </div>
                             <div className="flex flex-col space-between">
-                              <p className="line-clamp-7 mt-1 text-left text-sm">
+                              <p className="line-clamp-3 mt-1 text-left text-sm">
                                 {internship?.description}
                               </p>
                             </div>

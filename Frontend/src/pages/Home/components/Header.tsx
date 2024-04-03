@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { getAuthToken } from "../../../api/api";
+import { useAuth } from "../../../components/context/AuthContext";
 
 const Header = () => {
+  const { studentId } = useAuth();
   return (
     <>
       <h1 className="text-5xl my-20 text-center font-bold md:text-7xl xl:text-9xl lg:text-7xl">
@@ -18,11 +21,19 @@ const Header = () => {
             experiencia
           </h2>
 
-          <Link to="/register">
-            <button className="rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 lg:text-2xl">
-              <p>registrate</p>
-            </button>
-          </Link>
+          {getAuthToken() === null ? (
+            <Link to="/register">
+              <button className="rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 lg:text-2xl">
+                <p>registrate</p>
+              </button>
+            </Link>
+          ) : (
+            <Link to={`/student/${studentId}/profile`}>
+              <button className="rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 lg:text-2xl">
+                <p>Mi Perfíl</p>
+              </button>
+            </Link>
+          )}
         </div>
       </section>
     </>

@@ -9,24 +9,20 @@ import Loading from "../../components/ui/shared/Loading";
 
 export default function Profile() {
   const [student, setStudent] = useState<StudentProfile>({} as StudentProfile);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
   const { authenticated, studentId } = useAuth();
-
-  const handleNewIntershipOnClick = () => {
-    navigate(`/student/${params.studentId}/create-review`, {
-      state: { studentId: params.studentId },
-    });
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (params.studentId !== undefined) {
+          console.log("params.studentId ", params.studentId);
+          console.log("studentId ", studentId);
           const data = await getStudentById(params.studentId);
           setStudent(data);
-          setLoading(false);
+
+          console.log("Student ", data);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -40,6 +36,12 @@ export default function Profile() {
     return <Loading></Loading>;
   }
 
+  const handleNewIntershipOnClick = () => {
+    navigate(`/student/${params.studentId}/create-review`, {
+      state: { studentId: params.studentId },
+    });
+  };
+
   if (authenticated && studentId.toString() == params.studentId) {
     console.log("Valor authenticated mi perfil: ", authenticated);
 
@@ -47,6 +49,9 @@ export default function Profile() {
       <>
         <div className="font-body md:container md:mx-auto">
           <Header student={student} />
+          <h1 className="text-xl font-bold  pb-1 py-1 mb-10 rounded indent-4 text-secondary-100 bg-primary uppercase ">
+            Mis prácticas
+          </h1>
           {student?.internships?.map((internship, index) => {
             return <InternshipComponent key={index} internship={internship} />;
           })}

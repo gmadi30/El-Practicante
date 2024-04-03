@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = (props) => {
   ).href;
 
   const navigateToProfile = () => {
-    navigate(`/companies/${props.companyId}/profile`);
+    navigate(`/company/${props.companyId}/profile`);
   };
 
   return (
