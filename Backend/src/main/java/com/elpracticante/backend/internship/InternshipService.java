@@ -92,8 +92,7 @@ public class InternshipService implements InternshipServiceAPI {
                 mapToSummaryList(internshipEntity.getSummaries())
                 );
 
-        GetInternshipResponse getInternshipResponse = new GetInternshipResponse(internship);
-        return getInternshipResponse;
+        return new GetInternshipResponse(internship);
     }
 
     @Override
