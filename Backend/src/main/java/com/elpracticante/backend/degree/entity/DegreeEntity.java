@@ -14,12 +14,13 @@ import java.util.List;
 public class DegreeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)    @Column(name = "DEGREE_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "DEGREE_ID")
     private Integer id;
 
     @Column(name = "NAME")
     private String name;
 
-    @OneToMany(mappedBy = "degree", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "degree", fetch = FetchType.LAZY)
     private List<InternshipEntity> internships;
 }

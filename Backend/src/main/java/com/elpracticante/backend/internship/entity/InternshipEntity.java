@@ -36,30 +36,30 @@ public class InternshipEntity {
     @Column(name = "RATING")
     private Integer rating;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,  fetch = FetchType.LAZY)
     @JoinColumn(name = "SCHOOL_ID")
     private SchoolEntity school;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,  fetch = FetchType.LAZY)
     @JoinColumn(name = "DEGREE_ID")
     private DegreeEntity degree;
 
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="STUDENT_ID")
     private StudentEntity student;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="COMPANY_ID")
     private CompanyEntity company;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "INTERNSHIP_TECHNOLOGY",
             joinColumns = @JoinColumn(name = "INTERNSHIP_ID"),
             inverseJoinColumns = @JoinColumn(name = "TECHNOLOGY_ID"))
     private List<TechnologyEntity> technologies;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinTable(name = "INTERNSHIP_SUMMARIZE",
             joinColumns = @JoinColumn(name = "INTERNSHIP_ID"),
             inverseJoinColumns = @JoinColumn(name = "SUMMARIZE_ID"))

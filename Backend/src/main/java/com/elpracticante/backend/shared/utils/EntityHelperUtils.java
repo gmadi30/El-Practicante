@@ -123,8 +123,9 @@ public final class EntityHelperUtils {
                 studentEntity.getAutonomousCommunity(),
                 studentEntity.getMobile(),
                 null,
-                studentEntity.getCompanyName(),
-                studentEntity.getStudentProfilePicture().getName()
+                new Company(null, studentEntity.getCompanyName()),
+                studentEntity.getStudentProfilePicture().getName(),
+                studentEntity.getBirthday()
         );
     }
 
@@ -147,7 +148,7 @@ public final class EntityHelperUtils {
     public static StudentProfilePictureEntity uploadProfilePicture(MultipartFile file, StudentProfilePictureRepository studentProfilePictureRepository) throws IOException {
         StudentProfilePictureEntity studentProfilePictureEntity = new StudentProfilePictureEntity();
         String filePath = FOLDER_PATH;
-        if (!file.isEmpty()) {
+        if (null != file && !file.isEmpty()) {
             studentProfilePictureEntity.setName(file.getOriginalFilename());
             studentProfilePictureEntity.setType(file.getContentType());
             studentProfilePictureEntity.setPath(filePath + file.getOriginalFilename());

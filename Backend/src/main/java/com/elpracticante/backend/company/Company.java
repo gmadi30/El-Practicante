@@ -28,4 +28,8 @@ public record Company(
     public Company(Integer companyId, String companyName, Double rating, Integer intershipsAmount) {
         this(companyId, companyName, rating, null, null, null, null, intershipsAmount, null, null, null, null);
     }
+
+    public Company(Integer companyId, String companyName) {
+        this(companyId, companyName, null, null, null, null, null, null, null, null, null, null);
+    }
 }

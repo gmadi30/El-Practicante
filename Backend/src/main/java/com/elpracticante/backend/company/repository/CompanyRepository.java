@@ -13,6 +13,8 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
 
     Optional<CompanyEntity> findByNif(String nif);
 
+    Optional<CompanyEntity> findByName(String name);
+
     @Query("SELECT c FROM CompanyEntity c LEFT JOIN c.internships i GROUP BY c ORDER BY COUNT(i) DESC")
     List<CompanyEntity> findAllByOrderByInternshipsDesc();
 

@@ -1,7 +1,6 @@
 package com.elpracticante.backend.student;
 
 import com.elpracticante.backend.student.dto.*;
-import jakarta.persistence.EntityExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -32,12 +31,7 @@ public class StudentController {
     public ResponseEntity<CreateStudentResponse> addStudent(@ModelAttribute  CreateStudentRequest createStudentRequest) throws IOException {
         logger.debug("we got a post request... Input: {}", createStudentRequest);
         CreateStudentResponse studentRequestOutput;
-
-        try {
-            studentRequestOutput = service.addStudent(createStudentRequest);
-        } catch (EntityExistsException exception) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, exception.getMessage(), exception);
-        }
+        studentRequestOutput = service.addStudent(createStudentRequest);
         return new ResponseEntity<>(studentRequestOutput, HttpStatus.CREATED);
     }
 
@@ -47,53 +41,38 @@ public class StudentController {
         try {
             getStudentResponse = service.getStudent(studentId);
         }catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
 
         return new ResponseEntity<>(getStudentResponse, HttpStatus.OK);
     }
 
-
-    @PutMapping(path = "/{studentId}", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UpdateStudentResponse> updateStudent(@PathVariable int studentId, @RequestBody UpdateStudentRequest updateStudentRequest) {
-        UpdateStudentResponse updateStudentResponse;
-
-        try {
-            updateStudentResponse = service.updateStudent(studentId, updateStudentRequest);
-        }catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-        }
-
-        return new ResponseEntity<>(updateStudentResponse, HttpStatus.OK);
+    @PutMapping(consumes =  {"multipart/form-data"})
+    public ResponseEntity<Void> updateStudent(@ModelAttribute  UpdateStudentRequest updateStudentRequest) throws IOException {
+        service.updateStudent(updateStudentRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/{studentId}", consumes =  MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> deleteStudent(@PathVariable int studentId) {
-
+    public ResponseEntity<Void> deleteStudent(@PathVariable int studentId, @RequestBody DeleteStudentRequest body) {
         try {
-            service.deleteStudent(studentId);
+            service.deleteStudent(studentId, body);
         }catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetAllStudentsResponse> deleteStudent() {
+    public ResponseEntity<GetAllStudentsResponse> getAllStudents() {
         GetAllStudentsResponse getAllStudentsResponse;
         try {
             getAllStudentsResponse = service.getAllStudents();
         }catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
         return new ResponseEntity<>(getAllStudentsResponse, HttpStatus.OK);
     }
-
-
 
     @PostMapping(path = "/login", consumes =  MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginStudentResponse> postLogin(@RequestBody LoginStudentRequest body) {

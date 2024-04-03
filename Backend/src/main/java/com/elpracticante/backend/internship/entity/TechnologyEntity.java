@@ -18,7 +18,7 @@ public class TechnologyEntity {
     @Column(name = "NAME")
     private String name;
 
-    @ManyToMany(mappedBy = "technologies")
+    @ManyToMany(mappedBy = "technologies",  fetch = FetchType.LAZY)
     private List<InternshipEntity> internships;
 
 }

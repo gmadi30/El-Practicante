@@ -35,7 +35,7 @@ public class SchoolEntity {
     @Column(name = "FULL_ADRESS")
     private String fullAddress;
 
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY)
     private List<InternshipEntity> internships;
 
 }

@@ -12,6 +12,8 @@ public interface InternshipRepository extends JpaRepository<InternshipEntity, In
 
     List<InternshipEntity> findAllByStudentId(Integer studentId);
 
-    @Query("SELECT AVG(intership.rating) FROM InternshipEntity as intership WHERE company.id = ?1")
+    @Query("SELECT AVG(internship.rating) FROM InternshipEntity as internship WHERE company.id = ?1")
     Double calculateRatingAverageByCompanyId(Integer companyId);
+
+
 }

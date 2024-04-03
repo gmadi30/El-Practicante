@@ -12,9 +12,9 @@ public interface StudentServiceAPI {
 
     GetStudentResponse getStudent(int studentId);
 
-    UpdateStudentResponse updateStudent(int studentId, UpdateStudentRequest updateStudentRequest);
+    void updateStudent(UpdateStudentRequest updateStudentRequest) throws IOException;
 
-    void deleteStudent(int studentId);
+    void deleteStudent(int studentId, DeleteStudentRequest body);
 
     GetAllStudentsResponse getAllStudents();
 

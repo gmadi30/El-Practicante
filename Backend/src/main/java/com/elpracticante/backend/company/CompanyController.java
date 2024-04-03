@@ -2,7 +2,7 @@ package com.elpracticante.backend.company;
 
 
 import com.elpracticante.backend.company.dto.CreateCompanyRequest;
-import com.elpracticante.backend.company.dto.CreateCompoanyResponse;
+import com.elpracticante.backend.company.dto.CreateCompanyResponse;
 import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.dto.GetCompanyResponse;
 import com.elpracticante.backend.student.dto.CompanySortBy;
@@ -22,16 +22,15 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-
     @GetMapping(consumes =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GetAllCompaniesResponse> getAllCompanies(@RequestParam("sortBy") CompanySortBy sortBy) {
         GetAllCompaniesResponse getAllCompaniesResponse = companyService.getAllCompanies(sortBy);
         return new ResponseEntity<>(getAllCompaniesResponse, HttpStatus.OK);
     }
     @PostMapping(consumes =  {"multipart/form-data"})
-    public ResponseEntity<CreateCompoanyResponse> addCompany(@ModelAttribute CreateCompanyRequest createCompanyRequest) {
-        CreateCompoanyResponse createCompoanyResponse = companyService.addCompany(createCompanyRequest);
-        return new ResponseEntity<>(createCompoanyResponse, HttpStatus.CREATED);
+    public ResponseEntity<CreateCompanyResponse> addCompany(@ModelAttribute CreateCompanyRequest createCompanyRequest) {
+        CreateCompanyResponse createCompanyResponse = companyService.addCompany(createCompanyRequest);
+        return new ResponseEntity<>(createCompanyResponse, HttpStatus.CREATED);
     }
 
     @GetMapping(path = {"/{companyId}"}, consumes =  MediaType.APPLICATION_JSON_VALUE)

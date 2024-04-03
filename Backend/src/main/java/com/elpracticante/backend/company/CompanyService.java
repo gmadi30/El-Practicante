@@ -2,7 +2,7 @@ package com.elpracticante.backend.company;
 
 import com.elpracticante.backend.company.api.CompanyServiceAPI;
 import com.elpracticante.backend.company.dto.CreateCompanyRequest;
-import com.elpracticante.backend.company.dto.CreateCompoanyResponse;
+import com.elpracticante.backend.company.dto.CreateCompanyResponse;
 import com.elpracticante.backend.company.dto.GetAllCompaniesResponse;
 import com.elpracticante.backend.company.dto.GetCompanyResponse;
 import com.elpracticante.backend.company.entity.CompanyEntity;
@@ -79,7 +79,7 @@ public class CompanyService implements CompanyServiceAPI {
     }
 
     @Override
-    public CreateCompoanyResponse addCompany(CreateCompanyRequest createCompanyRequest) {
+    public CreateCompanyResponse addCompany(CreateCompanyRequest createCompanyRequest) {
 
         // Verificar que no exista la empresa
         Optional<CompanyEntity> companyEntityOptional = companyRepository.findByNif(createCompanyRequest.nif());
@@ -103,7 +103,7 @@ public class CompanyService implements CompanyServiceAPI {
 
         CompanyEntity companyEntitySaved = companyRepository.save(companyEntity);
 
-        return new CreateCompoanyResponse(companyEntitySaved.getId());
+        return new CreateCompanyResponse(companyEntitySaved.getId());
     }
 }
 

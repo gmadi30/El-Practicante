@@ -46,17 +46,21 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.POST, "/api/v1/students/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/students/{studentId}").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/students").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/students/{studentId}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/students/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/companies").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/companies/{companyId}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/degrees").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/schools").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/internships/technologies").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "/token").permitAll()
                         .anyRequest().authenticated()
                 )
+                .anonymous(anonymous -> anonymous
+                        .principal("anonymousUser")
+                        .authorities("ROLE_ANONYMOUS"))
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder())))

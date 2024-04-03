@@ -47,7 +47,7 @@ public class CompanyEntity {
     @Column(name = "WEBSITE")
     private String website;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "company")
     private List<InternshipEntity> internships;
 
     @Column(name = "RATING")

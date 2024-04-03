@@ -14,4 +14,6 @@ public interface InternshipServiceAPI {
     GetInternshipResponse getIntership(Integer intershipId);
 
     GetTechnologies getTechnologies();
+
+    void deleteTechnology(Integer intershipId, Integer technologyId);
 }

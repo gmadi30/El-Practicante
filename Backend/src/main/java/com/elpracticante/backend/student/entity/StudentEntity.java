@@ -58,10 +58,10 @@ public class StudentEntity {
     @Column(name = "DEGREE_NAME")
     private String degreeName;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<InternshipEntity> internships;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name = "STUDENT_PROFILE_PICTURE_ID", referencedColumnName = "STUDENT_PROFILE_PICTURE_ID")
     private StudentProfilePictureEntity StudentProfilePicture;
 

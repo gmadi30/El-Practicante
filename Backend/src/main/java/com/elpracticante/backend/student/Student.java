@@ -1,5 +1,9 @@
 package com.elpracticante.backend.student;
 
+import com.elpracticante.backend.company.Company;
+
+import java.time.LocalDate;
+
 public record Student(
         Integer id,
         String name,
@@ -8,8 +12,9 @@ public record Student(
         String city,
         String autonomousCommunity,
         String mobile,
-        String companyName,
-        String profilePictureName
+        Company company,
+        String profilePictureName,
+        LocalDate birthday
 
 
 ) {

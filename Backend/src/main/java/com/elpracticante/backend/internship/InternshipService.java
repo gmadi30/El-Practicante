@@ -14,6 +14,7 @@ import com.elpracticante.backend.internship.repository.TechnologyRepository;
 import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.school.repository.SchoolRepository;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
+import com.elpracticante.backend.shared.utils.Utils;
 import com.elpracticante.backend.student.repository.StudentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,7 @@ public class InternshipService implements InternshipServiceAPI {
         // Save the Intership entity
         Integer intershipId = internshipRepository.save(internshipEntity).getId();
 
-        updateRatingCompanyEntity(companyEntity);
+        Utils.updateRatingCompanyEntity(companyEntity, internshipRepository);
         Double companyRating = companyRepository.save(companyEntity).getRating();
         CreateInternshipResponse createInternshipResponse = new CreateInternshipResponse(intershipId);
 
@@ -101,10 +102,9 @@ public class InternshipService implements InternshipServiceAPI {
         return new GetTechnologies(mapToTechonologiesList(technologyEntityList));
     }
 
-
-    private void updateRatingCompanyEntity(CompanyEntity companyEntity) {
-       Double average = internshipRepository.calculateRatingAverageByCompanyId(companyEntity.getId());
-       companyEntity.setRating(average);
+    @Override
+    public void deleteTechnology(Integer intershipId, Integer technologyId) {
+            //internshipRepository.deleteTechnologyFromInternship(intershipId, technologyId);
     }
 
     private InternshipEntity createIntership(CreateInternshipRequest createInternshipRequest, CompanyEntity companyEntity) {
@@ -147,8 +147,10 @@ public class InternshipService implements InternshipServiceAPI {
         List<TechnologyEntity> technologyEntityList = new ArrayList<>();
 
         for(Integer technology: technologies) {
-            Optional<TechnologyEntity> technologyEntity = technologyRepository.findById(technology);
-            technologyEntity.ifPresent(technologyEntityList::add);
+           if (null != technology) {
+               Optional<TechnologyEntity> technologyEntity = technologyRepository.findById(technology);
+               technologyEntity.ifPresent(technologyEntityList::add);
+           }
         }
 
         return technologyEntityList;

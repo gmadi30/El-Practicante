@@ -38,5 +38,11 @@ public class InternshipController {
         GetTechnologies getTechnologies = service.getTechnologies();
         return new ResponseEntity<>(getTechnologies, HttpStatus.OK);
     }
+
+    @DeleteMapping(path = "/{intershipId}/technology/{technologyId}")
+    public ResponseEntity<Void> deleteTechnology(@PathVariable Integer intershipId, @PathVariable Integer technologyId) {
+        service.deleteTechnology(intershipId, technologyId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
 

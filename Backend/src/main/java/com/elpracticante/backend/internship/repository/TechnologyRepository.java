@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface TechnologyRepository extends JpaRepository<TechnologyEntity, Integer> {
 
     Optional<TechnologyEntity> findByName(String name);
+
 }
