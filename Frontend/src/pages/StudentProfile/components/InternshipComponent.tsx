@@ -1,5 +1,5 @@
 import { ImCheckmark, ImCross, ImFloppyDisk } from "react-icons/im";
-import { Internship } from "../../../types/types";
+import { Internship, Student } from "../../../types/types";
 import Rating from "../../../components/ui/shared/Rating";
 import { useNavigate } from "react-router-dom";
 
@@ -13,12 +13,18 @@ const imgCompanyProfile = (name: string) => {
 };
 
 const InternshipComponent: React.FC<IntershipProps> = (props) => {
+  const { internship } = props;
   const navigate = useNavigate();
-
   const handleNavigate = (companyId: number) => {
     navigate(`/company/${companyId}/profile`);
   };
-  const { internship } = props;
+
+  const navigateToEditInternship = () => {
+    navigate(
+      `/student/${internship?.student.id}/edit-internship/${internship?.id}`
+    );
+  };
+
   return (
     <>
       <div className="lg:flex lg:justify-between lg:flex-col">
@@ -48,6 +54,12 @@ const InternshipComponent: React.FC<IntershipProps> = (props) => {
                       </span>{" "}
                       opiniones
                     </p>
+                    <button
+                      className="text-sm gap-2 border rounded border-black px-4 py-2 mt-10 bg-secondary-100 text-white font-semibold flex items-center hover:bg-secondary-200"
+                      onClick={navigateToEditInternship}
+                    >
+                      <h1>Editar Práctica</h1>
+                    </button>
                   </div>
                 </div>
                 <div className="px-10">

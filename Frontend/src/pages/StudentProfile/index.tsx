@@ -37,7 +37,7 @@ export default function Profile() {
   }
 
   const handleNewIntershipOnClick = () => {
-    navigate(`/student/${params.studentId}/create-review`, {
+    navigate(`/student/${params.studentId}/create-internship`, {
       state: { studentId: params.studentId },
     });
   };

@@ -19,7 +19,7 @@ import {
   postIntership,
 } from "../../api/api";
 
-export default function CreateReview() {
+export default function CreateInternship() {
   let navigate = useNavigate();
   const { watch, control, register, handleSubmit, formState, setError } =
     useForm<CreateIntershipFromValues>();
@@ -134,13 +134,15 @@ export default function CreateReview() {
     return (
       <div className="font-body mx-auto container  xl:w-[60%]">
         <header className="bg-primary mx-3 my-24 tracking-[0.5rem]">
-          <h1 className="text-5xl font-semibold py-4 text-center">REVIEW</h1>
+          <h1 className="text-5xl font-semibold py-4 text-center">
+            CREAR PRÁCTICA
+          </h1>
         </header>
 
         <main className="m-3 mt-12 ">
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <section className="my-10">
-              <h1 className="text-xl xl:text-2xl text-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="text-xl xl:text-2xl font-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 DATOS GENERALES
               </h1>
               <p className="my-2  xl:text-xl">
@@ -313,7 +315,7 @@ export default function CreateReview() {
               </p>
             </section>
             <section className="my-10">
-              <h1 className="text-xl xl:text-2xl text-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="text-xl xl:text-2xl font-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 DESCRIPCIÓN PRINCIPAL
               </h1>
 
@@ -348,7 +350,7 @@ export default function CreateReview() {
                 </p>
               </label>
               <label>
-                <h1 className="text-secondary-100 my-2 text-bold">
+                <h1 className="text-secondary-100 my-2 font-bold">
                   Descripción
                 </h1>
                 <textarea
@@ -367,7 +369,7 @@ export default function CreateReview() {
                   {errors.description?.message}
                 </p>
               </label>
-              <h1 className="text-xl xl:text-2xl text-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="text-xl xl:text-2xl font-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 RATE IT!
               </h1>
               <p className="my-2  xl:text-xl">
@@ -405,7 +407,7 @@ export default function CreateReview() {
               </label>
             </section>
             <section className="my-5 md">
-              <h1 className="text-xl xl:text-2xl text-bold max-w-xs  mt-3 mb-2 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="text-xl xl:text-2xl font-bold max-w-xs  mt-3 mb-2 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 TECNOLOGÍAS
               </h1>
               <h2 className="xl:text-xl">¿Qué tecnologías utilizastes?</h2>
@@ -508,7 +510,7 @@ export default function CreateReview() {
               </div>
             </section>
             <section className="my-10">
-              <h1 className="text-xl xl:text-2xl text-bold max-w-xs px-1 mt-3 mb-2 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="text-xl xl:text-2xl font-bold max-w-xs px-1 mt-3 mb-2 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 LO MEJOR
               </h1>
               <h2 className="xl:text-xl">
@@ -584,7 +586,7 @@ export default function CreateReview() {
               </div>
             </section>
             <section className="my-10">
-              <h1 className="text-xl xl:text-2xl text-bold max-w-xs pb-1 mt-3 mb-2 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
+              <h1 className="text-xl xl:text-2xl font-bold max-w-xs pb-1 mt-3 mb-2 py-1 rounded indent-4 bg-secondary-100 text-primary uppercase ">
                 LO PEOR
               </h1>
               <h2 className="xl:text-xl">

@@ -10,10 +10,11 @@ import CompaniesProfile from "./pages/CompanyProfile/index.tsx";
 import Register from "./pages/Register/index.tsx";
 import NavbarLayout from "./components/ui/navbar/NavbarLayout.tsx";
 import { AuthProvider } from "./components/context/AuthContext.tsx";
-import CreateReview from "./pages/CreateReview/index.tsx";
+import CreateInternship from "./pages/CreateInternship/index.tsx";
 import React from "react";
 import EditStudentProfile from "./pages/EditStudentProfile/index.tsx";
 import DeleteStudentAccount from "./pages/DeleteStudentAccount/index.tsx";
+import EditInternship from "./pages/EditInternship/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -57,14 +58,14 @@ const router = createBrowserRouter([
         element: <CompaniesProfile />,
       },
       {
-        // /student/id/createReview
-        path: "student/:studentId/create-review",
-        element: <CreateReview />,
+        // /student/id/create-internship
+        path: "student/:studentId/create-internship",
+        element: <CreateInternship />,
       },
       {
-        // /student/studentId/editReview/reviewId
-        path: "student/:studentId/edit-review/:reviewId",
-        element: <CreateReview />,
+        // /student/studentId/edit-internship/internshipId
+        path: "student/:studentId/edit-internship/:internshipId",
+        element: <EditInternship />,
       },
       {
         path: "/*",

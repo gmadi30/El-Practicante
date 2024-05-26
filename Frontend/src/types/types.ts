@@ -83,7 +83,7 @@ export type Internship = {
   title: string;
   description: string;
   startDate: string;
-  endDate: Date;
+  endDate: string;
   rating: number;
   degree: Degree;
   school: School;

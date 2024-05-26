@@ -187,7 +187,6 @@ export default function CompanyProfile() {
                               </p>
                             </div>
                           </div>
-
                           <p className="flex text-sm my-2">
                             <span className="text-secondary-100 font-bold mr-1">
                               Tecnologías: {""}

@@ -195,6 +195,69 @@ export const postIntership = async (
   return createInternship.json();
 };
 
+// Update internship
+export const updateIntership = async (
+  data: CreateIntershipFromValues,
+  studentId: string,
+  internshipId: string
+) => {
+  console.log("[API][updateIntership] - Input:", {
+    intershipBody: data,
+    studentId: studentId,
+    token: getAuthToken(),
+  });
+  const updateInternship = await fetch(
+    `${API_BASE_URL}/internships/${internshipId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify({
+        schoolId: data.schoolId,
+        companyId: data.companyId,
+        degreeId: data.degreeId,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        title: data.title,
+        description: data.description,
+        rating: data.rating,
+        technologies: [data.technology1, data.technology2, data.technology3],
+        summaryBest: [data.best1, data.best2, data.best3],
+        summaryWorst: [data.worst1, data.worst2, data.worst3],
+        studentId: studentId,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+  if (!updateInternship.ok) {
+    throw new Error(`HTTP error! Status: ${updateInternship.status}`);
+  }
+
+  console.log("[API][postInterships] - Output:", updateInternship);
+  return updateInternship;
+};
+
+// Retrieve internship by Id
+export const getInternshipById = async (internshipId: string) => {
+  console.log("[API][getInternshipById] - Input:", getAuthToken());
+  const internshipResponse = await fetchJson(
+    `${API_BASE_URL}/internships/${internshipId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json;",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    }
+  );
+  if (!internshipResponse.ok) {
+    throw new Error(`HTTP error! Status: ${internshipResponse.status}`);
+  }
+  console.log("[API][getInternshipById] - Output:", internshipResponse);
+  return internshipResponse.json();
+};
+
 // Create a student
 export const postStudent = async (data: FormData) => {
   console.log("[API][postStudent] - Input:", {
@@ -248,7 +311,7 @@ export const updateStudent = async (data: FormData) => {
   return updateStudentResponse.json();
 };
 
-// Update a student
+// Delete a student
 export const deleteStudent = async (
   studentId: string,
   data: DeleteStudentFormValues
