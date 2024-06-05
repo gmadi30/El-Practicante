@@ -16,12 +16,8 @@ export default function Login() {
   const { control, register, handleSubmit, formState } = form;
   const { errors } = formState;
   const [isCredentialsWrong, setIsCredentialsWrong] = useState(false);
-  const {
-    updateAuthenticatedUserID,
-    authenticated,
-    updateUserAuthentication,
-    studentId,
-  } = useAuth();
+  const { updateAuthenticatedUserID, updateUserAuthentication, studentId } =
+    useAuth();
 
   const retrieveStudent = async (data: FormValues) => {
     const bodyValues: LoginFormValues = {
