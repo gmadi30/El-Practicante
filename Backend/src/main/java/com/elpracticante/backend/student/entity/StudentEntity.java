@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -63,7 +64,16 @@ public class StudentEntity {
 
     @OneToOne()
     @JoinColumn(name = "STUDENT_PROFILE_PICTURE_ID", referencedColumnName = "STUDENT_PROFILE_PICTURE_ID")
-    private StudentProfilePictureEntity StudentProfilePicture;
+    private StudentProfilePictureEntity studentProfilePicture;
+
+    @Column(name = "PRIVACY_POLICY_ACCEPTANCE")
+    private Boolean privacyPolicyAcceptance;
+
+    @Column(name = "DATE_PRIVACY_POLICY_ACCEPTANCE")
+    private LocalDateTime datePrivacyPolicyAcceptance;
+
+    @Column(name = "PRIVACY_POLICY_VERSION")
+    private String privacyPolicyVersion;
 
 }
 

@@ -177,7 +177,7 @@ export const postIntership = async (
       title: data.title,
       description: data.description,
       rating: data.rating,
-      technologies: [data.technology1, data.technology2, data.technology3],
+      selectedTechnologies: data.selectedTechnologies,
       summaryBest: [data.best1, data.best2, data.best3],
       summaryWorst: [data.worst1, data.worst2, data.worst3],
       studentId: studentId,
@@ -201,7 +201,7 @@ export const updateIntership = async (
   studentId: string,
   internshipId: string
 ) => {
-  console.log("[API][updateIntership] - Input:", {
+  console.log("[API][updateInternship] - Input:", {
     intershipBody: data,
     studentId: studentId,
     token: getAuthToken(),
@@ -219,7 +219,7 @@ export const updateIntership = async (
         title: data.title,
         description: data.description,
         rating: data.rating,
-        technologies: [data.technology1, data.technology2, data.technology3],
+        selectedTechnologies: data.selectedTechnologies,
         summaryBest: [data.best1, data.best2, data.best3],
         summaryWorst: [data.worst1, data.worst2, data.worst3],
         studentId: studentId,

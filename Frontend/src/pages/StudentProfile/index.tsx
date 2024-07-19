@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { StudentProfile } from "../../types/types";
 import InternshipComponent from "./components/InternshipComponent";
@@ -55,7 +55,9 @@ export default function Profile() {
           {student?.internships?.map((internship, index) => {
             return <InternshipComponent key={index} internship={internship} />;
           })}
-          <AddInternshipButton onClick={handleNewIntershipOnClick} />
+          {student?.internships?.length === 0 && (
+            <AddInternshipButton onClick={handleNewIntershipOnClick} />
+          )}
         </div>
       </>
     );

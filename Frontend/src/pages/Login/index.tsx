@@ -94,6 +94,7 @@ export default function Login() {
                     font-normal
                     placeholder:opacity-60
                     "
+                autoComplete="on"
               />
               <p className="text-base font-light text-red">
                 {errors.email?.message}

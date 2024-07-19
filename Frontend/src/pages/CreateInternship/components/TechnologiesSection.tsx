@@ -1,119 +1,145 @@
-import React, { FC } from "react";
-import { useFormContext } from "react-hook-form";
+import { FC, useEffect, useState } from "react";
+import { UseFormRegister, useFormContext } from "react-hook-form";
 import { Technology } from "../../../types/types";
+import { ImFloppyDisk } from "react-icons/im";
 
 interface TechnologiesSectionProps {
-  technologies: Technology[];
+  availableTechnologies: Technology[];
+  internshipTechnologies: Technology[] | [];
+  register: UseFormRegister<any>;
 }
 
 const TechnologiesSection: FC<TechnologiesSectionProps> = ({
-  technologies,
+  availableTechnologies,
+  internshipTechnologies,
+  register,
 }) => {
-  const { register, formState, watch } = useFormContext();
+  // Obtiene métodos y estados del contexto del formulario
+  const { formState, getValues, setError, setValue, clearErrors } =
+    useFormContext();
   const { errors } = formState;
 
-  const selectedTechnologies = watch([
-    "technology1",
-    "technology2",
-    "technology3",
-  ]);
-  const isUnique = (arr: string[]) => {
-    console.log("array de tecnologías", arr);
-    if (arr[1] === "" && arr[2] === "") {
-      return true;
+  // Estado para almacenar las tecnologías seleccionadas
+  const [selectedTechnologies, setSelectedTechnologies] = useState<
+    Technology[]
+  >([...internshipTechnologies]);
+
+  // Actualiza el valor del formulario cuando cambian las tecnologías seleccionadas
+  useEffect(() => {
+    setValue("selectedTechnologies", selectedTechnologies);
+  }, [selectedTechnologies, setValue]);
+
+  // Maneja la adición de una nueva tecnología a la lista de seleccionadas
+  const handleAddTechnology = () => {
+    const technologyId = getValues("technologySelect");
+
+    const selectedTechnologyAvailable = availableTechnologies.find(
+      (tech) => tech.id === parseInt(technologyId)
+    );
+
+    const technologyRepeated = selectedTechnologies.find(
+      (tech) => tech.id === parseInt(technologyId)
+    );
+
+    if (technologyRepeated) {
+      setError("technologySelect", {
+        type: "manual",
+        message: `Ya has añadido la technologia a tu lista`,
+      });
+      return;
     }
-    return new Set(arr).size === arr.length;
+
+    if (!selectedTechnologyAvailable) {
+      setError("technologySelect", {
+        type: "manual",
+        message: "Debe seleccionar una tecnología válida",
+      });
+      return;
+    }
+
+    const updatedTechnologies = [
+      ...selectedTechnologies,
+      selectedTechnologyAvailable,
+    ];
+
+    setValue("selectedTechnologies", updatedTechnologies);
+    setSelectedTechnologies(updatedTechnologies);
+    clearErrors("technologySelect");
   };
+
+  // Maneja la eliminación de una tecnología de la lista de seleccionadas
+  const handleRemoveTechnology = (technology: Technology) => {
+    const updatedTechnologies = selectedTechnologies.filter(
+      (tech) => tech.id !== technology.id
+    );
+
+    setSelectedTechnologies(updatedTechnologies);
+    setValue("selectedTechnologies", updatedTechnologies);
+  };
+
   return (
     <section className="my-5 md">
       <h1 className="text-xl xl:text-2xl font-bold max-w-xs py-1 my-3 rounded indent-4 bg-secondary-100 text-primary uppercase">
         TECNOLOGÍAS
       </h1>
-      <h2 className="xl:text-xl">¿Qué tecnologías utilizastes?</h2>
+      <h2 className="xl:text-xl">¿Qué tecnologías utilizaste?</h2>
       <h3 className="text-gray xl:text-xl my-1">
         Es obligatorio completar al menos 1 opción
       </h3>
-      {!isUnique(selectedTechnologies) && (
-        <p className="text-base font-light text-red">
-          Las tecnologías no se pueden repetir.
-        </p>
-      )}
       <div className="flex flex-col gap-4">
-        <label className="">
-          <h1 className="text-secondary-100 my-2 font-bold">Opción 1</h1>
+        <label>
+          <h1 className="text-secondary-100 my-2 font-bold">Tecnología</h1>
           <select
-            className=" 
-                    border rounded py-2
-                    pl-2  w-3/4 text-black
-                     focus:focus:border-secondary-100"
-            {...register("technology1", {
-              required: {
-                value: true,
-                message: "Este campo es obligatorio",
-              },
-            })}
-            id="technology1"
+            id="technologySelect"
+            className="border rounded py-2 pl-2 w-3/4 text-black focus:border-secondary-100"
+            defaultValue=""
+            {...register("technologySelect")}
           >
             <option value="">Selecciona una tecnología</option>
-            {(technologies ?? []).map((technology: Technology) => {
-              return <option value={technology?.id}>{technology?.name}</option>;
-            })}
+            {availableTechnologies
+              .filter(
+                (tech) =>
+                  !selectedTechnologies.some(
+                    (selectedTech) => selectedTech.id === tech.id
+                  )
+              )
+              .map((technology: Technology) => (
+                <option key={technology.id} value={technology.id.toString()}>
+                  {technology.name}
+                </option>
+              ))}
           </select>
+          {selectedTechnologies.length < 3 && (
+            <button
+              type="button"
+              className="bg-secondary-100 text-white font-bold py-2 px-4 rounded mt-4 ml-4"
+              onClick={handleAddTechnology}
+            >
+              Añadir
+            </button>
+          )}
           <p className="text-base font-light text-red">
-            {errors.technology1?.message?.toString()}
-          </p>
-        </label>
-        <label className="">
-          <h1 className="text-secondary-100 my-2 font-bold">Opción 2</h1>
-          <select
-            className=" 
-                    border rounded py-2
-                    pl-2  w-3/4 text-black
-                     focus:focus:border-secondary-100"
-            {...register("technology2", {
-              validate: () => {
-                if (!isUnique(selectedTechnologies)) {
-                  return "Hay una tecnología repetida.";
-                }
-              },
-            })}
-            id="technology2"
-          >
-            <option value="">Selecciona una tecnología</option>
-            {(technologies ?? []).map((technology: Technology) => {
-              return <option value={technology?.id}>{technology?.name}</option>;
-            })}
-          </select>
-          <p className="text-base font-light text-red">
-            {errors.technology2?.message?.toString()}
-          </p>
-        </label>
-        <label className="">
-          <h1 className="text-secondary-100 my-2 font-bold">Opción 3</h1>
-          <select
-            className=" 
-                    border rounded py-2
-                    pl-2  w-3/4 text-black
-                     focus:focus:border-secondary-100"
-            {...register("technology3", {
-              validate: () => {
-                if (!isUnique(selectedTechnologies)) {
-                  return "Hay una tecnología repetida.";
-                }
-              },
-            })}
-            id="technology3"
-          >
-            <option value="">Selecciona una tecnología</option>
-            {(technologies ?? []).map((technology: Technology) => {
-              return <option value={technology?.id}>{technology?.name}</option>;
-            })}
-          </select>
-          <p className="text-base font-light text-red">
-            {errors.technology3?.message?.toString()}
+            {errors.technologySelect?.message?.toString()}
           </p>
         </label>
       </div>
+      <ul className="mt-4">
+        {selectedTechnologies.map((technology) => (
+          <li key={technology.id} className="flex gap-4 items-center mt-4">
+            <div className="text-secondary-100">
+              <ImFloppyDisk />
+            </div>
+            <span>{technology.name}</span>
+            <button
+              type="button"
+              className="bg-red text-white font-bold py-1 px-2 text-sm rounded shadow"
+              onClick={() => handleRemoveTechnology(technology)}
+            >
+              Eliminar
+            </button>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };

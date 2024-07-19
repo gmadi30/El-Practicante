@@ -24,6 +24,7 @@ import com.elpracticante.backend.shared.entity.FeedbackEntriesEntity;
 import com.elpracticante.backend.shared.exceptions.UserNotFoundException;
 import com.elpracticante.backend.shared.repository.FeedbackEntriesRepository;
 import com.elpracticante.backend.shared.repository.StudentProfilePictureRepository;
+import com.elpracticante.backend.shared.utils.Constants;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
 import com.elpracticante.backend.shared.utils.ErrorCodeConstants;
 import com.elpracticante.backend.shared.utils.Utils;
@@ -38,6 +39,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -74,7 +78,7 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public CreateStudentResponse addStudent(CreateStudentRequest createStudentRequest) throws IOException {
-            validateInput(createStudentRequest);
+        validateInput(createStudentRequest);
         StudentEntity studentEntity = createStudentEntity(createStudentRequest);
 
         return new CreateStudentResponse(insertStudent(studentEntity));
@@ -272,6 +276,9 @@ public class StudentService implements StudentServiceAPI {
         studentEntity.setDegreeName(getDegreeEntity(createStudentRequest.degreeId(), degreeRepository).getName());
         studentEntity.setCompanyName(EntityHelperUtils.getCompanyEntity(createStudentRequest.companyId(), companyRepository).getName());
         studentEntity.setStudentProfilePicture(uploadProfilePicture(createStudentRequest.profilePicture(), studentProfilePictureRepository));
+        studentEntity.setPrivacyPolicyAcceptance(createStudentRequest.privacyPolicy().equals(Constants.TRUE) ? true : false);
+        studentEntity.setDatePrivacyPolicyAcceptance(LocalDateTime.ofInstant(Instant.now(), ZoneId.of(Constants.ZONE_ID_EUROPE_PARIS)));
+        studentEntity.setPrivacyPolicyVersion(Constants.PRIVACY_POLICY_VERSION);
         return studentEntity;
     }
 
@@ -282,7 +289,6 @@ public class StudentService implements StudentServiceAPI {
            throw new DniExistsException(ErrorCodeConstants.SIGNUP_VALIDATION_DNI_EXISTS_101, ErrorCodeConstants.SIGNUP_VALIDATION_DNI_EXISTS_101_CODE );
        }
        */
-
 
         if (studentRepository.existsByEmail(createStudentRequest.email())){
             throw new EmailExistsException(ErrorCodeConstants.SIGNUP_VALIDATION_EMAIL_EXISTS_102, ErrorCodeConstants.SIGNUP_VALIDATION_EMAIL_EXISTS_102_CODE );

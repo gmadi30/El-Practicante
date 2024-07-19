@@ -15,6 +15,7 @@ export type RegisterFormValues = {
   autonomousCommunity: string;
   zipCode: string;
   profilePicture: string;
+  privacyPolicy: Boolean;
 };
 
 // UpdateStudentFromValues
@@ -151,6 +152,11 @@ export enum CompanySortBy {
   SCORINGDESC = "SCORINGDESC",
 }
 
+export enum BooleanMappingConstants {
+  TRUE = "TRUE",
+  FALSE = "FALSE",
+}
+
 export type ErrorName = "FETCHING_DATA_ERROR";
 
 // FormValues to create an intership
@@ -163,9 +169,7 @@ export type CreateIntershipFromValues = {
   title: string;
   description: string;
   rating: string;
-  technology1: string;
-  technology2: string;
-  technology3: string;
+  selectedTechnologies: Technology[];
   best1: string;
   best2: string;
   best3: string;

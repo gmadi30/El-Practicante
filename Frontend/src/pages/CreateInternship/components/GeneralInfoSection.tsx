@@ -55,7 +55,7 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
             </h1>
             <select
               className="border rounded py-2 pl-2 w-3/4 text-black focus:focus:border-secondary-100"
-              {...register("school", {
+              {...register("schoolId", {
                 required: {
                   value: true,
                   message: "Este campo es obligatorio",
@@ -70,14 +70,14 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
               ))}
             </select>
             <p className="text-base font-light text-red">
-              {errors.school?.message?.toString()}
+              {errors.schoolId?.message?.toString()}
             </p>{" "}
           </label>
           <label className="flex-grow">
             <h1 className="text-secondary-100 my-2 font-bold">Empresa</h1>
             <select
               className="border rounded py-2 pl-2 w-3/4 text-black focus:focus:border-secondary-100"
-              {...register("comppany", {
+              {...register("companyId", {
                 required: {
                   value: true,
                   message: "Este campo es obligatorio",
@@ -92,7 +92,7 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
               ))}
             </select>
             <p className="text-base font-light text-red">
-              {errors.comppany?.message?.toString()}
+              {errors.companyId?.message?.toString()}
             </p>
           </label>
         </div>
@@ -103,7 +103,7 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
             </h1>
             <select
               className="border rounded py-2 pl-2 w-3/4 text-black focus:focus:border-secondary-100"
-              {...register("degree", {
+              {...register("degreeId", {
                 required: {
                   value: true,
                   message: "Este campo es obligatorio",
@@ -118,7 +118,7 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
               ))}
             </select>
             <p className="text-base font-light text-red">
-              {errors.degree?.message?.toString()}
+              {errors.degreeId?.message?.toString()}
             </p>
           </label>
         </div>

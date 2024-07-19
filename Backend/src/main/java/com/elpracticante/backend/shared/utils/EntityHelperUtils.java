@@ -45,7 +45,7 @@ public final class EntityHelperUtils {
     }
 
     public static StudentEntity getStudentEntityById(int studentId, StudentRepository studentRepository) {
-        Optional<StudentEntity> studentEntity = studentRepository.findById(studentId);
+            Optional<StudentEntity> studentEntity = studentRepository.findById(studentId);
 
         if (studentEntity.isPresent()) {
             return studentEntity.get();

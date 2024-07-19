@@ -18,18 +18,18 @@ import {
   postIntership,
 } from "../../api/api";
 import GeneralInfoSection from "./components/GeneralInfoSection";
-import BestSection from "./components/BestSection";
-import RatingSection from "./components/RatingSection";
-import TechnologiesSection from "./components/TechnologiesSection";
 import WorstSection from "./components/WorstSection";
 import DescriptionSection from "./components/DescriptionSection";
+import RatingSection from "./components/RatingSection";
+import BestSection from "./components/BestSection";
+import TechnologiesSection from "./components/TechnologiesSection";
 
 const CreateInternship: FC = () => {
   const { studentId } = useParams<{ studentId: string }>();
   const navigate = useNavigate();
   const { authenticated } = useAuth();
-  const methods = useForm();
 
+  const methods = useForm();
   const [schools, setSchools] = useState<School[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [degrees, setDegrees] = useState<Degree[]>([]);
@@ -101,9 +101,13 @@ const CreateInternship: FC = () => {
                 companies={companies}
                 degrees={degrees}
               />
-              <DescriptionSection></DescriptionSection>
+              <DescriptionSection />
               <RatingSection />
-              <TechnologiesSection technologies={technologies} />
+              <TechnologiesSection
+                availableTechnologies={technologies}
+                internshipTechnologies={[]}
+                register={methods.register}
+              />
               <BestSection />
               <WorstSection />
               {errorThrown && (

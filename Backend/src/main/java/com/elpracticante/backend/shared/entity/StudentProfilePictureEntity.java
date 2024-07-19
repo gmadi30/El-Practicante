@@ -24,6 +24,6 @@ public class StudentProfilePictureEntity {
     private String path;
 
 
-    @OneToOne(mappedBy = "StudentProfilePicture")
+    @OneToOne(mappedBy = "studentProfilePicture")
     private StudentEntity student;
 }

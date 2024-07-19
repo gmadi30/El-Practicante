@@ -1,6 +1,11 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  ScrollRestoration,
+  useLocation,
+} from "react-router-dom";
 import Home from "./pages/Home/index.tsx";
 import ErrorPage from "./components/ui/shared/error-page.tsx";
 import Companies from "./pages/Companies/index.tsx";
@@ -15,6 +20,7 @@ import React from "react";
 import EditStudentProfile from "./pages/EditStudentProfile/index.tsx";
 import DeleteStudentAccount from "./pages/DeleteStudentAccount/index.tsx";
 import EditInternship from "./pages/EditInternship/index.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +74,11 @@ const router = createBrowserRouter([
         element: <EditInternship />,
       },
       {
+        // /privacy-policy
+        path: "privacy-policy",
+        element: <PrivacyPolicy />,
+      },
+      {
         path: "/*",
         element: <ErrorPage />,
       },
@@ -78,7 +89,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}></RouterProvider>
     </AuthProvider>
   </React.StrictMode>
 );

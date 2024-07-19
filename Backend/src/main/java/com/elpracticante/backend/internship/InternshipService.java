@@ -13,6 +13,7 @@ import com.elpracticante.backend.internship.repository.InternshipRepository;
 import com.elpracticante.backend.internship.repository.TechnologyRepository;
 import com.elpracticante.backend.school.School;
 import com.elpracticante.backend.school.repository.SchoolRepository;
+import com.elpracticante.backend.shared.utils.DateUtils;
 import com.elpracticante.backend.shared.utils.EntityHelperUtils;
 import com.elpracticante.backend.shared.utils.Utils;
 import com.elpracticante.backend.student.repository.StudentRepository;
@@ -59,7 +60,7 @@ public class InternshipService implements InternshipServiceAPI {
         // Retrieve a company
         CompanyEntity companyEntity = EntityHelperUtils.getCompanyEntity(createInternshipRequest.companyId(), companyRepository);
         // Create the Intership entity
-        InternshipEntity internshipEntity = createIntership(createInternshipRequest,companyEntity);
+        InternshipEntity internshipEntity = createInternship(createInternshipRequest,companyEntity);
         // Save the Intership entity
         Integer intershipId = internshipRepository.save(internshipEntity).getId();
 
@@ -106,7 +107,51 @@ public class InternshipService implements InternshipServiceAPI {
             //internshipRepository.deleteTechnologyFromInternship(intershipId, technologyId);
     }
 
-    private InternshipEntity createIntership(CreateInternshipRequest createInternshipRequest, CompanyEntity companyEntity) {
+    @Override
+    public void updateInternship(UpdateInternshipRequest updateInternshipRequest, Integer internshipId) {
+        Optional<InternshipEntity> internshipEntityOptional = internshipRepository.findById(internshipId);
+
+
+        if (internshipEntityOptional.isPresent()) {
+            InternshipEntity internshipEntity = internshipEntityOptional.get();
+
+            if (updateInternshipRequest.schoolId() != internshipEntity.getSchool().getId()) {
+                internshipEntity.setSchool(EntityHelperUtils.getSchoolEntity(updateInternshipRequest.schoolId(), schoolRepository));
+            }
+
+            if (updateInternshipRequest.companyId() != internshipEntity.getCompany().getId()) {
+                internshipEntity.setCompany(EntityHelperUtils.getCompanyEntity(updateInternshipRequest.companyId(), companyRepository));
+            }
+
+            if (updateInternshipRequest.degreeId() != internshipEntity.getDegree().getId()) {
+                internshipEntity.setDegree(EntityHelperUtils.getDegreeEntity(updateInternshipRequest.degreeId(), degreeRepository));
+            }
+
+            if (!updateInternshipRequest.startDate().equals(internshipEntity.getStartDate().toString())) {
+                internshipEntity.setStartDate(DateUtils.getFormattedLocalDate(updateInternshipRequest.startDate()));
+            }
+
+            if (!updateInternshipRequest.endDate().equals(internshipEntity.getEndDate().toString())) {
+                internshipEntity.setEndDate(DateUtils.getFormattedLocalDate(updateInternshipRequest.endDate()));
+            }
+
+            if (!updateInternshipRequest.description().equals(internshipEntity.getDescription())) {
+                internshipEntity.setDescription(updateInternshipRequest.description());
+            }
+
+            if (updateInternshipRequest.rating() != internshipEntity.getRating()) {
+                internshipEntity.setRating(updateInternshipRequest.rating());
+            }
+
+            internshipEntity.setTechnologies(getTechnologiesList(updateInternshipRequest.selectedTechnologies()));
+            internshipEntity.setSummaries(getSummaries(updateInternshipRequest.summaryBest(), updateInternshipRequest.summaryWorst()));
+
+
+            internshipRepository.save(internshipEntity);
+        }
+    }
+
+    private InternshipEntity createInternship(CreateInternshipRequest createInternshipRequest, CompanyEntity companyEntity) {
         InternshipEntity internshipEntity = new InternshipEntity();
         internshipEntity.setTitle(createInternshipRequest.title());
         internshipEntity.setDescription(createInternshipRequest.description());
@@ -117,12 +162,12 @@ public class InternshipService implements InternshipServiceAPI {
         internshipEntity.setSchool(EntityHelperUtils.getSchoolEntity(createInternshipRequest.schoolId(), schoolRepository));
         internshipEntity.setStudent(EntityHelperUtils.getStudentEntityById(createInternshipRequest.studentId(), studentRepository));
         internshipEntity.setCompany(companyEntity);
-        internshipEntity.setTechnologies(getTechnologiesList(createInternshipRequest.technologies()));
-        internshipEntity.setSummaries(getSumarriesBest(createInternshipRequest.summaryBest(), createInternshipRequest.summaryWorst()));
+        internshipEntity.setTechnologies(getTechnologiesList(createInternshipRequest.selectedTechnologies()));
+        internshipEntity.setSummaries(getSummaries(createInternshipRequest.summaryBest(), createInternshipRequest.summaryWorst()));
         return internshipEntity;
     }
 
-    private List<SummarizeEntity> getSumarriesBest(List<String> bestList, List<String> worstList) {
+    private List<SummarizeEntity> getSummaries(List<String> bestList, List<String> worstList) {
         List<SummarizeEntity> summarizeEntityList = new ArrayList<>();
 
         for(String best: bestList) {
@@ -142,13 +187,15 @@ public class InternshipService implements InternshipServiceAPI {
         return summarizeEntityList;
     }
 
-    private List<TechnologyEntity> getTechnologiesList(List<Integer> technologies) {
+    private List<TechnologyEntity> getTechnologiesList(List<Technology> technologies) {
         List<TechnologyEntity> technologyEntityList = new ArrayList<>();
 
-        for(Integer technology: technologies) {
+        for(Technology technology: technologies) {
            if (null != technology) {
-               Optional<TechnologyEntity> technologyEntity = technologyRepository.findById(technology);
-               technologyEntity.ifPresent(technologyEntityList::add);
+                TechnologyEntity technologyEntity = new TechnologyEntity();
+                technologyEntity.setId(technology.id());
+                technologyEntity.setName(technology.name());
+                technologyEntityList.add(technologyEntity);
            }
         }
 

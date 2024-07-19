@@ -15,5 +15,6 @@ public record CreateStudentRequest(
         Integer companyId,
         Integer schoolId,
         Integer degreeId,
-        MultipartFile profilePicture
+        MultipartFile profilePicture,
+        String privacyPolicy
 ) {}

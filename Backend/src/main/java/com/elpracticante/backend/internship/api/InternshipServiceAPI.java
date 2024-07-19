@@ -1,9 +1,6 @@
 package com.elpracticante.backend.internship.api;
 
-import com.elpracticante.backend.internship.dto.CreateInternshipRequest;
-import com.elpracticante.backend.internship.dto.CreateInternshipResponse;
-import com.elpracticante.backend.internship.dto.GetInternshipResponse;
-import com.elpracticante.backend.internship.dto.GetTechnologies;
+import com.elpracticante.backend.internship.dto.*;
 
 
 public interface InternshipServiceAPI {
@@ -16,4 +13,6 @@ public interface InternshipServiceAPI {
     GetTechnologies getTechnologies();
 
     void deleteTechnology(Integer intershipId, Integer technologyId);
+
+    void updateInternship(UpdateInternshipRequest updateInternshipRequest, Integer internshipId);
 }

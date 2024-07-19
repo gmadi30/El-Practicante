@@ -45,7 +45,7 @@ public class InternshipEntity {
     private DegreeEntity degree;
 
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name="STUDENT_ID")
     private StudentEntity student;
 

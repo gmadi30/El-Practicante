@@ -1,8 +1,9 @@
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
+  BooleanMappingConstants,
   Company,
   CompanySortBy,
   Degree,
@@ -77,9 +78,19 @@ const RegisterForm = () => {
       formData.append("schoolId", data.schoolId);
       formData.append("companyId", data.companyId);
       formData.append("degreeId", data.degreeId);
+      formData.append(
+        "privacyPolicy",
+        data.privacyPolicy
+          ? BooleanMappingConstants.TRUE
+          : BooleanMappingConstants.FALSE
+      );
+
       if (data.profilePicture[0]) {
         formData.append("profilePicture", data.profilePicture[0]);
       }
+
+      console.log("CreateStudent payload", formData);
+
       await postStudent(formData);
       setIsStudentCreated(true);
       setLoading(false);
@@ -264,6 +275,28 @@ const RegisterForm = () => {
             label: company.companyName,
           }))}
         />
+        <label className="flex gap-5">
+          <input
+            type="checkbox"
+            {...register("privacyPolicy", {
+              required: {
+                value: true,
+                message: "Debes leer y aceptar la política de privacidad.",
+              },
+            })}
+          ></input>
+          <p>
+            He leído y acepto la{" "}
+            <Link to="/privacy-policy">
+              <span className="font-bold text-secondary-100 hover:underline">
+                política de privacidad{" "}
+              </span>
+            </Link>
+          </p>
+        </label>
+        <p className="text-base font-light text-red">
+          {errors.privacyPolicy?.message}
+        </p>
         {errorThrown && (
           <p className="font-bold text-red">
             {" "}

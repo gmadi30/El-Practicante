@@ -2,7 +2,7 @@ package com.elpracticante.backend.internship.dto;
 
 import java.util.List;
 
-public record CreateInternshipRequest(
+public record UpdateInternshipRequest(
 
         Integer schoolId,
 
@@ -22,7 +22,7 @@ public record CreateInternshipRequest(
 
         Integer rating,
 
-        List<Integer> technologies,
+        List<Technology> selectedTechnologies,
 
         List<String> summaryBest,
 
