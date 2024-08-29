@@ -238,7 +238,7 @@ export default function EditInternship() {
                     ¿Qué ha sido lo mejor de tus prácticas?
                   </h2>
                   <h3 className="text-gray  xl:text-xl text-sm my-1">
-                    Es obligatorio completar al menos 1 opción
+                    Es obligatorio añadir al menos 1 comentario{" "}
                   </h3>
                   <div className="flex flex-col gap-4">
                     <label className="font-bold">
@@ -314,7 +314,7 @@ export default function EditInternship() {
                     ¿Qué ha sido lo peor de tus prácticas?
                   </h2>
                   <h3 className="text-gray  xl:text-xl text-sm my-1">
-                    Es obligatorio completar al menos 1 opción
+                    Es obligatorio añadir al menos 1 comentario
                   </h3>
                   <div className="flex flex-col gap-4">
                     <label className="font-bold">

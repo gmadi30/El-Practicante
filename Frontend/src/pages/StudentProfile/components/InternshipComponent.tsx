@@ -66,22 +66,30 @@ const InternshipComponent: React.FC<IntershipProps> = (props) => {
                   <h1 className="text-secondary-100 font-bold tracking-wider text-xl">
                     DESCRIPCIÓN
                   </h1>
-                  <h2>Escuela: {internship?.school.name}</h2>
-                  <h2>Empresa: {internship?.company.companyName}</h2>
-                  <h2>Grado: {internship?.degree.name}</h2>
                   <h2>
-                    Fecha de inicio:{" "}
+                    <b>Escuela:</b> {internship?.school.name}
+                  </h2>
+                  <h2>
+                    <b>Empresa:</b> {internship?.company.companyName}
+                  </h2>
+                  <h2>
+                    <b>Grado:</b> {internship?.degree.name}
+                  </h2>
+                  <h2>
+                    <b>Fecha de inicio:</b>{" "}
                     {internship?.startDate &&
                       new Date(internship?.startDate).toLocaleDateString(
                         "en-GB"
                       )}
                   </h2>
                   <h2>
-                    Fecha de fin:{" "}
+                    <b>Fecha de fin:</b>{" "}
                     {internship?.endDate &&
                       new Date(internship?.endDate).toLocaleDateString("en-GB")}
                   </h2>
-                  <h2>Rating: {internship?.rating}/5</h2>
+                  <h2>
+                    <b>Rating:</b> {internship?.rating}/5
+                  </h2>
                   <h3>{internship?.title}</h3>
                   <p className="text-justify pr-1 pt-2 text-xl">
                     {internship?.description}

@@ -33,7 +33,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ company }) => {
                 rel="noreferrer"
                 className="hover:underline"
               >
-                {company.website}
+                {company.companyName}
               </a>
             </div>
           </li>

@@ -2,6 +2,7 @@ import { TiMail, TiSocialLinkedin } from "react-icons/ti";
 import { StudentProfile } from "../../../types/types";
 import { LuPencilLine } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../components/context/AuthContext";
 
 interface HeaderProps {
   student: StudentProfile;
@@ -10,6 +11,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = (props) => {
   const impagesFolderPath = "../../../assets/students/";
   const navigate = useNavigate();
+  const { authenticated, studentId } = useAuth();
+  const params = useParams();
 
   const handleProfilePicture = (name: string) => {
     return new URL(`${impagesFolderPath}${name}`, import.meta.url).href;
@@ -54,16 +57,17 @@ const Header: React.FC<HeaderProps> = (props) => {
             {props.student?.student?.city},{" "}
             {props.student?.student?.autonomousCommunity}
           </h3>
-
-          <button
-            className="text-sm gap-2 border rounded border-black px-4 py-2 mt-2 bg-secondary-100 text-white font-semibold flex items-center hover:bg-secondary-200"
-            onClick={navigateToEditProfile}
-          >
-            <h1>Editar Perfíl</h1>
-            <div className="text-base ">
-              <LuPencilLine />
-            </div>
-          </button>
+          {authenticated && studentId.toString() == params.studentId && (
+            <button
+              className="text-sm gap-2 border rounded border-black px-4 py-2 mt-2 bg-secondary-100 text-white font-semibold flex items-center hover:bg-secondary-200"
+              onClick={navigateToEditProfile}
+            >
+              <h1>Editar Perfíl</h1>
+              <div className="text-base ">
+                <LuPencilLine />
+              </div>
+            </button>
+          )}
         </div>
 
         <div className="mt-10">
