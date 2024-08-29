@@ -7,7 +7,6 @@ import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.internship.api.InternshipServiceAPI;
 import com.elpracticante.backend.internship.dto.*;
 import com.elpracticante.backend.internship.entity.InternshipEntity;
-import com.elpracticante.backend.internship.entity.SummarizeEntity;
 import com.elpracticante.backend.internship.entity.TechnologyEntity;
 import com.elpracticante.backend.internship.repository.InternshipRepository;
 import com.elpracticante.backend.internship.repository.TechnologyRepository;
@@ -21,11 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.elpracticante.backend.shared.utils.DateUtils.getFormattedLocalDate;
 import static com.elpracticante.backend.shared.utils.EntityHelperUtils.*;
 
 @Service
@@ -60,7 +57,7 @@ public class InternshipService implements InternshipServiceAPI {
         // Retrieve a company
         CompanyEntity companyEntity = EntityHelperUtils.getCompanyEntity(createInternshipRequest.companyId(), companyRepository);
         // Create the Intership entity
-        InternshipEntity internshipEntity = createInternship(createInternshipRequest,companyEntity);
+        InternshipEntity internshipEntity = EntityHelperUtils.createInternship(createInternshipRequest,companyEntity, degreeRepository, schoolRepository, studentRepository);
         // Save the Intership entity
         Integer intershipId = internshipRepository.save(internshipEntity).getId();
 
@@ -97,9 +94,9 @@ public class InternshipService implements InternshipServiceAPI {
     }
 
     @Override
-    public GetTechnologies getTechnologies() {
+    public Technologies getTechnologies() {
         List<TechnologyEntity> technologyEntityList = technologyRepository.findAll();
-        return new GetTechnologies(mapToTechonologiesList(technologyEntityList));
+        return new Technologies(mapToTechonologiesList(technologyEntityList));
     }
 
     @Override
@@ -151,54 +148,13 @@ public class InternshipService implements InternshipServiceAPI {
         }
     }
 
-    private InternshipEntity createInternship(CreateInternshipRequest createInternshipRequest, CompanyEntity companyEntity) {
-        InternshipEntity internshipEntity = new InternshipEntity();
-        internshipEntity.setTitle(createInternshipRequest.title());
-        internshipEntity.setDescription(createInternshipRequest.description());
-        internshipEntity.setStartDate(getFormattedLocalDate(createInternshipRequest.startDate()));
-        internshipEntity.setEndDate(getFormattedLocalDate(createInternshipRequest.endDate()));
-        internshipEntity.setRating(createInternshipRequest.rating());
-        internshipEntity.setDegree(EntityHelperUtils.getDegreeEntity(createInternshipRequest.degreeId(), degreeRepository));
-        internshipEntity.setSchool(EntityHelperUtils.getSchoolEntity(createInternshipRequest.schoolId(), schoolRepository));
-        internshipEntity.setStudent(EntityHelperUtils.getStudentEntityById(createInternshipRequest.studentId(), studentRepository));
-        internshipEntity.setCompany(companyEntity);
-        internshipEntity.setTechnologies(getTechnologiesList(createInternshipRequest.selectedTechnologies()));
-        internshipEntity.setSummaries(getSummaries(createInternshipRequest.summaryBest(), createInternshipRequest.summaryWorst()));
-        return internshipEntity;
+    @Override
+    public List<Technology> getTechnologiesByInternship(Integer internshipId) {
+        InternshipEntity internshipEntity = EntityHelperUtils.getIntershipEntity(internshipId, internshipRepository);
+        return mapToTechonologiesList(internshipEntity.getTechnologies());
     }
 
-    private List<SummarizeEntity> getSummaries(List<String> bestList, List<String> worstList) {
-        List<SummarizeEntity> summarizeEntityList = new ArrayList<>();
 
-        for(String best: bestList) {
-            SummarizeEntity summarizeEntity = new SummarizeEntity();
-            summarizeEntity.setName(best);
-            summarizeEntity.setType(SummarizeType.BEST);
-            summarizeEntityList.add(summarizeEntity);
-        }
 
-        for(String worst: worstList) {
-            SummarizeEntity summarizeEntity = new SummarizeEntity();
-            summarizeEntity.setName(worst);
-            summarizeEntity.setType(SummarizeType.WORST);
-            summarizeEntityList.add(summarizeEntity);
-        }
 
-        return summarizeEntityList;
-    }
-
-    private List<TechnologyEntity> getTechnologiesList(List<Technology> technologies) {
-        List<TechnologyEntity> technologyEntityList = new ArrayList<>();
-
-        for(Technology technology: technologies) {
-           if (null != technology) {
-                TechnologyEntity technologyEntity = new TechnologyEntity();
-                technologyEntity.setId(technology.id());
-                technologyEntity.setName(technology.name());
-                technologyEntityList.add(technologyEntity);
-           }
-        }
-
-        return technologyEntityList;
-    }
 }

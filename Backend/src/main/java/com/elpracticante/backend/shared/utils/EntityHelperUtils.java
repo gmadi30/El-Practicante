@@ -7,7 +7,9 @@ import com.elpracticante.backend.degree.Degree;
 import com.elpracticante.backend.degree.entity.DegreeEntity;
 import com.elpracticante.backend.degree.repository.DegreeRepository;
 import com.elpracticante.backend.internship.Internship;
+import com.elpracticante.backend.internship.dto.CreateInternshipRequest;
 import com.elpracticante.backend.internship.dto.Summarize;
+import com.elpracticante.backend.internship.dto.SummarizeType;
 import com.elpracticante.backend.internship.dto.Technology;
 import com.elpracticante.backend.internship.entity.InternshipEntity;
 import com.elpracticante.backend.internship.entity.SummarizeEntity;
@@ -34,6 +36,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.elpracticante.backend.shared.utils.DateUtils.getFormattedLocalDate;
 
 public final class EntityHelperUtils {
 
@@ -204,5 +208,61 @@ public final class EntityHelperUtils {
         for (CompanyEntity companyEntity : companyEntityList) {
             companyList.add(mapToCompany(companyEntity));
         }
+    }
+
+    public static InternshipEntity createInternship(
+            CreateInternshipRequest createInternshipRequest,
+            CompanyEntity companyEntity,
+            DegreeRepository degreeRepository,
+            SchoolRepository schoolRepository,
+            StudentRepository studentRepository) {
+        InternshipEntity internshipEntity = new InternshipEntity();
+        internshipEntity.setTitle(createInternshipRequest.title());
+        internshipEntity.setDescription(createInternshipRequest.description());
+        internshipEntity.setStartDate(getFormattedLocalDate(createInternshipRequest.startDate()));
+        internshipEntity.setEndDate(getFormattedLocalDate(createInternshipRequest.endDate()));
+        internshipEntity.setRating(createInternshipRequest.rating());
+        internshipEntity.setDegree(EntityHelperUtils.getDegreeEntity(createInternshipRequest.degreeId(), degreeRepository));
+        internshipEntity.setSchool(EntityHelperUtils.getSchoolEntity(createInternshipRequest.schoolId(), schoolRepository));
+        internshipEntity.setStudent(EntityHelperUtils.getStudentEntityById(createInternshipRequest.studentId(), studentRepository));
+        internshipEntity.setCompany(companyEntity);
+        internshipEntity.setTechnologies(getTechnologiesList(createInternshipRequest.selectedTechnologies()));
+        internshipEntity.setSummaries(getSummaries(createInternshipRequest.summaryBest(), createInternshipRequest.summaryWorst()));
+        return internshipEntity;
+    }
+
+    public static List<SummarizeEntity> getSummaries(List<String> bestList, List<String> worstList) {
+        List<SummarizeEntity> summarizeEntityList = new ArrayList<>();
+
+        for(String best: bestList) {
+            SummarizeEntity summarizeEntity = new SummarizeEntity();
+            summarizeEntity.setName(best);
+            summarizeEntity.setType(SummarizeType.BEST);
+            summarizeEntityList.add(summarizeEntity);
+        }
+
+        for(String worst: worstList) {
+            SummarizeEntity summarizeEntity = new SummarizeEntity();
+            summarizeEntity.setName(worst);
+            summarizeEntity.setType(SummarizeType.WORST);
+            summarizeEntityList.add(summarizeEntity);
+        }
+
+        return summarizeEntityList;
+    }
+
+    public static List<TechnologyEntity> getTechnologiesList(List<Technology> technologies) {
+        List<TechnologyEntity> technologyEntityList = new ArrayList<>();
+
+        for(Technology technology: technologies) {
+            if (null != technology) {
+                TechnologyEntity technologyEntity = new TechnologyEntity();
+                technologyEntity.setId(technology.id());
+                technologyEntity.setName(technology.name());
+                technologyEntityList.add(technologyEntity);
+            }
+        }
+
+        return technologyEntityList;
     }
 }

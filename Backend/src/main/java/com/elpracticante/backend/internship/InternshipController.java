@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("api/v1/internships")
@@ -31,21 +33,27 @@ public class InternshipController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping(path = "/{intershipId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetInternshipResponse> getIntership(@PathVariable Integer intershipId) {
-        GetInternshipResponse getInternshipResponse = service.getIntership(intershipId);
+    @GetMapping(path = "/{internshipId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GetInternshipResponse> getIntership(@PathVariable Integer internshipId) {
+        GetInternshipResponse getInternshipResponse = service.getIntership(internshipId);
         return new ResponseEntity<>(getInternshipResponse, HttpStatus.OK);
     }
 
     @GetMapping(path = "/technologies")
-    public ResponseEntity<GetTechnologies> getTechnologies() {
-        GetTechnologies getTechnologies = service.getTechnologies();
+    public ResponseEntity<Technologies> getTechnologies() {
+        Technologies getTechnologies = service.getTechnologies();
         return new ResponseEntity<>(getTechnologies, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{intershipId}/technology/{technologyId}")
-    public ResponseEntity<Void> deleteTechnology(@PathVariable Integer intershipId, @PathVariable Integer technologyId) {
-        service.deleteTechnology(intershipId, technologyId);
+    @GetMapping(path = "/{internshipId}/technologies")
+    public ResponseEntity<List<Technology>> getTechnologiesByInternship(@PathVariable Integer internshipId) {
+        List<Technology> getTechnologies = service.getTechnologiesByInternship(internshipId);
+        return new ResponseEntity<>(getTechnologies, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/{internshipId}/technology/{technologyId}")
+    public ResponseEntity<Void> deleteTechnology(@PathVariable Integer internshipId, @PathVariable Integer technologyId) {
+        service.deleteTechnology(internshipId, technologyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
