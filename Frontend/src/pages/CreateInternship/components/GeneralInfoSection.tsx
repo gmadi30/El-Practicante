@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { School, Company, Degree } from "../../../types/types";
+import { Link } from "react-router-dom";
 
 interface GeneralInfoSectionProps {
   schools: School[];
@@ -165,6 +166,25 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
         {validateDateDifferenceMessage &&
           "La fecha de fin no puede ser inferior a la fecha de inicio. Mínimo 50 días."}
       </p>
+      <label className="flex gap-3 items-center my-5">
+          <input className="h-4 w-4"
+            type="checkbox"
+            {...register("isAnonymous")}
+          ></input>
+          <p>Deseo publicar esta practica de forma anonima {" "}</p>
+        </label>
+        <p className="text-base font-light text-red">
+          {errors.annonymousInternship?.message?.toString()}
+        </p>
+        <p>
+            En nuestra {" "}
+            <Link to="/privacy-policy">
+              <span className="font-bold text-secondary-100 hover:underline">
+                política de privacidad{" "}
+              </span>
+            </Link>
+            puedes leer las condiciones de anonimidad
+          </p>
     </section>
   );
 };

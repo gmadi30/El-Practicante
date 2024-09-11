@@ -87,7 +87,9 @@ public class InternshipService implements InternshipServiceAPI {
                 mapToCompany(internshipEntity.getCompany()),
                 mapToStudent(internshipEntity.getStudent()),
                 mapToTechonologiesList(internshipEntity.getTechnologies()),
-                mapToSummaryList(internshipEntity.getSummaries())
+                mapToSummaryList(internshipEntity.getSummaries()),
+                internshipEntity.getSubmittedDate(),
+                internshipEntity.getIsAnonymous()
                 );
 
         return new GetInternshipResponse(internship);

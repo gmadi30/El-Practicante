@@ -92,6 +92,8 @@ export type Internship = {
   summarizeList: Summary[];
   technologyList: Technology[];
   student: Student;
+  submittedDate: string;
+  isAnonymous: Boolean;
 };
 
 export type Summary = {
@@ -176,6 +178,7 @@ export type CreateIntershipFromValues = {
   worst1: string;
   worst2: string;
   worst3: string;
+  isAnonymous: Boolean;
 };
 
 export type ErrorResponseType = {

@@ -124,7 +124,9 @@ public class StudentService implements StudentServiceAPI {
                     new Company(internshipEntity.getCompany().getId(), internshipEntity.getCompany().getName(), internshipEntity.getCompany().getRating(), internshipEntity.getCompany().getInternships().size()),
                     new Student(internshipEntity.getStudent().getId(), internshipEntity.getStudent().getName(), internshipEntity.getStudent().getLastName(), internshipEntity.getStudent().getEmail(), internshipEntity.getStudent().getCity(), internshipEntity.getStudent().getAutonomousCommunity(), internshipEntity.getStudent().getMobile(), new Company(null, internshipEntity.getStudent().getCompanyName()), internshipEntity.getStudent().getStudentProfilePicture().getName(),  internshipEntity.getStudent().getBirthday()),
                     mapToTechnology(internshipEntity.getTechnologies()),
-                    mapToSummarize(internshipEntity.getSummaries()))
+                    mapToSummarize(internshipEntity.getSummaries()),
+                   internshipEntity.getSubmittedDate(),
+                   internshipEntity.getIsAnonymous())
            );
         }
 
@@ -276,7 +278,7 @@ public class StudentService implements StudentServiceAPI {
         studentEntity.setDegreeName(getDegreeEntity(createStudentRequest.degreeId(), degreeRepository).getName());
         studentEntity.setCompanyName(EntityHelperUtils.getCompanyEntity(createStudentRequest.companyId(), companyRepository).getName());
         studentEntity.setStudentProfilePicture(uploadProfilePicture(createStudentRequest.profilePicture(), studentProfilePictureRepository));
-        studentEntity.setPrivacyPolicyAcceptance(createStudentRequest.privacyPolicy().equals(Constants.TRUE) ? true : false);
+        studentEntity.setPrivacyPolicyAcceptance(createStudentRequest.privacyPolicy().equals("true") ? true : false);
         studentEntity.setDatePrivacyPolicyAcceptance(LocalDateTime.ofInstant(Instant.now(), ZoneId.of(Constants.ZONE_ID_EUROPE_PARIS)));
         studentEntity.setPrivacyPolicyVersion(Constants.PRIVACY_POLICY_VERSION);
         return studentEntity;

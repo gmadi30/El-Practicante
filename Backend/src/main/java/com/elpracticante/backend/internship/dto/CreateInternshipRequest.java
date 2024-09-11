@@ -26,7 +26,9 @@ public record CreateInternshipRequest(
 
         List<String> summaryBest,
 
-        List<String> summaryWorst
+        List<String> summaryWorst,
+
+        Boolean isAnonymous
 
 ) {
 }

@@ -110,6 +110,7 @@ const CreateInternship: FC = () => {
               />
               <BestSection />
               <WorstSection />
+              
               {errorThrown && (
                 <p className="font-bold text-red-500">
                   ❌ ¡Ha ocurrido un error revisa el formulario!

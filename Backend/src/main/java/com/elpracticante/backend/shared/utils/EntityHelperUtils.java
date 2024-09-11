@@ -33,7 +33,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +46,8 @@ public final class EntityHelperUtils {
    // private static final String FOLDER_PATH = "C:/Users/georg/Documents/El Practicante/Frontend/src/assets/img/";
 
     private static final Logger logger = LoggerFactory.getLogger(EntityHelperUtils.class);
-    private static final String FOLDER_PATH ="/Users/georg/Documents/El Practicante/Frontend/src/assets/students/";
+    // private static final String FOLDER_PATH ="/Users/georg/Documents/El Practicante/Frontend/src/assets/students/";
+    private static final String FOLDER_PATH ="C:\\Users\\Georges\\Documents\\El-Practicante\\Frontend\\src\\assets\\students";
     private EntityHelperUtils() {
     }
 
@@ -197,7 +200,9 @@ public final class EntityHelperUtils {
                         new Company(internshipEntity.getCompany().getName(), internshipEntity.getCompany().getRating()),
                         mapToStudent(internshipEntity.getStudent()),
                         mapToTechonologiesList(internshipEntity.getTechnologies()),
-                        mapToSummaryList(internshipEntity.getSummaries())
+                        mapToSummaryList(internshipEntity.getSummaries()),
+                        internshipEntity.getSubmittedDate(),
+                        internshipEntity.getIsAnonymous()
                 )
         ));
 
@@ -228,6 +233,8 @@ public final class EntityHelperUtils {
         internshipEntity.setCompany(companyEntity);
         internshipEntity.setTechnologies(getTechnologiesList(createInternshipRequest.selectedTechnologies()));
         internshipEntity.setSummaries(getSummaries(createInternshipRequest.summaryBest(), createInternshipRequest.summaryWorst()));
+        internshipEntity.setIsAnonymous(createInternshipRequest.isAnonymous());
+        internshipEntity.setSubmittedDate(LocalDate.parse(LocalDate.now().toString()));
         return internshipEntity;
     }
 

@@ -55,7 +55,7 @@ export default function Profile() {
           {student?.internships?.map((internship, index) => {
             return <InternshipComponent key={index} internship={internship} />;
           })}
-          {student?.internships?.length === 2 && (
+          {student?.internships?.length !== 0 && (
             <AddInternshipButton onClick={handleNewIntershipOnClick} />
           )}
         </div>

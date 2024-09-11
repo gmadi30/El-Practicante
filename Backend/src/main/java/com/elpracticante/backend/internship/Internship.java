@@ -22,7 +22,9 @@ public record Internship(
         Company company,
         Student student,
         List<Technology> technologyList,
-        List<Summarize> summarizeList
+        List<Summarize> summarizeList,
+        LocalDate submittedDate,
+        Boolean isAnonymous
 ) {
 
 }

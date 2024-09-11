@@ -110,6 +110,47 @@ export default function PrivacyPolicy() {
         </li>
       </ul>
 
+      <h2 className="text-2xl font-bold mb-4">Publicación Anónima de Reviews y Prácticas</h2>
+
+      <p className="mb-4">
+          Al utilizar nuestra aplicación para publicar una review o práctica, puedes optar por hacerlo de manera anónima. 
+          Esto significa que, aunque el contenido de tu publicación será visible para otros usuarios de la aplicación, 
+          no se mostrará públicamente ninguna información que pueda identificarte, como tu nombre de usuario o cualquier otro dato personal.
+      </p>
+
+      <h3 className="text-xl font-semibold mb-2">Retención y Uso de Datos Anónimos:</h3>
+      <ul className="list-disc list-inside mb-4">
+          <li className="mb-2">
+              Aunque tus publicaciones serán anónimas para el público, <strong>EL PRACTICANTE</strong> conservará toda la información relacionada 
+              con la publicación, incluyendo datos de identificación personal asociados a tu cuenta, tales como nombre de usuario, 
+              dirección de correo electrónico y cualquier otra información que hayas proporcionado durante el registro.
+          </li>
+          <li className="mb-2">
+              Esta información se almacenará de manera segura y se utilizará exclusivamente para fines internos, como asegurar la integridad 
+              y veracidad de las publicaciones, responder a cualquier situación legal que pueda surgir, y mejorar los servicios ofrecidos 
+              por nuestra aplicación.
+          </li>
+      </ul>
+
+      <h3 className="text-xl font-semibold mb-2">Garantía de Anonimato:</h3>
+      <ul className="list-disc list-inside mb-4">
+          <li className="mb-2">
+              Nos comprometemos a no revelar tu identidad o cualquier información personal que te identifique en relación con las publicaciones 
+              anónimas. No se permitirá el acceso a esta información a ningún tercero sin tu consentimiento previo, salvo que sea requerido 
+              por ley o una autoridad competente.
+          </li>
+          <li className="mb-2">
+              La publicación anónima no permitirá a otros usuarios ni al público en general acceder a tu perfil o identificarte de ninguna 
+              manera a partir de la review o práctica publicada.
+          </li>
+      </ul>
+
+      <p className="mb-4">
+          Al publicar una review o práctica de manera anónima, aceptas y consientes que <strong>EL PRACTICANTE</strong> retenga y utilice tus 
+          datos personales de acuerdo con los términos establecidos en esta política de privacidad.
+      </p>
+
+
       <h2 className="text-xl font-semibold mb-2">
         Cambios en esta Política de Privacidad
       </h2>
