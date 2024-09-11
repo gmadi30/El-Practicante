@@ -22,6 +22,7 @@ export default function Profile() {
       try {
         if (params.studentId !== undefined) {
           const data = await getStudentById(params.studentId);
+          console.log(data);
           setStudent(data);
         }
       } catch (error) {
@@ -69,7 +70,11 @@ export default function Profile() {
         <div className="font-body md:container md:mx-auto">
           <Header student={student} />
           {student?.internships?.map((internship, index) => {
-            return <InternshipComponent key={index} internship={internship} />;
+            return (
+              !internship.isAnonymous && (
+                <InternshipComponent key={index} internship={internship} />
+              )
+            );
           })}
         </div>
       </>

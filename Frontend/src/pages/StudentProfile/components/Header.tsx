@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = (props) => {
   };
 
   const navigateToEditProfile = () => {
-    navigate(`/student/${props.student?.student?.id}/edit-profile`);
+    navigate(`/student/${studentId.toString()}/edit-profile`);
   };
 
   return (

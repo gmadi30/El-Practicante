@@ -26,8 +26,16 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
         internships.map((internship, index) => (
           <div key={index} className="flex mx-2 space-y-2">
             <div
-              onClick={() => handleNavigate(internship.student.id)}
-              className="flex flex-col items-center justify-center text-center p-2 min-w-fit cursor-pointer"
+              onClick={() =>
+                internship.isAnonymous
+                  ? null
+                  : handleNavigate(internship.student.id)
+              }
+              className={
+                internship.isAnonymous
+                  ? "flex flex-col items-center justify-center text-center p-2 min-w-fit"
+                  : "flex flex-col items-center justify-center text-center p-2 min-w-fit cursor-pointer"
+              }
             >
               <img
                 className="float-left w-[100px] h-[100px] object-cover rounded-full mb-3"
@@ -35,12 +43,13 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
                 alt=""
               />
               <div className="flex flex-col justify-center items-center text-sm my-3">
-                {
-                  internship.isAnonymous ? <h1>Usuario anonimo</h1> : 
-                <h1 className="font-bold">
-                  {internship.student.name} {internship.student.lastName}
-                </h1>
-                }
+                {internship.isAnonymous ? (
+                  <h1>Usuario anonimo</h1>
+                ) : (
+                  <h1 className="font-bold">
+                    {internship.student.name} {internship.student.lastName}
+                  </h1>
+                )}
                 <h2>{internship.school.name}</h2>
                 <h2>{internship.degree.name}</h2>
               </div>
@@ -52,7 +61,7 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
                   <h1 className="font-semibold ml-2">{internship.title}</h1>
                 </div>
                 <h2 className="text-xs">{internship.submittedDate}</h2>
-                
+
                 <div className="flex flex-col space-between">
                   <p className="line-clamp-3 mt-1 text-left text-sm">
                     {internship.description}
