@@ -37,11 +37,19 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
                   : "flex flex-col items-center justify-center text-center p-2 min-w-fit cursor-pointer"
               }
             >
-              <img
-                className="float-left w-[100px] h-[100px] object-cover rounded-full mb-3"
-                src={imgStudentProfile(internship.student.profilePictureName)}
-                alt=""
-              />
+              {internship.isAnonymous ? (
+                <img
+                  className="float-left w-[100px] h-[100px] object-cover rounded-full mb-3"
+                  src={imgStudentProfile("NoProfilePicture.png")}
+                  alt=""
+                />
+              ) : (
+                <img
+                  className="float-left w-[100px] h-[100px] object-cover rounded-full mb-3"
+                  src={imgStudentProfile(internship.student.profilePictureName)}
+                  alt=""
+                />
+              )}
               <div className="flex flex-col justify-center items-center text-sm my-3">
                 {internship.isAnonymous ? (
                   <h1>Usuario anonimo</h1>

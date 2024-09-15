@@ -43,6 +43,7 @@ export default function EditInternship() {
   const [internship, setIntership] = useState<Internship | null>(null);
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [isInternshipUpdated, setIsInternshipUpdated] = useState(false);
+  const [isEmptyTechnologyList, setIsEmptyTechnologyList] = useState(false);
   const [errorThrown, setErrorThrown] = useState(false);
   const [validateDateDifferenceMessage, setValidateDateDifferenceMessage] =
     useState(false);
@@ -156,7 +157,21 @@ export default function EditInternship() {
   }, [internship]);
 
   const updateInternship = async (data: CreateIntershipFromValues) => {
-    console.log("Data collected to save in the DB" + data);
+    console.log("Data collected to save in the DB");
+
+    if (null != internship && data.selectedTechnologies.length === 0) {
+      console.log(
+        "EditIntership - index.tsx - No Technology error" +
+          internship.technologyList
+      );
+      setIsEmptyTechnologyList(true);
+      return; // Prevent form submission if no technology is selected
+    } else {
+      console.log(
+        "EditIntership - index.tsx - Technology list is not emptyh" + data
+      );
+      setIsEmptyTechnologyList(false);
+    }
 
     try {
       if (!studentId) {
@@ -166,9 +181,6 @@ export default function EditInternship() {
       if (!internshipId) {
         throw new Error(`InternshipId is null or undefined: ${internshipId}`);
       }
-
-      const dataStudent = await getStudentById(studentId);
-      setStudent(dataStudent);
 
       console.log("EditIntership body:", data);
 
@@ -228,6 +240,7 @@ export default function EditInternship() {
                       : []
                   }
                   register={methods.register}
+                  isEmptyTechnologyList={isEmptyTechnologyList}
                 />
 
                 <section className="my-10">

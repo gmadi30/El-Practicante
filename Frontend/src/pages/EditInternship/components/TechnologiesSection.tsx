@@ -7,12 +7,14 @@ interface TechnologiesSectionProps {
   availableTechnologies: Technology[];
   internshipTechnologies: Technology[];
   register: UseFormRegister<any>;
+  isEmptyTechnologyList: boolean;
 }
 
 const TechnologiesSection: FC<TechnologiesSectionProps> = ({
   availableTechnologies,
   internshipTechnologies,
   register,
+  isEmptyTechnologyList,
 }) => {
   // Obtiene métodos y estados del contexto del formulario
   const { formState, getValues, setError, setValue, clearErrors } =
@@ -29,9 +31,12 @@ const TechnologiesSection: FC<TechnologiesSectionProps> = ({
     setValue("selectedTechnologies", selectedTechnologies);
   }, [selectedTechnologies, setValue]);
 
-  // Maneja la adición de una nueva tecnología a la lista de seleccionadas
+  console.log("isEmptyTechnologyList: ", isEmptyTechnologyList);
+  console.log("internshipTechnologies: ", internshipTechnologies);
+
   // Maneja la adición de una nueva tecnología a la lista de seleccionadas
   const handleAddTechnology = () => {
+    console.log("Entra en handleAddTechnology");
     const technologyId = getValues("technologySelect");
 
     const selectedTechnologyAvailable = availableTechnologies.find(
@@ -110,6 +115,7 @@ const TechnologiesSection: FC<TechnologiesSectionProps> = ({
                 </option>
               ))}
           </select>
+
           {selectedTechnologies.length < 3 && (
             <button
               type="button"
@@ -122,6 +128,11 @@ const TechnologiesSection: FC<TechnologiesSectionProps> = ({
           <p className="text-base font-light text-red">
             {errors.technologySelect?.message?.toString()}
           </p>
+          {isEmptyTechnologyList && selectedTechnologies.length === 0 && (
+            <p className="text-base font-light text-red">
+              {"Debes seleccionar al menos una tecnología"}
+            </p>
+          )}
         </label>
       </div>
       <ul className="mt-4">
