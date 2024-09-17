@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { School, Company, Degree, Internship } from "../../../types/types";
+import { Link } from "react-router-dom";
 
 interface GeneralInfoSectionProps {
   schools: School[];
@@ -15,7 +16,7 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
   degrees,
   internship,
 }) => {
-  const { register, watch, formState } = useFormContext();
+  const { register, watch, formState, setValue } = useFormContext();
   const startDate = watch("startDate");
   const endDate = watch("endDate");
   const { errors } = formState;
@@ -23,6 +24,7 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
     useState(false);
 
   useEffect(() => {
+    setValue("isAnonymous", internship?.isAnonymous);
     const validateDateDifference = () => {
       if (startDate && endDate) {
         const differenceInTime =
@@ -36,9 +38,8 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
         }
       }
     };
-
     validateDateDifference(); // Call the function when the component mounts and whenever startDate or endDate changes
-  }, [startDate, endDate]); // Add dependencies to the useEffect hook
+  }, [internship, startDate, endDate]); // Add dependencies to the useEffect hook
 
   return (
     <section className="my-10">
@@ -179,6 +180,26 @@ const GeneralInfoSection: FC<GeneralInfoSectionProps> = ({
       <p className="text-base font-light text-red">
         {validateDateDifferenceMessage &&
           "La fecha de fin no puede ser inferior a la fecha de inicio. Mínimo 50 días."}
+      </p>
+      <label className="flex gap-3 items-center my-5">
+        <input
+          className="h-4 w-4"
+          type="checkbox"
+          {...register("isAnonymous")}
+        ></input>
+        <p>Deseo publicar esta practica de forma anonima </p>
+      </label>
+      <p className="text-base font-light text-red">
+        {errors.annonymousInternship?.message?.toString()}
+      </p>
+      <p>
+        En nuestra{" "}
+        <Link to="/privacy-policy">
+          <span className="font-bold text-secondary-100 hover:underline">
+            política de privacidad{" "}
+          </span>
+        </Link>
+        puedes leer las condiciones de anonimidad
       </p>
     </section>
   );

@@ -20,7 +20,6 @@ import {
   getAllSchools,
   getAllTechnologies,
   getInternshipById,
-  getStudentById,
   updateIntership,
 } from "../../api/api";
 import GeneralInfoSection from "./components/GeneralInfoSection";
@@ -181,6 +180,10 @@ export default function EditInternship() {
       if (!internshipId) {
         throw new Error(`InternshipId is null or undefined: ${internshipId}`);
       }
+
+      data.isAnonymous === null
+        ? (data.isAnonymous = false)
+        : (data.isAnonymous = true);
 
       console.log("EditIntership body:", data);
 

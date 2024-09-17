@@ -142,6 +142,12 @@ public class InternshipService implements InternshipServiceAPI {
                 internshipEntity.setRating(updateInternshipRequest.rating());
             }
 
+            if (updateInternshipRequest.isAnonymous() != internshipEntity.getIsAnonymous()) {
+                internshipEntity.setIsAnonymous(updateInternshipRequest.isAnonymous());
+            }
+
+
+
             internshipEntity.setTechnologies(getTechnologiesList(updateInternshipRequest.selectedTechnologies()));
             internshipEntity.setSummaries(getSummaries(updateInternshipRequest.summaryBest(), updateInternshipRequest.summaryWorst()));
 

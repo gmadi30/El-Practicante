@@ -24,7 +24,10 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
       </h1>
       {internships &&
         internships.map((internship, index) => (
-          <div key={index} className="flex mx-2 space-y-2">
+          <div
+            key={index}
+            className={`flex mx-2 my-2 ${index % 2 !== 0 ? "bg-primary" : ""}`}
+          >
             <div
               onClick={() =>
                 internship.isAnonymous
@@ -33,8 +36,8 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
               }
               className={
                 internship.isAnonymous
-                  ? "flex flex-col items-center justify-center text-center p-2 min-w-fit"
-                  : "flex flex-col items-center justify-center text-center p-2 min-w-fit cursor-pointer"
+                  ? "flex flex-col items-center justify-center text-center p-2 w-1/3 "
+                  : "flex flex-col items-center justify-center text-center p-2 w-1/3 cursor-pointer "
               }
             >
               {internship.isAnonymous ? (
@@ -50,9 +53,11 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
                   alt=""
                 />
               )}
-              <div className="flex flex-col justify-center items-center text-sm my-3">
+              <div
+                className={`flex flex-col justify-center items-center text-sm my-3 `}
+              >
                 {internship.isAnonymous ? (
-                  <h1>Usuario anonimo</h1>
+                  <h1 className="font-bold">Usuario anonimo</h1>
                 ) : (
                   <h1 className="font-bold">
                     {internship.student.name} {internship.student.lastName}
@@ -62,7 +67,11 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
                 <h2>{internship.degree.name}</h2>
               </div>
             </div>
-            <div className="flex flex-col w-full h-fit pb-1 bg-primary py-3 px-2">
+            <div
+              className={`flex flex-col w-full flex-grow pb-1 px-2 justify-between ${
+                index % 2 !== 0 ? " bg-primary rounded-r-2xl " : ""
+              }`}
+            >
               <div className="text-sm">
                 <div className="flex">
                   <Rating rating={internship.rating} />
@@ -71,7 +80,7 @@ const InternshipSection: React.FC<InternshipSectionProps> = ({
                 <h2 className="text-xs">{internship.submittedDate}</h2>
 
                 <div className="flex flex-col space-between">
-                  <p className="line-clamp-3 mt-1 text-left text-sm">
+                  <p className="line-clamp-6 mt-1 text-left text-sm">
                     {internship.description}
                   </p>
                 </div>

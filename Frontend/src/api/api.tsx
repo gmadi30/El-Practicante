@@ -181,7 +181,7 @@ export const postIntership = async (
       summaryBest: [data.best1, data.best2, data.best3],
       summaryWorst: [data.worst1, data.worst2, data.worst3],
       studentId: studentId,
-      isAnonymous: data.isAnonymous
+      isAnonymous: data.isAnonymous,
     }),
     headers: {
       "Content-Type": "application/json",
@@ -224,6 +224,7 @@ export const updateIntership = async (
         summaryBest: [data.best1, data.best2, data.best3],
         summaryWorst: [data.worst1, data.worst2, data.worst3],
         studentId: studentId,
+        isAnonymous: data.isAnonymous,
       }),
       headers: {
         "Content-Type": "application/json",
