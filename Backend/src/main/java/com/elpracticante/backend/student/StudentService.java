@@ -1,5 +1,6 @@
 package com.elpracticante.backend.student;
 
+import com.elpracticante.backend.auth.AuthenticationResponse;
 import com.elpracticante.backend.auth.TokenService;
 import com.elpracticante.backend.company.Company;
 import com.elpracticante.backend.company.entity.CompanyEntity;
@@ -230,29 +231,30 @@ public class StudentService implements StudentServiceAPI {
 
     @Override
     public LoginStudent postLogin(LoginStudentRequest loginStudentRequest) {
-        Optional<StudentEntity> studentEntity = studentRepository.findByEmail(loginStudentRequest.studentEmail());
+        StudentEntity studentEntity = studentRepository
+                .findByEmail(loginStudentRequest.studentEmail())
+                .orElseThrow(() -> new UserNotFoundException("El usuario o la contraseña son incorrectas"));
 
-        if (studentEntity.isEmpty()) {
+
+        if (!passwordEncoder.matches(loginStudentRequest.password(), studentEntity.getPassword())) {
             throw new UserNotFoundException("El usuario o la contraseña son incorrectas");
         }
 
-        if (!passwordEncoder.matches(loginStudentRequest.password(), studentEntity.get().getPassword())) {
-            throw new UserNotFoundException("El usuario o la contraseña son incorrectas");
-        }
+        AuthenticationResponse authenticationResponse = generateTokens(studentEntity);
+        return new LoginStudent(studentEntity.getId(), authenticationResponse);
+    }
 
-        System.out.println("Login password: " + loginStudentRequest.password());
-        System.out.println("Database Stored password: " + studentEntity.get().getPassword());
+    private AuthenticationResponse generateTokens(StudentEntity studentEntity) {
 
-        String token = tokenService.generateToken(new UsernamePasswordAuthenticationToken(
-                studentEntity.get().getEmail(),
-                studentEntity.get().getPassword()
-        ) );
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                studentEntity.getEmail(),
+                studentEntity.getPassword()
+        );
 
-        System.out.println("Token generated: " + token);
+        String accessToken = tokenService.generateAccessToken(usernamePasswordAuthenticationToken);
+        String refreshToken = tokenService.generateRefreshToken(usernamePasswordAuthenticationToken);
 
-        tokenService.tokenDecoder(token);
-
-        return new LoginStudent(studentEntity.get().getId(), token);
+        return new AuthenticationResponse(accessToken, refreshToken);
     }
 
 

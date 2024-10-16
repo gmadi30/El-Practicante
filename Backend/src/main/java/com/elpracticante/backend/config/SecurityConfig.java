@@ -35,6 +35,7 @@ public class SecurityConfig {
     private static final Long MAX_AGE = 3600L;
     private static final int CORS_FILTER_ORDER = -102;
 
+
     private final RsaKeyProperties rsaKeys;
 
     public SecurityConfig(RsaKeyProperties rsaKeys) {
@@ -95,10 +96,11 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/", "http://127.0.0.1:5173/"));
         configuration.setAllowedHeaders(Arrays.asList(HttpHeaders.ACCEPT, HttpHeaders.CACHE_CONTROL, HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION));
-        configuration.setExposedHeaders(Arrays.asList(HttpHeaders.AUTHORIZATION));
+        configuration.setExposedHeaders(Arrays.asList(HttpHeaders.AUTHORIZATION, "Refresh-Token"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }

@@ -11,6 +11,9 @@ spring:
 
 logging:
   level:
+    root: INFO
+    com:
+      elpracticante: DEBUG
     org:
       springframework:
         security: DEBUG

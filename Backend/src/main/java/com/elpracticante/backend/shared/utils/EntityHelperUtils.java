@@ -35,7 +35,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +45,8 @@ public final class EntityHelperUtils {
    // private static final String FOLDER_PATH = "C:/Users/georg/Documents/El Practicante/Frontend/src/assets/img/";
 
     private static final Logger logger = LoggerFactory.getLogger(EntityHelperUtils.class);
-    // private static final String FOLDER_PATH ="/Users/georg/Documents/El Practicante/Frontend/src/assets/students/";
-    private static final String FOLDER_PATH ="C:\\Users\\Georges\\Documents\\El-Practicante\\Frontend\\src\\assets\\students";
+    private static final String FOLDER_PATH ="/Users/georg/Documents/El Practicante/Frontend/src/assets/students/";
+    // private static final String FOLDER_PATH ="C:\\Users\\Georges\\Documents\\El-Practicante\\Frontend\\src\\assets\\students";
     private EntityHelperUtils() {
     }
 

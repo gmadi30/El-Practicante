@@ -78,7 +78,8 @@ public class StudentController {
     public ResponseEntity<LoginStudentResponse> postLogin(@RequestBody LoginStudentRequest body) {
         LoginStudent loginStudent = service.postLogin(body);
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add(HttpHeaders.AUTHORIZATION, loginStudent.token());
+        headers.add(HttpHeaders.AUTHORIZATION, loginStudent.authenticationResponse().getAccessToken());
+        headers.add("Refresh-Token", loginStudent.authenticationResponse().getRefreshToken());
         return new ResponseEntity<>(new LoginStudentResponse(loginStudent.studentId()), headers, HttpStatus.OK);
     }
 }
