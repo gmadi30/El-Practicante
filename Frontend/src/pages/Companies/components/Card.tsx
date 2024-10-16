@@ -29,10 +29,12 @@ const Card: React.FC<CardProps> = (props) => {
   };
 
   return (
-    <div className="flex justify-center mb-5 ">
+    <div className={`flex justify-center mb-5`}>
       <div
         onClick={navigateToProfile}
-        className="flex flex-col px-10 hoverCompanyProfileImage"
+        className={`flex flex-col px-10 hoverCompanyProfileImag ${
+          props.isEven && "bg-primary"
+        }`}
       >
         <div className="">
           <img
@@ -53,7 +55,7 @@ const Card: React.FC<CardProps> = (props) => {
         </div>
       </div>
       <div
-        className={`flex ${props.isEven && "bg-primary"}  pb-1  w-fit md:w-1/4`}
+        className={`flex pb-1 w-full md:w-1/4 ${props.isEven && "bg-primary"}`}
       >
         <div className="flex flex-col  p-4  pb-8">
           <div className="flex flex-col ">

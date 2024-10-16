@@ -20,7 +20,7 @@ const CompanyCards: React.FC<CompanyCardsProps> = (
   });
 
   return (
-    <section className="px-5 flex flex-col ">
+    <section className="flex flex-col ">
       {companiesFiltered?.map((company, index) => {
         return (
           <div>

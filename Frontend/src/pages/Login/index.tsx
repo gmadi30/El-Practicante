@@ -9,7 +9,7 @@ import {
   LoginFormValues,
 } from "../../types/types";
 import { useAuth } from "../../components/context/AuthContext";
-import { getAuthToken, login } from "../../api/api";
+import { getAccessToken, login } from "../../api/api";
 export default function Login() {
   let navigate = useNavigate();
   const form = useForm<FormValues>();
@@ -58,7 +58,7 @@ export default function Login() {
     });
   };
 
-  if (!getAuthToken()) {
+  if (!getAccessToken()) {
     return (
       <>
         <div className="container px-20 mx-auto max-w-screen-sm md:mx-auto lg:text-xl sm:w-[75%]">

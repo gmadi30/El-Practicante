@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { getAuthToken } from "../../../api/api";
+import { getAccessToken } from "../../../api/api";
 import SuccesfulResponse from "../../../components/ui/shared/SuccesfulResponse";
 import LoginForm from "./LoginForm";
 
 export default function Login() {
   const navigate = useNavigate();
 
-  if (getAuthToken()) {
+  if (getAccessToken()) {
     return <SuccesfulResponse message={"¡Sesión iniciada con éxito!"} />;
   } else {
     return (

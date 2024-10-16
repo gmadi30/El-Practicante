@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { getAuthToken } from "../../../api/api";
+import { getAccessToken } from "../../../api/api";
 import { useAuth } from "../../../components/context/AuthContext";
 
 const Header = () => {
@@ -21,7 +21,7 @@ const Header = () => {
             experiencia
           </h2>
 
-          {getAuthToken() === null ? (
+          {getAccessToken() === null ? (
             <Link to="/register">
               <button className="rounded border-cyan-600 bg-secondary-100 text-white px-14 py-2 font-bold uppercase tracking-[0.5rem] my-5 hover:bg-secondary-200 lg:text-2xl">
                 <p>registrate</p>

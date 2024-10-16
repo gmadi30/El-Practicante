@@ -36,10 +36,10 @@ const InternshipComponent: React.FC<IntershipProps> = (props) => {
             <div>
               <div className="flex">
                 <div className="flex-shrink-0 space-y-4 ">
-                  <div>
+                  <div className="flex justify-center items-cente">
                     <img
                       src={imgCompanyProfile(internship?.company?.companyName)}
-                      className=" w-[110px] h-[110px] object-cover mb-3 cursor-pointer"
+                      className=" w-[110px] h-[110px] object-cover mb-3 cursor-pointer "
                       onClick={() =>
                         handleNavigate(internship?.company?.companyId)
                       }

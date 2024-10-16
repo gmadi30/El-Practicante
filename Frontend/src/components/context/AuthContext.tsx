@@ -1,5 +1,5 @@
 import { createContext, useContext, FC, ReactNode, useState } from "react";
-import { getAuthToken } from "../../api/api";
+import { getAccessToken } from "../../api/api";
 
 type AuthContextType = {
   authenticated: boolean;
@@ -15,7 +15,7 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  const [authenticated, setAuthenticated] = useState(getAuthToken() !== null);
+  const [authenticated, setAuthenticated] = useState(getAccessToken() !== null);
   const [studentId, setStudentId] = useState(() => {
     return parseInt(localStorage.getItem("studentId") || "0");
   });

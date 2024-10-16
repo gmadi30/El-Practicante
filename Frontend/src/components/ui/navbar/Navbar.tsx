@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import logo from "../../../assets/img/logo.png";
 import { useAuth } from "../../context/AuthContext";
-import { authToken, getAuthToken } from "../../../api/api";
+import { accessToken, getAccessToken} from "../../../api/api";
 
 const Navbar = () => {
   const {
@@ -13,15 +13,15 @@ const Navbar = () => {
 
   console.log(authenticated);
 
-  console.log(getAuthToken());
+  console.log(getAccessToken());
   const handleLogout = () => {
-    if (getAuthToken()) {
-      console.log("Token dentro del if: ", authToken);
-      localStorage.removeItem("authToken");
+    if (getAccessToken()) {
+      console.log("Token dentro del if: ", accessToken);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken")
       updateUserAuthentication(false); // Update state to trigger re-render
       updateAuthenticatedUserID(0);
     }
-    console.log("Token fuera del if: ", getAuthToken());
   };
 
   console.log("Valor del studentID: ", studentId);

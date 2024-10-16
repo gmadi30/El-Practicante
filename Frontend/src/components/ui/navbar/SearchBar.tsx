@@ -32,7 +32,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   };
 
   return (
-    <main className="flex flex-col container mx-auto  mb-10 max-w-[25%]   min-w-fit ">
+    <main className="flex flex-col container mx-auto  mb-10 max-w-[30%]   min-w-fit ">
       <section className="font-body ">
         <div className="">
           <form className="my-10">

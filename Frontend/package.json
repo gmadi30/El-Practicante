@@ -13,6 +13,7 @@
     "@hookform/devtools": "^4.3.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
+    "practicante": "file:",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
